@@ -1,0 +1,79 @@
+%{PAH}
+
+Tipo de documento:
+
+	%html%
+	%latex%
+
+Formatação:
+
+	Negrito:	%b{} 
+	Itálico:	%i{}
+	Sublinhado:	%u{}
+
+Títulos: %t1{}..%t3{}
+	
+Indíce: %index%
+
+Texto não formatado: %verb??
+
+Lista de tópicos:
+
+	Numerado: 
+		
+		%ol{
+		%it cenas
+		%it cenas2
+		}
+
+	Não numerado:
+	
+		%ul{
+		%it cenas
+		%it cenas2
+		}
+
+	Entradas de um dicionário:
+
+		%dl{
+		%it{} cenas
+		%it{} cenas2
+		}
+	
+Inclusão de imagens:
+		
+		%img{path}{caption}
+
+Links:
+
+		%link{link}{text}
+
+Inclusão e formatação de tabelas:
+
+		%table{
+			%row{
+				%h Tag
+				%h Numero de Ocorrencias
+				}
+			%row{
+				%r <b>
+				%r 30
+				}
+		}
+
+ou
+		
+		%table{
+			%head Tag % Número Ocorrencias
+			%row <b>  % 30	
+		}	
+
+Comentários:
+	%%
+
+	%coment{}	
+
+Features:
+	i ou item...
+	mudar tipo de items
+	
