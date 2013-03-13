@@ -1,0 +1,5 @@
+%html%
+%latex%
+
+%b{%{PAH}\}
+O joão é do %b{Porto}, a rita é do %i{Benfica}. 

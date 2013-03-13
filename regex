@@ -1,0 +1,12 @@
+Tipo de ficheiro:
+
+	^%html%
+	^%latex%
+
+Formatação:
+
+	Negrito: 	%b{([^\\}]|\\}|\\)*}
+	Itálico: 	%i{([^\\}]|\\}|\\)*}
+	Sublinhado:	%u{([^\\}]|\\}|\\)*}
+
+
