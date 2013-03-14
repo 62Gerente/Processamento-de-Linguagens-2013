@@ -58,8 +58,8 @@ Inclusão e formatação de tabelas:
 Comentários:
 	%%
 
-	%%coment%
-	%coment%%	
+	%%comment%
+	%comment%%	
 
 Features:
 	i ou item...

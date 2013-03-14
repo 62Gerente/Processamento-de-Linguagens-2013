@@ -42,4 +42,24 @@ Lista de tópicos:
 
 Imagens:
 
-	
+	%img((\{([^\\\n\}]|\\\}|\\)+\}){1,2})
+
+Links:
+
+	%link((\{([^\\\n\}]|\\\}|\\)+\}){1,2})
+
+Tabelas:
+
+	%%table%([ \t\n]+(%(head|row)([ \t]+([^%]|\\%)*%)+)\n+)+[ \t]*%table%%
+
+Comentários:
+
+	De linha:
+
+		^[ \t]*%%[ \t]+[^\n]*
+
+	De várias linhas:
+
+		^[ \t]*%%comment%([^%]|%[^c]|%c[^o]|%co[^m]|%com[^m]|%comm[^e]|%comme[^n]|%commen[^t]|%comment[^%]|%comment%[^%])*%comment%%
+
+		
