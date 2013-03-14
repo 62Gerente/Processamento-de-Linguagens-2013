@@ -19,14 +19,14 @@ Texto não formatado: %verb??
 
 Lista de tópicos:
 
-	Numerado: 
+	Numerada: 
 		
 		%ol{
 		%it cenas
 		%it cenas2
 		}
 
-	Não numerado:
+	Não numerada:
 	
 		%ul{
 		%it cenas

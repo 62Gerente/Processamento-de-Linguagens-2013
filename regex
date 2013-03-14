@@ -11,4 +11,26 @@ Formatação:
 
 Títulos:
 
+	%t[1-3]{([^\\}]|\\}|\\)*}
 	
+Indíce:
+
+	^%index%
+
+Texto não formatado: (INCOMPLETO)
+
+	%verb{([^\\}]|\\}|\\)*}
+
+Lista de tópicos:
+
+	Numerada:
+
+		^[ \t]*%ol{[ \t\n]*(^[ \t]*%it[ \t\n]*([^}\\%]|\\}|\\|%[^i]|%i[^t]|%)*)*}
+
+	Não Numerada
+	
+		^[ \t]*%ul{[ \t\n]*(^[ \t]%it[ \t\n]*([^}\\%]|\\}|\\|%[^i]|%i[^t]|%)*)*}
+
+	Entradas de um dicionário
+
+		^[ \t]*%dl{[ \t\n]*(^[ \t]*%it{([^\\\n}]|\\}|\\)*}[ \t\n]*([^}\\%]|\\}|\\|%[^i]|%i[^t]|\\%)*)*}
