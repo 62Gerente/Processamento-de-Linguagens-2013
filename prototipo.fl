@@ -1,0 +1,23 @@
+%option noyywrap
+
+	char* substring (char* str, int posi, int posf) ;
+
+%%
+
+%b\{([^\\\}]|\\\}|\\)*\}	{  printf("Negrito: %s", substring(yytext,3,strlen(yytext)-1));}
+
+%%
+
+char* substring(char* str, int posi, int posf){
+	str[posf] = '\0';
+	str+=posi;
+
+	return str;
+}
+
+int main(){
+	yylex();
+	return 0;
+}
+
+
