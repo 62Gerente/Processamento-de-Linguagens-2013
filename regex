@@ -1,7 +1,7 @@
 Tipo de ficheiro:
 
-	^%html%
-	^%latex%
+	^[ \t]*%html%
+	^[ \t]*%latex%
 
 Formatação:
 
@@ -15,7 +15,7 @@ Títulos:
 	
 Indíce:
 
-	^%index%
+	^[ \t]*%index%
 
 Texto não formatado: (INCOMPLETO)
 
@@ -25,12 +25,12 @@ Lista de tópicos:
 
 	Numerada:
 
-		^[ \t]*%ol{[ \t\n]*(^[ \t]*%it[ \t\n]*([^}\\%]|\\}|\\|%[^i]|%i[^t]|%)*)*}
+		^[ \t]*%ol{[ \t]*\n[ \t]*(^[ \t]*%it[ \t\n]*([^}\\%]|\\}|\\|%[^i]|%i[^t]|%)*)*}
 
 	Não Numerada
 	
-		^[ \t]*%ul{[ \t\n]*(^[ \t]%it[ \t\n]*([^}\\%]|\\}|\\|%[^i]|%i[^t]|%)*)*}
+		^[ \t]*%ul{[ \t]*\n[ \t]*(^[ \t]%it[ \t\n]*([^}\\%]|\\}|\\|%[^i]|%i[^t]|%)*)*}
 
 	Entradas de um dicionário
 
-		^[ \t]*%dl{[ \t\n]*(^[ \t]*%it{([^\\\n}]|\\}|\\)*}[ \t\n]*([^}\\%]|\\}|\\|%[^i]|%i[^t]|\\%)*)*}
+		^[ \t]*%dl{[ \t]*\n[ \t]*(^[ \t]*%it{([^\\\n}]|\\}|\\)*}[ \t\n]*([^}\\%]|\\}|\\|%[^i]|%i[^t]|\\%)*)*}
