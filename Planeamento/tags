@@ -21,24 +21,24 @@ Lista de tópicos:
 
 	Numerada: 
 		
-		%ol{
+		%%ol%
 		%it cenas
 		%it cenas2
-		}
+		%ol%%
 
 	Não numerada:
 	
-		%ul{
+		%%ul%
 		%it cenas
 		%it cenas2
-		}
+		%ul%%
 
 	Entradas de um dicionário:
 
-		%dl{
+		%%dl%
 		%it{} cenas
 		%it{} cenas2
-		}
+		%dl%%
 	
 Inclusão de imagens:
 		
@@ -49,29 +49,17 @@ Links:
 		%link{link}{text}
 
 Inclusão e formatação de tabelas:
-
-		%table{
-			%row{
-				%h Tag
-				%h Numero de Ocorrencias
-				}
-			%row{
-				%r <b>
-				%r 30
-				}
-		}
-
-ou
 		
-		%table{
+		%%table%
 			%head Tag % Número Ocorrencias
 			%row <b>  % 30	
-		}	
+		%table%%
 
 Comentários:
 	%%
 
-	%coment{}	
+	%%coment%
+	%coment%%	
 
 Features:
 	i ou item...
