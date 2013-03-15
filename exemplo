@@ -1,5 +1,8 @@
 %html%
 %latex%
 
+
+%t3{Exemplo de título 1}
+
 O joão é do %b{Porto}, a rita é do %i{Benfica}.
-O Gregs vai buscar o %u{pão}. 
+O Gregs vai buscar o %b{%u{pão} e a broa}. 
