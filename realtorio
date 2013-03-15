@@ -1,0 +1,121 @@
+%html%
+
+%t1{%bf{PAH - ????}}
+ 
+%index
+ 
+%t2{Introdução}
+ 
+
+
+%t2{Composicão e Instalação}
+A ferramenta PAH está desenvolvida em flex, sendo esta constituído por dois ficheiros:
+
+%%dl%
+    %it{pah.ff:} código fonte da ferramenta;
+    %it{makefile:} cria o respectivo executável.
+%dl%%
+ 
+Para proceder à instalação da ferramenta, basta apenas copiar os dois ficheiros para uma directoria à escolha e executar a makefile. Desta forma, será criado um executável na mesma directoria, com o nome de %i{pah}.
+
+%t2{Invocação}
+Como um dos objectivos deste pré-processador é facilitar a conversão em latex e html, a invocação para gerar ficheiros para cada uma destas linguagens consiste em: 
+
+%%dl%
+    %it{Gerar LaTeX:} pah -l ficheiro.pre ficheiro.tex
+    %it{gerar HTML:} pah -h ficheiro.pre ficheiro.tex
+%dl%%
+
+
+%t2{Funcionalidades da ferramenta}
+Nas secções seguintes serão apresentadas e exemplificadas todas as funcionalidades oferecidas por parte desta nova ferramenta. 
+ 
+%t3{Índices}
+Para um índice de um documento ser gerado, basta introduzir o comando:
+
+%%ul%
+    %it verb{%index%}
+%ul%%
+
+Estes são criados a partir do ponto onde o comando é colocado.
+ 
+%t3{Títulos do documento}
+ Existem três tipos de títulos, sendo estes apresentados pela ordem de maior importância.
+
+%%ul%
+    %it %verb{%t1{Título da secção}}
+    %it %verb{%t2{Título da subsecção}}
+    %it %verb{%t3{Título de subsubsecção}}
+%ul%%
+
+ 
+%t2{Texto Não Formatado}
+Uma das funcionalidades da ferramenta é permitir incluir texto não interpretado pelo PAH. Desta forma, todo o texto compreendido entre os parêntesis do comando %verb{%verb{}} não será interpretado aquando da compilação, sendo este apresentado no documento sem quaisquer modificações. 
+
+%t2{Texto Formatado}
+Ao longo do documento, partes do texto pode ser apresentadas em itálico, em negrito, ou até mesmo estarem sublinhadas. Para isso, basta seguir os próximos comandos:
+
+%%dl%
+    %it{Itálico:} %verb{%i{Texto em itálico}}
+    %it{Negrito:} %verb{%b{Texto em negrito}}
+    %it{Sublinhado:} %verb{%u{Textto sublinhado}}
+%dl%%
+
+%t2{Listas} 
+De seguida, são apresentadas os três tipos de listas suportadas pela ferramenta PAH.
+ 
+%t3{Listas Numeradas}
+%%ul%
+    %it Iniciada por %verb{%%ol%} e finalizado por %verb{%ol%%};
+    %it Cada item é precedido por %verb{%it};
+%ul%%
+
+%t3{Listas Não Numeradas}
+%%ul%
+    %it Iniciada por %verb{%%ul%} e finalizada por %verb{%ul%%};
+    %it Cada item é precedido por %verb{%it};
+%ul%%
+
+%t3{Entradas de um dicionário}
+%%ul%
+    %it Iniciada por %verb{%%dl%} e finalizada por %verb{%dl%%};
+    %it Cada item é precedido por %verb{%it} e o texto que ficará a negrito deverá ser colocado entre os parêntesis;
+    %it A descrição do item deve ser colocada após o fim dos parêntesis.
+%ul%%
+
+%t3{Exemplo:}
+
+%%dl%
+    %it{Item} descrição do item
+    %it{Item} descrição do item
+%dl%%
+ 
+
+%t2{Imagens}
+Como qualquer outra ferramenta, é permitida a inclusão de imagens no documento. Para isso, basta usar o comando %img{path}{caption}, sendo "path" o caminho para a respectiva imagem e "caption" a legenda da mesma.
+
+%t2{Links}
+A presença de links num documento é permitida usando o comando \verb{%link{url}{text}}. No campo "texto" é inserido o texto, onde o link colocado no campo "url", fica associado.
+ 
+%t2{Comentários}
+O uso de comentários é muito usual ao longo do texto, uma vez que facilitam a leitura do mesmo e não aparecem no documento final. Estes podem ser inseridos entre %verb{%%coment%} e {%coment%%}.
+
+%%ul%
+    %it \verb{%%coment% Isto é um comentário %coment%%}
+%ul%%
+
+%t2{Tabelas} 
+As tabelas têm a seguinte estrutura:
+
+%verb{
+    %%table%
+            %head Célula  % Célula 
+            %row  Célula  % Célula  
+        %table%%
+}
+
+%%ul%
+    %it A tabela é iniciada com %verb{%%table%} e finalizada com %verb{%table%%};
+    %it Cada célula da tabela deve ser colocada após %verb{%head} ou %verb{%row}. A única diferença entre estes consiste no formato do texto. Enquanto que o comando %verb{%head} coloca o texto centrado e a negrito, o comando %verb{%row} coloca o texto num formato normal.
+    %it O comando \verb{%} permite a separação das células da tabela, correspondendo, no entanto, ao número total de colunas.
+%ul%%
