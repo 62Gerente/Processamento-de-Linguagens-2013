@@ -2,27 +2,19 @@
 %{
 	#include "functionsLatex.h"
 	#include "utilities.h"
-    #include "../LinkedList/linkedlist.h"
-
-    char* substring(char* str, int posi, int offset);
-	void beginBoldLatex();
-	void beginItalicLatex();
-	void beginUnderlineLatex();
-	void beginTitleLatex(int level);
-    void addCloseTagLatex();
-    void endLatexTag();
+    #include "LinkedList/linkedlist.h"
 
     LinkedList closeTags;
 %}
 %%
 
-%b\{		{ beginBoldLatex(); }
-%i\{		{ beginItalicLatex(); }
-%u\{		{ beginUnderlineLatex(); }
+%b\{		{ beginBoldLatex(closeTags); }
+%i\{		{ beginItalicLatex(closeTags); }
+%u\{		{ beginUnderlineLatex(closeTags); }
 %t[1-3]\{   {   char* str = substring(yytext, 2, 1);
-                beginTitleLatex(atoi(str));
+                beginTitleLatex(closeTags,atoi(str));
                 free(str) ; }
-\}          { endLatexTag(); }
+\}          { endLatexTag(closeTags); }
 
 
 .|\n        { printf("%s", yytext); }

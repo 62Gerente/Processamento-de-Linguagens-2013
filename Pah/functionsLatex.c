@@ -1,30 +1,32 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "functionsLatex.h"
+#include "LinkedList/linkedlist.h"
 
-void endLatexTag(){
-    printf("%s",(char*)(popLinkedList(closeTags)));
+void endLatexTag(LinkedList l){
+    printf("%s",(char*)(popLinkedList(l)));
 }
-void beginBoldLatex(){
+void beginBoldLatex(LinkedList l){
     printf("\\textbf{");
-    addCloseTagLatex();
+    addCloseTagLatex(l);
 }
-void beginItalicLatex(){
+void beginItalicLatex(LinkedList l){
     printf("\\textit{");
-    addCloseTagLatex();
+    addCloseTagLatex(l);
 }
-void beginUnderlineLatex(){
+void beginUnderlineLatex(LinkedList l){
     printf("\\underline{");
-    addCloseTagLatex();
+    addCloseTagLatex(l);
 }
-void beginTitleLatex(int level){
+void beginTitleLatex(LinkedList l,int level){
     int i;
     printf("\\");
     for(i=1; i<level; i++)
            printf("sub");
     printf("section{");
-    addCloseTagLatex();
+    addCloseTagLatex(l);
 }
-void addCloseTagLatex(){
-    pushLinkedList(closeTags,(void*)"}");
+void addCloseTagLatex(LinkedList l){
+    pushLinkedList(l,(void*)"}");
 }
