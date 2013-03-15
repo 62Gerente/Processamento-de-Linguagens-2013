@@ -1,0 +1,34 @@
+%option noyywrap
+	
+	#include "printHtml.h" 
+	char* substring (char* str, int posi, int posf);
+
+%%
+
+%b\{([^\\\}]|\\\}|\\)*\}	{ printBoldHtml(substring(yytext,3,strlen(yytext)-1)); }
+%i\{([^\\\}]|\\\}|\\)*\}	{ printItalicHtml(substring(yytext,3,strlen(yytext)-1)); }
+%u\{([^\\\}]|\\\}|\\)*\}	{ printUnderlineHtml(substring(yytext,3,strlen(yytext)-1)); }
+
+%t[1-3]\{([^\\\}]|\\\}|\\)*\}	{ 	char str[strlen(yytext)] ;
+									strcpy(str, yytext) ;
+									int level = atoi(substring(str, 2, 3)) ;									
+									printTitleHtml(substring(yytext,4,strlen(yytext)-1), level); }  
+
+%%
+
+char* substring(char* str, int posi, int posf){
+	/* int size = posf-posi, i = 0 ;
+	char* str = (char*)malloc(size) ;
+	for(; i < size; i++)
+		str[i] = strArg[posi+i] ; */
+	
+	str[posf] = '\0';
+	str+=posi; 
+	
+	return str;
+}
+
+int main(){
+	yylex();
+	return 0;
+}
