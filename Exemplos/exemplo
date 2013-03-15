@@ -1,8 +1,11 @@
 %html%
 %latex%
 
+%t1{Testes}
 
-%t3{Exemplo de título 1}
+%t3{Testes Formatação}
 
 O joão é do %b{Porto}, a rita é do %i{Benfica}.
 O Gregs vai buscar o %b{%u{pão} e a broa}. 
+
+

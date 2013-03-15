@@ -1,0 +1,47 @@
+%option noyywrap
+	
+	void printBoldLatex(char* str);
+	void printItalicLatex(char* str);
+	void printUnderlineLatex(char* str);
+	void printTitleLatex(char* str, int grau);
+	char* substring (char* str, int posi, int posf);
+
+%%
+
+%b\{([^\\\}]|\\\}|\\)*\}		{ printBoldLatex(substring(yytext,3,strlen(yytext)-1)); }
+%i\{([^\\\}]|\\\}|\\)*\}		{ printItalicLatex(substring(yytext,3,strlen(yytext)-1)); }
+%u\{([^\\\}]|\\\}|\\)*\}		{ printUnderlineLatex(substring(yytext,3,strlen(yytext)-1)); }
+%t[1-3]\{([^\\\}]|\\\}|\\)*\}	{ printTitleLatex(substring(yytext,4,strlen(yytext)-1),atoi(&yytext[2]));}
+
+%%
+
+void printBoldLatex(char* str){
+	printf("\\textbf{%s}",str);
+}
+void printItalicLatex(char* str){
+	printf("\\textit{%s}",str);
+}
+void printUnderlineLatex(char* str){
+	printf("\\underline{%s}",str);
+}
+void printTitleLatex(char* str, int grau){
+	int i;
+	printf("\\");
+	for(i=1;i<grau;i++){
+		printf("sub");
+	}
+	printf("section{%s}",str);
+}
+char* substring(char* str, int posi, int posf){
+	str[posf] = '\0';
+	str+=posi;
+
+	return str;
+}
+
+int main(){
+	yylex();
+	return 0;
+}
+
+
