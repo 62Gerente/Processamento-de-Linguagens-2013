@@ -1,0 +1,38 @@
+%option noyywrap
+%{
+	#include "functionsLatex.h"
+	#include "utilities.h"
+    #include "../LinkedList/linkedlist.h"
+
+    char* substring(char* str, int posi, int offset);
+	void beginBoldLatex();
+	void beginItalicLatex();
+	void beginUnderlineLatex();
+	void beginTitleLatex(int level);
+    void addCloseTagLatex();
+    void endLatexTag();
+
+    LinkedList closeTags;
+%}
+%%
+
+%b\{		{ beginBoldLatex(); }
+%i\{		{ beginItalicLatex(); }
+%u\{		{ beginUnderlineLatex(); }
+%t[1-3]\{   {   char* str = substring(yytext, 2, 1);
+                beginTitleLatex(atoi(str));
+                free(str) ; }
+\}          { endLatexTag(); }
+
+
+.|\n        { printf("%s", yytext); }
+
+%%
+
+int main(){
+    closeTags = createLinkedList(NULL,NULL);
+	yylex();
+	return 0;
+}
+
+
