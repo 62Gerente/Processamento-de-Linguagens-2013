@@ -1,6 +1,6 @@
 %option noyywrap
 	
-	#include "printHtml.h" 
+	#include "../printHtml/printHtml.h" 
 	char* substring (char* str, int posi, int posf);
 
 %%
