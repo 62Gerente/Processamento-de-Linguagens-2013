@@ -42,12 +42,12 @@
 
 <LATEX>^[ \t]*%index%          { addIndexLatex(); }                      /* Tag de índice */
 
-<LATEX>%%ol%                   { beginOrderListLatex(closeTags); }       /* Tag de início de lista ordenada */
-<LATEX>%ol%%                   { endOrderListLatex(closeTags); }         /* Tag de fim de lista ordenada*/
-<LATEX>%%ul%                   { beginUnorderListLatex(closeTags); }     /* Tag de início de lista não ordenada */
-<LATEX>%ul%%                   { endUnorderListLatex(closeTags); }       /* Tag de fim de lista não ordenada */
-<LATEX>%%dl%                   { beginDictionaryLatex(closeTags); }      /* Tag de início de entradas de um dicionário */
-<LATEX>%dl%%                   { endDictionaryLatex(closeTags); }        /* Tag de fim de entradas de um dicionario */
+<LATEX>%%ol%                   { beginOrderListLatex(); }                /* Tag de início de lista ordenada */
+<LATEX>%ol%%                   { endOrderListLatex(); }                  /* Tag de fim de lista ordenada*/
+<LATEX>%%ul%                   { beginUnorderListLatex(); }              /* Tag de início de lista não ordenada */
+<LATEX>%ul%%                   { endUnorderListLatex(); }                /* Tag de fim de lista não ordenada */
+<LATEX>%%dl%                   { beginDictionaryLatex(); }               /* Tag de início de entradas de um dicionário */
+<LATEX>%dl%%                   { endDictionaryLatex(); }                 /* Tag de fim de entradas de um dicionario */
 
 <LATEX>%it\{                   { beginDictionaryEntryLatex(closeTags) }  /* Tag de início de uma entrada de dicionário */  
 <LATEX>%it[ \t]                { addItemLatex(closeTags); }              /* Tag de item de uma lista */ 
@@ -70,8 +70,8 @@
                                  BEGIN LATEX;                            /* Volta a dar início ao estádo normal do Latex */
 
 <LATEX>%%%                     { beginLineCommentLatex(closeTags); }     /* Tag de comentário de linha */
-<LATEX>%%comment%              { beginCommentLatex(closeTags); }         /* Tag de início de comentário */
-<LATEX>%comment%%              { endCommentLatex(closeTags); }           /* Tag de fim de comentário */
+<LATEX>%%comment%              { beginCommentLatex(); }                  /* Tag de início de comentário */
+<LATEX>%comment%%              { endCommentLatex(); }                    /* Tag de fim de comentário */
 
 <LATEX>\}                      { endLatexTag(closeTags); }               /* Tag de fim geral */
     
