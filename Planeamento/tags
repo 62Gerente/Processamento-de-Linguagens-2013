@@ -42,11 +42,11 @@ Lista de tópicos:
 	
 Inclusão de imagens:
 		
-		%img{path}{caption}
+		%img{path,caption}
 
 Links:
 
-		%link{link}{text}
+		%link{link,text}
 
 Inclusão e formatação de tabelas:
 		
