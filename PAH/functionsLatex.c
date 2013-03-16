@@ -30,3 +30,6 @@ void beginTitleLatex(LinkedList l,int level){
 void addCloseTagLatex(LinkedList l){
     pushLinkedList(l,(void*)"}");
 }
+void addIndexLatex(){
+	printf("\\tableofcontents");
+}

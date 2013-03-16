@@ -9,5 +9,6 @@ void beginItalicLatex(LinkedList l);
 void beginUnderlineLatex(LinkedList l);
 void beginTitleLatex(LinkedList l, int level);
 void addCloseTagLatex(LinkedList l);
+void addIndexLatex();
 
 #endif

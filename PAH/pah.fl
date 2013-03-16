@@ -1,0 +1,54 @@
+%option noyywrap
+%{
+	/* --------------------------- INCLUDES ----------------------- */	
+
+	#include "functionsLatex.h"
+	#include "utilities.h"
+    #include "LinkedList/linkedlist.h"
+
+
+	/* --------------------------- VAR GLOBAIS --------------------- */	
+
+    LinkedList closeTags;
+
+%}
+
+%x LATEX HTML
+
+%%
+	BEGIN LATEX;
+
+	/* --------------------------- TIPO DE DOC --------------------- */	
+	
+^[ \t]*%html%			{ BEGIN HTML; }
+^[ \t]*%latex%			{ BEGIN LATEX; }
+
+	/* --------------------------- LATEX --------------------------- */	
+
+<LATEX>%b\{				{ beginBoldLatex(closeTags); }			/* Tag de inicio de negrito */
+<LATEX>%i\{				{ beginItalicLatex(closeTags); }		/* Tag de inicio de italico */
+<LATEX>%u\{				{ beginUnderlineLatex(closeTags); }		/* Tag de inicio de sublinhado */
+
+<LATEX>%t[1-3]\{	    { char* str = substring(yytext, 2, 1);	/* Tag de inicio de título */
+                			beginTitleLatex(closeTags,atoi(str));
+                			free(str) ;
+						}
+
+<LATEX>^[ \t]*%index%	{ addIndexLatex(); }					/* Tag de índice */
+
+<LATEX>\}         	 	{ endLatexTag(closeTags); }				/* Tag de fim geral */
+	
+	/* --------------------------- HTML ---------------------------- */	
+	/* --------------------------- GERAL --------------------------- */	
+
+.|\n        			{ printf("%s", yytext); }
+
+%%
+
+int main(){
+    closeTags = createLinkedList(NULL,NULL);
+	yylex();
+	return 0;
+}
+
+
