@@ -56,7 +56,7 @@ Inclusão e formatação de tabelas:
 		%table%%
 
 Comentários:
-	%%
+	%%%
 
 	%%comment%
 	%comment%%	

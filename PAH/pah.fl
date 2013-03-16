@@ -18,7 +18,8 @@
 %x HTML           /* Estado HTML  */
 %x LATEX_VERB     /* Estado Verbatim em LATEX */
 %x LATEX_IMG      /* Estado imagem em LATEX */
-%c LATEX_LINK     /* Estado link em LATEX */
+%x LATEX_LINK     /* Estado link em LATEX */
+%x LATEX_ROW
 
 %%
     BEGIN LATEX;
@@ -30,43 +31,47 @@
 
     /* --------------------------- LATEX --------------------------- */    
 
-<LATEX>%b\{                    { beginBoldLatex(closeTags); }            /* Tag de inicio de negrito */
-<LATEX>%i\{                    { beginItalicLatex(closeTags); }          /* Tag de inicio de italico */
-<LATEX>%u\{                    { beginUnderlineLatex(closeTags); }       /* Tag de inicio de sublinhado */
+<LATEX>%b\{                    { beginBoldLatex(closeTags); }            /* Tag de início de negrito */
+<LATEX>%i\{                    { beginItalicLatex(closeTags); }          /* Tag de início de italico */
+<LATEX>%u\{                    { beginUnderlineLatex(closeTags); }       /* Tag de início de sublinhado */
 
-<LATEX>%t[1-3]\{               { char* str = substring(yytext, 2, 1);    /* Tag de inicio de título */
+<LATEX>%t[1-3]\{               { char* str = substring(yytext, 2, 1);    /* Tag de início de título */
                                  beginTitleLatex(closeTags,atoi(str));
                                  free(str) ;
                                }
 
 <LATEX>^[ \t]*%index%          { addIndexLatex(); }                      /* Tag de índice */
 
-<LATEX>%%ol%                   { beginOrderListLatex(closeTags); }       /* Tag de inicio de lista ordenada */
+<LATEX>%%ol%                   { beginOrderListLatex(closeTags); }       /* Tag de início de lista ordenada */
 <LATEX>%ol%%                   { endOrderListLatex(closeTags); }         /* Tag de fim de lista ordenada*/
-<LATEX>%%ul%                   { beginUnorderListLatex(closeTags); }     /* Tag de inicio de lista não ordenada */
+<LATEX>%%ul%                   { beginUnorderListLatex(closeTags); }     /* Tag de início de lista não ordenada */
 <LATEX>%ul%%                   { endUnorderListLatex(closeTags); }       /* Tag de fim de lista não ordenada */
-<LATEX>%%dl%                   { beginDictionaryLatex(closeTags); }      /* Tag de inicio de entradas de um dicionário */
+<LATEX>%%dl%                   { beginDictionaryLatex(closeTags); }      /* Tag de início de entradas de um dicionário */
 <LATEX>%dl%%                   { endDictionaryLatex(closeTags); }        /* Tag de fim de entradas de um dicionario */
 
-<LATEX>%it\{                   { beginDictionaryEntryLatex(closeTags) }  /* Tag de inicio de uma entrada de dicionário */  
-<LATEX>%it                     { addItemLatex(closeTags); }              /* Tag de item de uma lista */ 
+<LATEX>%it\{                   { beginDictionaryEntryLatex(closeTags) }  /* Tag de início de uma entrada de dicionário */  
+<LATEX>%it[ \t]                { addItemLatex(closeTags); }              /* Tag de item de uma lista */ 
 
 <LATEX>%img\{                  { BEGIN LATEX_IMG;                        /* Começa o estado de imagem */
-                                 BeginImageLatex(closeTags);             /* Tags de inicio de uma imagem */
+                                 BeginImageLatex(closeTags);             /* Tags de início de uma imagem */
                                }
 
 <LATEX_IMG>,                   { endImagePathLatex(closeTags);           /* Tag de fim do includegraphics */
-                                 beginImageCaptionLatex(closeTags);      /* Tag de inicio da legenda */
-                                 BEGIN LATEX;                            /* Volta a dar inicio ao estádo normal do Latex */
+                                 beginImageCaptionLatex(closeTags);      /* Tag de início da legenda */
+                                 BEGIN LATEX;                            /* Volta a dar início ao estádo normal do Latex */
                                }
 
 <LATEX>%link\{                 { BEGIN LATEX_LINK;                       /* Começa o estado de link */
-                                 BeginLinkLatex(closeTags);              /* Tags de inicio de um link */
+                                 BeginLinkLatex(closeTags);              /* Tags de início de um link */
                                }
 
 <LATEX_LINK>,                  { endURLLatex(closeTags);                 /* Tag de fim do url */
-                                 beginLinkTextLatex(closeTags);          /* Tag de inicio do texto do link */
-                                 BEGIN LATEX;                            /* Volta a dar inicio ao estádo normal do Latex */
+                                 beginLinkTextLatex(closeTags);          /* Tag de início do texto do link */
+                                 BEGIN LATEX;                            /* Volta a dar início ao estádo normal do Latex */
+
+<LATEX>%%%                     { beginLineCommentLatex(closeTags); }     /* Tag de comentário de linha */
+<LATEX>%%comment%              { beginCommentLatex(closeTags); }         /* Tag de início de comentário */
+<LATEX>%comment%%              { endCommentLatex(closeTags); }           /* Tag de fim de comentário */
 
 <LATEX>\}                      { endLatexTag(closeTags); }               /* Tag de fim geral */
     
