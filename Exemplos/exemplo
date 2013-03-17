@@ -7,4 +7,49 @@
 O joão é do %b{Porto}, a rita é do %i{Benfica}.
 O Gregs vai buscar o %b{%u{pão} e a broa}. 
 
+	%index%
 
+
+%%ol%
+	%it Item 1
+	%it Item 2
+	%it %u{Item 3}
+%ol%%
+%%ul%
+	%it Item a
+	%it %i{Item b}
+	%it Item c
+%ul%%
+%%dl%
+	%it{Desc1} %b{Item}
+	%it{Desc2} Item
+	%it{Desc3} Item
+%dl%%
+
+%%% O Gregs vai buscar o %b{%u{pão} e a broa}. 
+
+%img{/home/gerente/img.png,%b{Fotografia} Pessoal}
+
+%link{/home/gerente/img.png,Fotografia %u{Pessoal}}
+
+%verb| %link{/home/gerente/img.png,Fotografia %u{Pessoal}} |
+
+%b{BOLD TEXT}
+
+delimiter
+
+%%comment% 
+%%dl%
+	%it{Desc1} %b{Item}
+	%it{Desc2} Item
+	%it{Desc3} Item
+%dl%%
+%comment%%
+
+%%verbatim% 
+%%dl%
+	%it{Desc1} %b{Item}
+	%it{Desc2} Item
+	%it{Desc3} Item
+%dl%%
+%verbatim%%
