@@ -1,0 +1,74 @@
+
+%option noyywrap 
+
+%{
+	#include <stdlib.h>
+	#include <string.h>
+	#include <stdio.h>
+	#include "LinkedList/linkedlist.h"
+	#include "functionsHtml.h"
+	#include "utilities.h"
+
+	LinkedList closeTags ;
+%}
+
+%s LIST NO_LIST
+
+%%
+			int openItem = 0 ;
+
+			BEGIN NO_LIST ;
+	
+%b\{		{ beginBoldHtml(); }
+%i\{		{ beginItalicHtml(); }
+%u\{		{ beginUnderlineHtml(); }
+
+%\%dl%				{ 	beginDictionaryHtml(); 	}
+
+
+%t[1-3]\{	{ char* str = substring(yytext, 2, 1);    /* Tag de início de título */
+              beginTitleHtml(atoi(str));
+              free(str); }
+
+
+<NO_LIST>%%ol%	{ 	BEGIN LIST ;
+					  	beginOrderListHtml(); 	}
+
+<LIST>%ol%%    	{ 	if(openItem == 1) {
+							endTagHtml() ;
+							openItem = 0 ;
+						}
+						BEGIN NO_LIST ;
+					  	endTagHtml(); 	}					  					  
+
+<NO_LIST>%%ul%	{ 	BEGIN LIST ;
+					  	beginUnorderListHtml(); 	}
+
+<LIST>%ul%%    		{ 	if(openItem == 1) {
+							openItem = 0 ;
+							endTagHtml() ;
+						}
+						BEGIN NO_LIST ;
+					  	endTagHtml(); 	}
+
+
+
+<LIST>%it  			{	if(openItem == 1)
+							endTagHtml() ;
+					  	else
+					  		openItem = 1 ;					
+					  	beginItemHtml();
+					  	/*printf("%s", yytext+3) ;
+						endTagHtml(); */  	}
+
+\}					{ endTagHtml(); }
+
+
+%%
+
+int main () {
+
+	closeTags = createLinkedList(NULL, NULL);
+	yylex() ;
+	return 0 ;
+}
