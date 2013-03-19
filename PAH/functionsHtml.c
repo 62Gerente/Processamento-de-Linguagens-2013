@@ -4,22 +4,35 @@
 #include "functionsHtml.h"
 
 
+char 	closeI[] = "</i>",
+		closeB[] = "</b>",
+		closeU[] = "</u>",
+		closeOl[] = "</ol>",
+		closeUl[] = "</ul>",
+		closeDl[] = "</dl>",
+		closeH1[] = "</h1>",
+		closeH2[] = "</h2>",
+		closeH3[] = "</h3>",
+		closeLi[] = "</li>",
+		closeDt[] = "</dt>",
+		closeDd[] = "</dd>" ;
+
 void beginBoldHtml() {
 
 	printf("<b>") ;
-	pushLinkedList(closeTags, "</b>") ;
+	pushLinkedList(closeTags, closeB) ;
 }
 
 void beginItalicHtml() {
 
 	printf("<i>") ;
-	pushLinkedList(closeTags, "</i>") ;
+	pushLinkedList(closeTags, closeI) ;
 }
 
 void beginUnderlineHtml() {
 
 	printf("<u>") ;
-	pushLinkedList(closeTags, "</u>") ;
+	pushLinkedList(closeTags, closeU) ;
 }
 
 void beginTitleHtml(int level) {
@@ -33,24 +46,36 @@ void beginTitleHtml(int level) {
 void beginOrderListHtml() {
 
 	printf("<ol>") ;
-	pushLinkedList(closeTags, "</ol>") ;	
+	pushLinkedList(closeTags, closeOl) ;	
 }
 
 void beginUnorderListHtml() {
 
 	printf("<ul>") ;
-	pushLinkedList(closeTags, "</ul>") ;		
+	pushLinkedList(closeTags, closeUl) ;		
 }
 void beginDictionaryHtml() {
 
 	printf("<dl>") ;
-	pushLinkedList(closeTags, "</dl>") ;	
+	pushLinkedList(closeTags, closeDl) ;	
 }
 
 void beginItemHtml() {
 
 	printf("<li>") ;
-	pushLinkedList(closeTags, "</li>") ;		
+	pushLinkedList(closeTags, closeLi) ;		
+}
+
+void beginDictionaryTitleHtml() {
+
+	printf("<dt>") ;
+	pushLinkedList(closeTags, closeDt) ;		
+}
+
+void beginDictionaryItemHtml() {
+
+	printf("<dd>") ;
+	pushLinkedList(closeTags, closeDd) ;		
 }
 
 void endTagHtml() {

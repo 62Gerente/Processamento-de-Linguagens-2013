@@ -12,18 +12,37 @@
 	LinkedList closeTags ;
 %}
 
-%s LIST NO_LIST
+%s NO_ENV LIST DICT DICT_TIT
 
 %%
 			int openItem = 0 ;
 
-			BEGIN NO_LIST ;
+			BEGIN NO_ENV ;
 	
 %b\{		{ beginBoldHtml(); }
 %i\{		{ beginItalicHtml(); }
 %u\{		{ beginUnderlineHtml(); }
 
-%\%dl%				{ 	beginDictionaryHtml(); 	}
+<NO_ENV>%%dl%		{ 	BEGIN DICT ;	
+						beginDictionaryHtml(); 	}
+
+<DICT>%it\{			{	if(openItem == 1) 
+							endTagHtml() ;
+						else
+							openItem = 1 ;
+						beginDictionaryTitleHtml() ;	
+						BEGIN DICT_TIT ;	}
+
+<DICT_TIT>\}			{ 	endTagHtml() ;
+							beginDictionaryItemHtml();	
+							BEGIN DICT;	}						
+
+<DICT>%dl%%			{ 	if(openItem == 1) {
+							endTagHtml() ;
+							openItem = 0 ;
+						}
+						BEGIN NO_ENV ;
+					  	endTagHtml(); 	}						
 
 
 %t[1-3]\{	{ char* str = substring(yytext, 2, 1);    /* Tag de início de título */
@@ -31,24 +50,24 @@
               free(str); }
 
 
-<NO_LIST>%%ol%	{ 	BEGIN LIST ;
+<NO_ENV>%%ol%	{ 	BEGIN LIST ;
 					  	beginOrderListHtml(); 	}
 
 <LIST>%ol%%    	{ 	if(openItem == 1) {
 							endTagHtml() ;
 							openItem = 0 ;
 						}
-						BEGIN NO_LIST ;
+						BEGIN NO_ENV ;
 					  	endTagHtml(); 	}					  					  
 
-<NO_LIST>%%ul%	{ 	BEGIN LIST ;
+<NO_ENV>%%ul%	{ 	BEGIN LIST ;
 					  	beginUnorderListHtml(); 	}
 
 <LIST>%ul%%    		{ 	if(openItem == 1) {
 							openItem = 0 ;
 							endTagHtml() ;
 						}
-						BEGIN NO_LIST ;
+						BEGIN NO_ENV ;
 					  	endTagHtml(); 	}
 
 

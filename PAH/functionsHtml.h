@@ -13,6 +13,8 @@ void beginOrderListHtml();
 void beginUnorderListHtml();
 void beginDictionaryHtml();
 void beginItemHtml();
+void beginDictionaryTitleHtml();
+void beginDictionaryItemHtml();
 
 void beginTitleHtml(int level);
 
