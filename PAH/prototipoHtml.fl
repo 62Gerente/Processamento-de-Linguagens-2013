@@ -10,18 +10,30 @@
 	#include "utilities.h"
 
 	LinkedList closeTags ;
+	int nImg = 1 ;
 %}
 
-%s NO_ENV LIST DICT DICT_TIT
+%s NO_ENV LIST DICT DICT_TIT IMG LINK
 
 %%
-			int openItem = 0 ;
+			int openItem = 0,
+				itemTitleTags = 0 ;
 
 			BEGIN NO_ENV ;
 	
+
+<DICT_TIT,IMG,LINK>%b\{ 		{ 	beginBoldHtml();
+									itemTitleTags ++ ; }
+<DICT_TIT,IMG,LINK>%i\{			{ 	beginItalicHtml(); 
+									itemTitleTags ++ ; }
+<DICT_TIT,IMG,LINK>%u\{			{ 	beginUnderlineHtml();
+									itemTitleTags ++ ; }
+
 %b\{		{ beginBoldHtml(); }
 %i\{		{ beginItalicHtml(); }
 %u\{		{ beginUnderlineHtml(); }
+
+\%\%\%[^\n]* 			{	addCommentHtml(yytext+3);	}
 
 <NO_ENV>%%dl%		{ 	BEGIN DICT ;	
 						beginDictionaryHtml(); 	}
@@ -33,9 +45,14 @@
 						beginDictionaryTitleHtml() ;	
 						BEGIN DICT_TIT ;	}
 
-<DICT_TIT>\}			{ 	endTagHtml() ;
-							beginDictionaryItemHtml();	
-							BEGIN DICT;	}						
+<DICT_TIT>\}			{ 	endTagHtml() ;							
+							if(itemTitleTags == 0) {
+								beginDictionaryItemHtml();	
+								BEGIN DICT;	
+							}
+							else
+								itemTitleTags -- ;
+						}						
 
 <DICT>%dl%%			{ 	if(openItem == 1) {
 							endTagHtml() ;
@@ -80,14 +97,50 @@
 					  	/*printf("%s", yytext+3) ;
 						endTagHtml(); */  	}
 
+<IMG>\}				{ 	endTagHtml() ;							
+						if(itemTitleTags == 0) {	
+							nImg ++ ;						
+							BEGIN NO_ENV;	
+						}
+						else
+							itemTitleTags -- ;	}
+
+<LINK>\}				{ 	endTagHtml() ;							
+						if(itemTitleTags == 0) {								
+							BEGIN NO_ENV;	
+						}
+						else
+							itemTitleTags -- ;	}						
+
 \}					{ endTagHtml(); }
 
+<NO_ENV>%img\{	{	BEGIN IMG;
+					beginImageHtml() ;	}
+
+<IMG>,			{	beginCaptionHtml(); }	
+
+<NO_ENV>%link\{		{	BEGIN LINK ;
+						beginLinkHtml();	}
+
+<LINK>,			{	beginLinkTextHtml(); }	
+
+\%\%comment%([^%]|%[^c]|%c[^o]|%co[^m]|%com[^m]|%comm[^e]|%comme[^n]|%commen[^t]|%comment[^%]|%comment%[^%])*%comment%% 	{	
+				char *txt = substring(yytext, 10, strlen(yytext)-20) ;
+				addCommentHtml(txt);
+				free(txt) ;	}
+
+\%\%verbatim%([^%]|%[^v]|%v[^e]|%ve[^r]|%ver[^b]|%verb[^a]|%verba[^t]|%verbat[^i]|%verbati[^m]|%verbatim[^%]|%verbatim%[^%])*%verbatim%% {
+				char *txt = substring(yytext, 11, strlen(yytext)-22) ;
+				addVerbatimHtml(txt);
+				free(txt) ;	}
 
 %%
 
 int main () {
 
 	closeTags = createLinkedList(NULL, NULL);
+	beginHtml();
 	yylex() ;
+	endHtml();
 	return 0 ;
 }

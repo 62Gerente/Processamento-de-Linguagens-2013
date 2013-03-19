@@ -15,7 +15,9 @@ char 	closeI[] = "</i>",
 		closeH3[] = "</h3>",
 		closeLi[] = "</li>",
 		closeDt[] = "</dt>",
-		closeDd[] = "</dd>" ;
+		closeDd[] = "</dd>",
+		closeFigure[] = "</figcaption>\n</figure>",
+		closeLink[] = "</a>" ;
 
 void beginBoldHtml() {
 
@@ -78,11 +80,60 @@ void beginDictionaryItemHtml() {
 	pushLinkedList(closeTags, closeDd) ;		
 }
 
+void beginImageHtml() {
+
+	printf("<figure>\n<img src='") ;
+}
+
+void beginCaptionHtml()  {
+	
+	printf("' alt='Image %d' />\n", nImg) ;
+	printf("<figcaption>") ;
+	pushLinkedList(closeTags, closeFigure) ;
+}
+
 void endTagHtml() {
 
 	char* tag = (char*)popLinkedList(closeTags) ;
 	if(tag != NULL)
 		printf("%s", tag) ;
+}
+
+void beginHtml() {
+
+	printf("<!DOCTYPE html>\n");
+	printf("<html>\n") ;
+	printf("<head>\n") ;
+	printf("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\n") ;
+	printf("</head>\n") ;
+	printf("<body>\n") ;
+}
+
+void endHtml() {
+
+	printf("</body>\n") ;
+	printf("</html>") ;
+}
+
+void beginLinkHtml() {
+
+	printf("<a href=\"http://") ;
+	pushLinkedList(closeTags, closeLink) ;
+}
+
+void beginLinkTextHtml() {
+
+	printf("\">") ;
+}
+
+void addCommentHtml(char* text) {
+
+	printf("<!--%s-->", text) ;
+}
+
+void addVerbatimHtml(char* text) {
+
+	printf("<PER>%s</PER>", text) ;
 }
 
 /*void endBoldHtml()  ;
