@@ -146,3 +146,18 @@ void beginVerbatimLatex(){
 void endVerbatimLatex(){
     printf("\\end{verbatim}");
 }
+
+/* Início de verbatim de linha em Latex */
+void beginVerbatimLineLatex(){
+    printf("\\verb@");
+}
+
+/* Fim de verbatim de linha em Latex */
+void endVerbatimLineLatex(){
+    printf("@");
+}
+
+/* Capa em Latex */
+void addCoverLatex(){
+    printf("\\maketitle");
+}

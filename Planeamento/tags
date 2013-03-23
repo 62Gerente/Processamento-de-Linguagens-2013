@@ -15,7 +15,9 @@ Títulos: %t1{}..%t3{}
 	
 Indíce: %index%
 
-Texto não formatado: %verb??
+Texto não formatado: 
+			Linha: %%verb% %verb%%
+			Várias Linhas: %%verbatim% %verbatim%%
 
 Lista de tópicos:
 
@@ -60,6 +62,20 @@ Comentários:
 
 	%%comment%
 	%comment%%	
+
+Título, Data e Autor do Documento:
+
+%%header%
+	%title Relatório PAH
+	%author 41,49,62
+	%date 23/3/2013
+%header%%
+
+Fazer Capa: %cover% 
+
+Codigo HTML/LATEX:
+	%%latex% %latex%%
+	%%html% %html %%
 
 Features:
 	i ou item...

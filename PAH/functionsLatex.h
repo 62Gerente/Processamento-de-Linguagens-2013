@@ -81,4 +81,13 @@ void beginVerbatimLatex();
 /* Fim de verbatim em Latex */
 void endVerbatimLatex();
 
+/* Início de verbatim de linha em Latex */
+void beginVerbatimLineLatex();
+
+/* Fim de verbatim de linha em Latex */
+void endVerbatimLineLatex();
+
+/* Capa em Latex */
+void addCoverLatex();
+
 #endif
