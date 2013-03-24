@@ -161,7 +161,7 @@
 
     /* --------------------------- GERAL --------------------------- */    
 
-<INITIAL>\}                      { endLatexTag(closeTags); }               /* Fecha ultima tag aberta */
+<INITIAL,LIST,DICTIONARY>\}      { endLatexTag(closeTags); }               /* Fecha ultima tag aberta */
 <*>.|\n                          { ECHO; }
 
 %%
@@ -169,7 +169,13 @@
 int main(){
     closeTags = createLinkedList(NULL,NULL);
     table = createLinkedList(NULL,NULL);
+
+    beginDocumentLatex();
+    
     yylex();
+
+    endDocumentLatex();
+    
     return 0;
 }
 

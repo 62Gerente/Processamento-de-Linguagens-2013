@@ -35,7 +35,7 @@ O Gregs vai buscar o %b{%u{pão} e a broa}.
 
 %img{/home/gerente/img.png,%b{Fotografia} Pessoal}
 
-%link{/home/gerente/img.png,Fotografia %u{Pessoal}}
+%link{http://likeagenius.com,LIKE A GENIUS}
 
 %%verb% %%link{/home/gerente/img.png,Fotografia %%u{Pessoal}} %verb%%
 

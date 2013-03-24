@@ -266,3 +266,27 @@ void newRowLatex(LinkedList table, char* c, int head){
 
     pushLinkedList(table,row);
 }
+
+/* Inicio de um documento Latex */
+void beginDocumentLatex(){
+    printf("\\documentclass[11pt,a4paper]{article}\n");
+    printf("\\usepackage{tikz}\n");
+    printf("\\usetikzlibrary{arrows,shapes}\n");
+    printf("\\usepackage[utf8]{inputenc} \n");
+    printf("\\usepackage{setspace}\n");
+    printf("\\usepackage{indentfirst}\n");
+    printf("\\usepackage{graphicx}\n");
+    printf("\\usepackage{color}\n");
+    printf("\\usepackage{verbatim}\n");
+    printf("\\pagenumbering{arabic}\n");
+    printf("\\usepackage{a4wide}\n");
+    printf("\\usepackage{biblatex}\n");
+    printf("\\onehalfspacing\n");
+    printf("\\usepackage[pdftex]{hyperref}\n")
+    printf("\\begin{document}\n\n");
+}
+
+/* Fim de um documento Latex */
+void endDocumentLatex(){
+    printf("\\end{document}\n");
+}

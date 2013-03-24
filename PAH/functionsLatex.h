@@ -108,4 +108,10 @@ void newColumnLatex(LinkedList table, char* c);
 /* Linha de uma tabela em Latex */
 void newRowLatex(LinkedList table, char* column, int head);
 
+/* Início de documento Latex */
+void beginDocumentLatex();
+
+/* Fim de documento Latex */
+void endDocumentLatex();
+
 #endif
