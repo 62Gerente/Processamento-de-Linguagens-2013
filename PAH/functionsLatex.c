@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "functionsLatex.h"
 #include "LinkedList/linkedlist.h"
+#include "utilities.h"
 
 /* Função que fecha a ultima tag aberta */
 void endLatexTag(LinkedList l){
@@ -160,4 +161,108 @@ void endVerbatimLineLatex(){
 /* Capa em Latex */
 void addCoverLatex(){
     printf("\\maketitle");
+}
+
+/* Título em Latex */
+void addTitleLatex(char* title){
+    printf("\\title{ %s }",title);
+}
+
+/* Autor em Latex */
+void addAuthorLatex(char* author){
+    printf("\\author{ %s }",author);
+}
+
+/* Título em Latex */
+void addDateLatex(char* date){
+    printf("\\date{ %s }",date);
+}
+
+/* Imprime as colunas de uma tabela */
+void printColumns(LinkedElem columns, int head){
+    if(columns){
+        char* column = (char*) columns->data;
+        printColumns(columns->next,head);
+        
+        if(head){
+            printf(" \\textbf{ %s } ",column);
+        }else{
+            printf(" %s ",column);
+        }
+
+        if(!columns->next){
+            printf("&");
+        }
+    }
+}
+
+/* Imprime as linhas de uma tabela */
+void printRows(LinkedElem table){
+    if(table){
+
+        Row row = (Row) table->data;
+        
+        printRows(table->next);
+        if(table->next){
+            printf("\\\\\n"); 
+        }
+        printf("\\hline\n");  
+    
+        printColumns(row->columns->elems,row->head);
+    }
+}
+
+/* Faz tabela em Latex */
+void addTableLatex(LinkedList table){
+    int i,max = 0;
+    LinkedElem rows = table->elems;
+    while(rows){
+        Row row = (Row) rows->data;
+        if(row->nrColumns > max){
+            max = row->nrColumns;
+        }
+        rows = rows->next;
+    }
+
+    printf("\\begin{table}[!htpb]\n");
+    printf("\\centering\n");
+    printf("\\begin{tabular}{||");
+    for(i=0;i<max;i++){
+        printf("c|");
+    }
+    printf("|}\n");
+
+    printRows(table->elems);
+
+    printf("\\\\\n\\hline\n\\end{tabular}\n");
+    printf("\\end{table}\n");
+
+    clearLinkedList(table);
+}
+
+/* Coluna de uma tabela em Latex */
+void newColumnLatex(LinkedList table, char* c){
+    Row row = (Row) table->elems->data;
+
+    row->nrColumns++;
+
+    char* column = (char*) malloc (sizeof (c));
+
+    strcpy(column,c);
+
+    pushLinkedList(row->columns,column);
+}
+
+/* Linha de uma tabela em Latex */
+void newRowLatex(LinkedList table, char* c, int head){
+    Row row = createRow(head);
+    
+    row->nrColumns++;
+    
+    char* column = (char*) malloc (sizeof (c));
+    strcpy(column,c);
+
+    pushLinkedList(row->columns,column);
+
+    pushLinkedList(table,row);
 }

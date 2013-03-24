@@ -53,8 +53,8 @@ Links:
 Inclusão e formatação de tabelas:
 		
 		%%table%
-			%head Tag % Número Ocorrencias
-			%row <b>  % 30	
+			%head Tag % Número Ocorrencias 
+			%row <b>  % 30 
 		%table%%
 
 Comentários:
@@ -80,4 +80,4 @@ Codigo HTML/LATEX:
 Features:
 	i ou item...
 	mudar tipo de items
-	
+	caption nas tabelas

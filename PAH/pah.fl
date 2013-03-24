@@ -7,12 +7,13 @@
     #include "LinkedList/linkedlist.h"
 
 
-    /* --------------------------- VAR GLOBAIS --------------------- */    
+    /* --------------------------- VAR E ESTRUTURAS ---------------- */    
 
     LinkedList closeTags;   /* Lista ligada com as tags que estão por fechar */
-
+    LinkedList table;
+            
 %}
-    /* --------------------------- VAR GLOBAIS --------------------- */  
+    /* --------------------------- ESTADOS ------------------------- */  
 
 %x VERB
 %x VERB_LINE
@@ -20,9 +21,11 @@
 %x COMMENT
 %x IMG  
 %x LINK 
-%x ROW
 %x LIST
 %x DICTIONARY
+%x HEADER
+%x LATEX
+%x TABLE
 
 %%
     /* --------------------------- VARIAVEIS ----------------------- */    
@@ -32,6 +35,14 @@
 
     /* --------------------------- LATEX --------------------------- */    
     
+    /* --------------------------- HEADER -------------------------- */    
+
+<INITIAL>%%header%               { BEGIN HEADER; }                        /* Começa o estado de header */
+<HEADER>%header%%                { BEGIN INITIAL; }                       /* Volta ao estado inicial */
+
+<HEADER>%title[ \t].*            { addTitleLatex(yytext+7); }             /* Título */
+<HEADER>%author[ \t].*           { addAuthorLatex(yytext+8); }            /* Autor */
+<HEADER>%date[ \t].*             { addDateLatex(yytext+6); }              /* Data */
 
     /* --------------------------- FORMATACAO ---------------------- */    
 
@@ -70,7 +81,7 @@
 <INITIAL>%%dl%                   { BEGIN DICTIONARY;                       /* Começa o estado de dicionário*/
                                    beginDictionaryLatex();                 /* Início de entradas de um dicionário */
                                  }
-<DICTIONARY>%dl%%                { BEGIN INITIAL;;                         /* Volta ao estado normal */
+<DICTIONARY>%dl%%                { BEGIN INITIAL;                          /* Volta ao estado normal */
                                    endDictionaryLatex();                   /* Fim de entradas de um dicionario */
                                  }
 
@@ -132,15 +143,32 @@
                                    endVerbatimLineLatex();                 /* Fim de verbatim de linha */
                                  }
 
+    /* --------------------------- LATEX E HTML --------------------- */    
+
+<INITIAL>%%latex%                { BEGIN LATEX; }                          /* Começa estado LATEX */
+<LATEX>%latex%%                  { BEGIN INITIAL; }                        /* Volta ao estado normal */
+                         
+<INITIAL>%%html%(.|\n)*%html%%   { }                                       /* Ignora */
+
+
+    /* --------------------------- TABELAS ------------------------- */    
+
+<INITIAL>%%table%               { BEGIN TABLE; }                            /* Começa estado tabela */
+<TABLE>%table%%                 { addTableLatex(table); }                   /* Cria tabela */
+<TABLE>%head[ \t][^%\n]*        { newRowLatex(table,yytext+6,1); }          /* Nova linha header */
+<TABLE>%row[ \t][^%\n]*         { newRowLatex(table,yytext+5,0); }          /* Nova linha */
+<TABLE>%[ \t][^%\n]*            { newColumnLatex(table,yytext+1); }         /* Nova Coluna */
+
     /* --------------------------- GERAL --------------------------- */    
 
-<INITIAL>\}                      { endLatexTag(closeTags); }               /* Fim geral */
-<*>.|\n                          { printf("%s", yytext); }
+<INITIAL>\}                      { endLatexTag(closeTags); }               /* Fecha ultima tag aberta */
+<*>.|\n                          { ECHO; }
 
 %%
 
 int main(){
     closeTags = createLinkedList(NULL,NULL);
+    table = createLinkedList(NULL,NULL);
     yylex();
     return 0;
 }

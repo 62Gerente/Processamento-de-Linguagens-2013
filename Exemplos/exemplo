@@ -1,12 +1,19 @@
+%%header%
+	%title Relatório
+	%author Grupo
+	%date dia de hoje
+%header%%
+
+%cover%
+	%index%
+
+
 %t1{Testes}
 
 %t3{Testes Formatação}
 
 O joão é do %b{Porto}, a rita é do %i{Benfica}.
 O Gregs vai buscar o %b{%u{pão} e a broa}. 
-
-	%index%
-
 
 %%ol%
 	%it Item 1
@@ -51,3 +58,25 @@ delimiter
 	%it{Desc3} Item
 %dl%%
 %verbatim%%
+
+%%html%
+
+Cenas em javascript e css
+<h5>
+
+%html%%
+
+%%latex%
+
+gráficos e cenas ninja!
+\blabl{}
+
+%latex%%
+
+%%table%
+
+	%head Tag % Ocorrencias
+	%row <b> % 30
+	%row <i> % 90
+
+%table%%

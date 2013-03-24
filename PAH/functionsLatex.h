@@ -90,4 +90,22 @@ void endVerbatimLineLatex();
 /* Capa em Latex */
 void addCoverLatex();
 
+/* Título em Latex */
+void addTitleLatex(char* title);
+
+/* Autor em Latex */
+void addAuthorLatex(char* author);
+
+/* Título em Latex */
+void addDateLatex(char* date);
+
+/* Faz tabela em Latex */
+void addTableLatex(LinkedList table);
+
+/* Coluna de uma tabela em Latex */
+void newColumnLatex(LinkedList table, char* c);
+
+/* Linha de uma tabela em Latex */
+void newRowLatex(LinkedList table, char* column, int head);
+
 #endif
