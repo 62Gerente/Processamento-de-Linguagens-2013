@@ -137,3 +137,25 @@ void applyLikedList(LinkedList list, void (*function)(void *, void *), void *par
     }
 }
 
+
+/* Função que insere um elemento no final de uma lista ligada */
+
+int tailInsertLinkedList(LinkedList list, void *newData) {
+    
+    LinkedElem new = (LinkedElem) malloc (sizeof (struct sLinkedElem)) ;
+    new->data = newData ;
+    new->next = NULL ;
+
+    if(list->elems == NULL)
+        list->elems = new ;    
+    else {
+        LinkedElem l ;
+        for(l = list->elems ; l->next != NULL; l = l->next) 
+            ;
+        l->next = new ;
+    }
+
+    list->nrelems ++ ;
+    return 0 ;
+}
+

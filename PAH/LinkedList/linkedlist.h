@@ -40,8 +40,10 @@ void* removeLinkedList(LinkedList list, void* key);
 /* Função que limpa uma lista ligada */
 int clearLinkedList(LinkedList list);
 
-
 /* Função que aplica uma função a todos os nodos de uma lista ligada*/
 void applyLikedList(LinkedList list, void (*function)(void *, void *), void *params);
+
+/* Função que insere um elemento no final de uma lista ligada */
+int tailInsertLinkedList(LinkedList list, void *newData);
 
 #endif
