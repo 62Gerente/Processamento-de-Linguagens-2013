@@ -5,9 +5,10 @@
 #include "LinkedList/linkedlist.h"
 
 char* substring(char* str, int posi, int offset){
-    char *res = (char*) malloc (offset) ;    
+    char *res = (char*) malloc (offset+1) ;    
     str+=posi;
     strncpy(res, str, offset) ;
+    res[offset] = '\0' ;
     return res;
 }
 
