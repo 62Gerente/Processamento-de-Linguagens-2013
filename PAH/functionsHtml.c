@@ -17,7 +17,9 @@ char 	closeI[] = "</i>",
 		closeDt[] = "</dt>",
 		closeDd[] = "</dd>",
 		closeFigure[] = "</figcaption>\n</figure>",
-		closeLink[] = "</a>" ;
+		closeLink[] = "</a>",
+		closeTable[] = "</table>" ;
+
 
 void beginBoldHtml() {
 
@@ -131,9 +133,35 @@ void addCommentHtml(char* text) {
 	printf("<!--%s-->", text) ;
 }
 
-void addVerbatimHtml(char* text) {
+void addVerbatimLineHtml(char* text) {
 
 	printf("<PER>%s</PER>", text) ;
+}
+
+void addVerbatimHtml(char* text) {
+
+	printf("\n<xmp>%s</xmp>\n", text) ;
+}
+
+void addCodeHtml(char* text) {
+
+	printf("%s", text) ;
+}
+
+void beginTableHtml() {
+
+	printf("<table>") ;
+}
+
+void addIndexEntryHtml(int level, char* title) {
+
+	IndexEntry *entry = (IndexEntry*) malloc (sizeof(IndexEntry)) ;
+	switch (level) {
+		case 1 : section ++ ; subSection = subSubSection = 0 ;
+		case 2 : subSection ++ ; subSubSection = 0 ;
+		case 3 : subSubsection ++ ; 
+		default : ;
+	}
 }
 
 /*void endBoldHtml()  ;

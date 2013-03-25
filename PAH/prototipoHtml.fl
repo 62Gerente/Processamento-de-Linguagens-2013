@@ -10,33 +10,92 @@
 	#include "utilities.h"
 
 	LinkedList closeTags ;
+	LinkedList index ;
 	int nImg = 1 ;
+	int section = 0,
+		subSection = 0,
+		subSubSection = 0 ;
 %}
 
-%s NO_ENV LIST DICT DICT_TIT IMG LINK
+	/* ------------------------------------ ESTADOS -------------------------------------------- */
+
+%s NO_ENV 
+%s LIST 
+%s DICT 
+%s DICT_TIT 
+%s IMG 
+%s LINK
+%s TABLE
 
 %%
+
+	/* ----------------------------------- VARIÁVEIS ------------------------------------------------- */
 			int openItem = 0,
-				itemTitleTags = 0 ;
+				itemTitleTags = 0,
+				openLine = 0,
+				columnType ; // 0 -> header, 1 -> normal
+				
+
+	/* ------------------------------------ ESTADO INICIAL ------------------------------------------ */
 
 			BEGIN NO_ENV ;
 	
+	/* ------ NEGRITO, ITÁLICO E SUBLINHADO EM AMBIENTES ESPECIAIS (QUE TERMINAM COM '}') ------- */
 
-<DICT_TIT,IMG,LINK>%b\{ 		{ 	beginBoldHtml();
-									itemTitleTags ++ ; }
-<DICT_TIT,IMG,LINK>%i\{			{ 	beginItalicHtml(); 
-									itemTitleTags ++ ; }
-<DICT_TIT,IMG,LINK>%u\{			{ 	beginUnderlineHtml();
-									itemTitleTags ++ ; }
+<DICT_TIT,IMG,LINK,TITLE>%b\{ 		{ 	beginBoldHtml();
+										itemTitleTags ++ ; }
+<DICT_TIT,IMG,LINK,TITLE>%i\{		{ 	beginItalicHtml(); 
+										itemTitleTags ++ ; }
+<DICT_TIT,IMG,LINK,TITLE>%u\{		{ 	beginUnderlineHtml();
+										itemTitleTags ++ ; }
 
-%b\{		{ beginBoldHtml(); }
-%i\{		{ beginItalicHtml(); }
-%u\{		{ beginUnderlineHtml(); }
+	/* ------------------------ NEGRITO, ITÁLICO E SUBLINHADO ----------------------------- */
 
-\%\%\%[^\n]* 			{	addCommentHtml(yytext+3);	}
+%b\{				{ 	beginBoldHtml();	}
+%i\{				{ 	beginItalicHtml(); 	}
+%u\{				{ 	beginUnderlineHtml(); }
+
+	/* ------------------------- COMENTÁRIO DE LINHA -------------------------------------- */
+
+\%\%\%[^\n]* 		{	addCommentHtml(yytext+3);	}
+
+	/* -------------------------- INÍCIO DE LISTAS ----------------------------------------- */
 
 <NO_ENV>%%dl%		{ 	BEGIN DICT ;	
 						beginDictionaryHtml(); 	}
+
+<NO_ENV>%%ol%		{ 	BEGIN LIST ;
+					  	beginOrderListHtml(); 	}	
+
+<NO_ENV>%%ul%		{ 	BEGIN LIST ;
+					  	beginUnorderListHtml(); 	}	
+
+	/* -------------------------- FIM DE LISTAS ------------------------------------------- */
+
+<DICT>%dl%%			{ 	if(openItem == 1) {
+							endTagHtml() ;
+							openItem = 0 ;
+						}
+						BEGIN NO_ENV ;
+					  	endTagHtml(); 	}	
+
+<LIST>%ol%%    		{ 	if(openItem == 1) {
+							endTagHtml() ;
+							openItem = 0 ;
+						}
+						BEGIN NO_ENV ;
+					  	endTagHtml(); 	}					  					  
+
+
+
+<LIST>%ul%%    		{ 	if(openItem == 1) {
+							openItem = 0 ;
+							endTagHtml() ;
+						}
+						BEGIN NO_ENV ;
+					  	endTagHtml(); 	}					  					  						
+
+	/* ---------------------- ITEMS DE UM DICIONÁRIO --------------------- */
 
 <DICT>%it\{			{	if(openItem == 1) 
 							endTagHtml() ;
@@ -54,48 +113,42 @@
 								itemTitleTags -- ;
 						}						
 
-<DICT>%dl%%			{ 	if(openItem == 1) {
-							endTagHtml() ;
-							openItem = 0 ;
-						}
-						BEGIN NO_ENV ;
-					  	endTagHtml(); 	}						
-
-
-%t[1-3]\{	{ char* str = substring(yytext, 2, 1);    /* Tag de início de título */
-              beginTitleHtml(atoi(str));
-              free(str); }
-
-
-<NO_ENV>%%ol%	{ 	BEGIN LIST ;
-					  	beginOrderListHtml(); 	}
-
-<LIST>%ol%%    	{ 	if(openItem == 1) {
-							endTagHtml() ;
-							openItem = 0 ;
-						}
-						BEGIN NO_ENV ;
-					  	endTagHtml(); 	}					  					  
-
-<NO_ENV>%%ul%	{ 	BEGIN LIST ;
-					  	beginUnorderListHtml(); 	}
-
-<LIST>%ul%%    		{ 	if(openItem == 1) {
-							openItem = 0 ;
-							endTagHtml() ;
-						}
-						BEGIN NO_ENV ;
-					  	endTagHtml(); 	}
-
-
+	/* ---------------------- ITEMS DE UMA LISTA --------------------- */
 
 <LIST>%it  			{	if(openItem == 1)
 							endTagHtml() ;
 					  	else
 					  		openItem = 1 ;					
-					  	beginItemHtml();
-					  	/*printf("%s", yytext+3) ;
-						endTagHtml(); */  	}
+					  	beginItemHtml(); 	}
+
+
+	/* ---------------------- INICIAR TÍTULO ------------------------------------ */
+
+<NO_ENV>%t[1-3]\{	{ 	char* str = substring(yytext, 2, 1);    /* Tag de início de título */
+					  	int level = atoi(str) ;
+              			beginTitleHtml(level);
+              			free(str);
+              			BEGIN TITLE; }
+
+    /* ---------------------- TERMINAR TÍTULO ------------------------------------ */
+
+<TITLE>\}			{ 	endTagHtml() ;							
+						if(itemTitleTags == 0) {														
+							BEGIN NO_ENV;	
+						}
+						else
+							itemTitleTags -- ;	}             			
+
+	/* ---------------------- INÍCIO DE LINK E IMAGEM --------------------- */	              			
+
+
+<NO_ENV>%img\{		{	BEGIN IMG;
+						beginImageHtml() ;	} 
+
+<NO_ENV>%link\{		{	BEGIN LINK ;
+						beginLinkHtml();	}					
+
+	/* ------------------------ FIM DE LINK E IMAGEM --------------------------------- */
 
 <IMG>\}				{ 	endTagHtml() ;							
 						if(itemTitleTags == 0) {	
@@ -105,40 +158,109 @@
 						else
 							itemTitleTags -- ;	}
 
-<LINK>\}				{ 	endTagHtml() ;							
+<LINK>\}			{ 	endTagHtml() ;							
 						if(itemTitleTags == 0) {								
 							BEGIN NO_ENV;	
 						}
 						else
 							itemTitleTags -- ;	}						
 
+
+	/* ------------------------ LEGENDA DA IMAGEM E TEXTO DO LINK ---------------------------------- */
+
+<IMG>,				{	beginCaptionHtml(); }	
+
+
+<LINK>,				{	beginLinkTextHtml(); }	
+
+	/* ------------------------ FIM DE TAG ----------------------------------------------------------- */
+
 \}					{ endTagHtml(); }
 
-<NO_ENV>%img\{	{	BEGIN IMG;
-					beginImageHtml() ;	}
-
-<IMG>,			{	beginCaptionHtml(); }	
-
-<NO_ENV>%link\{		{	BEGIN LINK ;
-						beginLinkHtml();	}
-
-<LINK>,			{	beginLinkTextHtml(); }	
+	/* ------------------------ COMENTÁRIO MULTI-LINHA ----------------------------------------------- */
 
 \%\%comment%([^%]|%[^c]|%c[^o]|%co[^m]|%com[^m]|%comm[^e]|%comme[^n]|%commen[^t]|%comment[^%]|%comment%[^%])*%comment%% 	{	
 				char *txt = substring(yytext, 10, strlen(yytext)-20) ;
 				addCommentHtml(txt);
 				free(txt) ;	}
 
+	/* ------------------------ VERBATIM DE LINHA ---------------------------------------------------- */				
+
+\%\%verb%([^%]|%[^v]|%v[^e]|%ve[^r]|%ver[^b]|%verb[^%]|%verb%[^%])*%verb%% {				
+				char *txt = substring(yytext, 7, strlen(yytext)-14) ;				
+				addVerbatimLineHtml(txt);
+				free(txt) ;	}
+
+	/* ------------------------ VERBATIM MULTI-LINHA ------------------------------------------------- */				
+
 \%\%verbatim%([^%]|%[^v]|%v[^e]|%ve[^r]|%ver[^b]|%verb[^a]|%verba[^t]|%verbat[^i]|%verbati[^m]|%verbatim[^%]|%verbatim%[^%])*%verbatim%% {
 				char *txt = substring(yytext, 11, strlen(yytext)-22) ;
 				addVerbatimHtml(txt);
-				free(txt) ;	}
+				free(txt) ;	}	
+
+	/* ------------------------ CÓDIGO HTML E LATEX ---------------------------------------------------------- */				
+
+\%\%html%([^%]|%[^h]|%h[^t]|%ht[^m]|%htm[^l]|%html[^%]|%html%[^%])*%html%% 	{				
+				char *txt = substring(yytext, 7, strlen(yytext)-14) ;
+				addCodeHtml(txt) ;
+				free(txt) ;	}	
+
+\%\%latex%(.|\n)*%latex%%   { }				
+
+
+	/* ------------------------------ INICIAR TABELA ---------------------------------------------------------- */
+
+<NO_ENV>%%table%		{	BEGIN TABLE;
+							printf("<table border=\"1\">") ;	}
+
+	/* ------------------------------ INICIAR LINHA DA TABELA ---------------------------------------------------------- */
+
+<TABLE>%head[ \t]+		{	if(openLine == 1) {
+								(columnType == 0 ? printf("</th>\n") : printf("</td>\n")) ;
+								printf("</tr>\n");
+							}
+							else {
+								openLine = 1 ;
+								columnType = 0 ;
+							}
+							printf("<tr>\n");
+							printf("<th>") ;
+							columnType = 0 ;	}							
+
+<TABLE>%row[ \t]+		{	if(openLine == 1) {
+								(columnType == 0 ? printf("</th>\n") : printf("</td>\n")) ;
+								printf("</tr>\n");
+							}
+							else {
+								openLine = 1 ;
+								columnType = 1 ;
+							}
+							printf("<tr>\n");
+							printf("<td>") ;
+							columnType = 1 ;	}										
+
+	/* ------------------------------ FECHAR TABELA ---------------------------------------------------------- */
+
+<TABLE>%table%%		{	if(openLine == 1) {
+							(columnType == 0 ? printf("</th>\n") : printf("</td>\n")) ;
+							printf("</tr>\n");
+							openLine = 0 ;
+						}
+						printf("</table>");
+						BEGIN NO_ENV ;	}							
+	
+
+	/* ------------------------------ REGISTAR COLUNA DA TABELA ---------------------------------------------------------- */
+
+<TABLE>%[ \t]+	{	(columnType == 0 ? printf("</th>\n") : printf("</td>\n"));	
+					(columnType == 0 ? printf("<th>\n") : printf("<td>\n")) ;	}						
 
 %%
 
 int main () {
 
 	closeTags = createLinkedList(NULL, NULL);
+	index = createLinkedList(NULL, NULL);
 	beginHtml();
 	yylex() ;
 	endHtml();

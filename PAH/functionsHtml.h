@@ -4,7 +4,16 @@
 #include "LinkedList/linkedlist.h"
 
 LinkedList closeTags ;
+LinkedList index ;
 int nImg ;
+int section,
+	subSection,
+	subSubSection ;
+
+typedef struct sIndexEntry{
+    int level ;
+    char *titulo ;
+}IndexEntry;
 
 void beginBoldHtml();
 void beginItalicHtml();
@@ -36,7 +45,14 @@ void beginLinkTextHtml();
 
 void addCommentHtml(char* text);
 
+void addVerbatimLineHtml(char* text);
 void addVerbatimHtml(char* text);
+
+void addCodeHtml(char* text);
+
+void beginTableHtml();
+
+void addIndexEntryHtml();
 
 
 
