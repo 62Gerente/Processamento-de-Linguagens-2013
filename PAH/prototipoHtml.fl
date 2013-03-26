@@ -10,11 +10,15 @@
 	#include "utilities.h"
 
 	LinkedList closeTags ;
-	LinkedList index ;
-	int nImg = 1 ;
-	int section = 0,
-		subSection = 0,
-		subSubSection = 0 ;
+	LinkedList indexHtml ;
+	LinkedList title ;
+	LinkedList header ;
+	int nImg = 1,
+		titleLevel ;
+	int sect = 0, subSect = 0, subSubSect = 0;
+	int printIndex = 0 ;
+	FILE *f ;
+	char *outputFileName ;	
 %}
 
 	/* ------------------------------------ ESTADOS -------------------------------------------- */
@@ -26,6 +30,8 @@
 %s IMG 
 %s LINK
 %s TABLE
+%s TITLE
+%s HEADER
 
 %%
 
@@ -48,6 +54,12 @@
 										itemTitleTags ++ ; }
 <DICT_TIT,IMG,LINK,TITLE>%u\{		{ 	beginUnderlineHtml();
 										itemTitleTags ++ ; }
+
+	/* ------ NEGRITO, ITÁLICO E SUBLINHADO EM AMBIENTE HEADER ----------------------------------- */
+
+<HEADER>%b\{ 						{ 	beginHeaderBoldHtml();		}										
+<HEADER>%i\{						{ 	beginHeaderItalicHtml(); 	}
+<HEADER>%u\{						{ 	beginUnderlineHtml();		}										
 
 	/* ------------------------ NEGRITO, ITÁLICO E SUBLINHADO ----------------------------- */
 
@@ -125,19 +137,28 @@
 	/* ---------------------- INICIAR TÍTULO ------------------------------------ */
 
 <NO_ENV>%t[1-3]\{	{ 	char* str = substring(yytext, 2, 1);    /* Tag de início de título */
-					  	int level = atoi(str) ;
-              			beginTitleHtml(level);
+					  	titleLevel = atoi(str) ;					  	
+              			beginTitleHtml();
               			free(str);
               			BEGIN TITLE; }
 
-    /* ---------------------- TERMINAR TÍTULO ------------------------------------ */
+	/* ------------------------ FIM DE TÍTULO --------------------------------- */
 
-<TITLE>\}			{ 	endTagHtml() ;							
-						if(itemTitleTags == 0) {														
-							BEGIN NO_ENV;	
-						}
-						else
-							itemTitleTags -- ;	}             			
+<TITLE>\}			{ 		endTagHtml() ;							
+							if(itemTitleTags == 0) {								
+								BEGIN NO_ENV;
+								endTagHtml();	
+								closeTitleHtml() ;
+							}
+							else
+								itemTitleTags -- ;	}    
+
+	/* ------------------------ REGISTAR TÍTULO --------------------------------- */
+
+<TITLE>.			{	char *txt = substring(yytext, 0, 1) ;
+						tailInsertLinkedList(title, txt);
+						fprintf(f, "%s", yytext) ;	}							
+
 
 	/* ---------------------- INÍCIO DE LINK E IMAGEM --------------------- */	              			
 
@@ -148,7 +169,7 @@
 <NO_ENV>%link\{		{	BEGIN LINK ;
 						beginLinkHtml();	}					
 
-	/* ------------------------ FIM DE LINK E IMAGEM --------------------------------- */
+	/* ------------------------ FIM DE LINK --------------------------------- */
 
 <IMG>\}				{ 	endTagHtml() ;							
 						if(itemTitleTags == 0) {	
@@ -158,12 +179,14 @@
 						else
 							itemTitleTags -- ;	}
 
-<LINK>\}			{ 	endTagHtml() ;							
-						if(itemTitleTags == 0) {								
-							BEGIN NO_ENV;	
-						}
-						else
-							itemTitleTags -- ;	}						
+	/* ------------------------ FIM DE IMAGEM --------------------------------- */
+
+<LINK>\}			{ 		endTagHtml() ;							
+							if(itemTitleTags == 0) {								
+								BEGIN NO_ENV;	
+							}
+							else
+								itemTitleTags -- ;	}
 
 
 	/* ------------------------ LEGENDA DA IMAGEM E TEXTO DO LINK ---------------------------------- */
@@ -172,6 +195,10 @@
 
 
 <LINK>,				{	beginLinkTextHtml(); }	
+
+	/* ------------------------ FIM DE TAG NO CABEÇALHO ----------------------------------------------------------- */
+
+<HEADER>\}					{ endHeaderTag(); }
 
 	/* ------------------------ FIM DE TAG ----------------------------------------------------------- */
 
@@ -211,58 +238,126 @@
 	/* ------------------------------ INICIAR TABELA ---------------------------------------------------------- */
 
 <NO_ENV>%%table%		{	BEGIN TABLE;
-							printf("<table border=\"1\">") ;	}
+							fprintf(f, "<table border=\"1\">") ;	}
 
 	/* ------------------------------ INICIAR LINHA DA TABELA ---------------------------------------------------------- */
 
-<TABLE>%head[ \t]+		{	if(openLine == 1) {
-								(columnType == 0 ? printf("</th>\n") : printf("</td>\n")) ;
-								printf("</tr>\n");
+<TABLE>%head 			{	if(openLine == 1) {
+								(columnType == 0 ? fprintf(f, "</th>\n") : fprintf(f, "</td>\n")) ;
+								fprintf(f, "</tr>\n");
 							}
 							else {
 								openLine = 1 ;
 								columnType = 0 ;
 							}
-							printf("<tr>\n");
-							printf("<th>") ;
+							fprintf(f, "<tr>\n");
+							fprintf(f, "<th>") ;
 							columnType = 0 ;	}							
 
-<TABLE>%row[ \t]+		{	if(openLine == 1) {
-								(columnType == 0 ? printf("</th>\n") : printf("</td>\n")) ;
-								printf("</tr>\n");
+<TABLE>%row				{	if(openLine == 1) {
+								(columnType == 0 ? fprintf(f, "</th>\n") : fprintf(f, "</td>\n")) ;
+								fprintf(f, "</tr>\n");
 							}
 							else {
 								openLine = 1 ;
 								columnType = 1 ;
 							}
-							printf("<tr>\n");
-							printf("<td>") ;
+							fprintf(f, "<tr>\n");
+							fprintf(f, "<td>") ;
 							columnType = 1 ;	}										
 
 	/* ------------------------------ FECHAR TABELA ---------------------------------------------------------- */
 
 <TABLE>%table%%		{	if(openLine == 1) {
-							(columnType == 0 ? printf("</th>\n") : printf("</td>\n")) ;
-							printf("</tr>\n");
+							(columnType == 0 ? fprintf(f, "</th>\n") : fprintf(f, "</td>\n")) ;
+							fprintf(f, "</tr>\n");
 							openLine = 0 ;
 						}
-						printf("</table>");
+						fprintf(f, "</table>");
 						BEGIN NO_ENV ;	}							
 	
 
 	/* ------------------------------ REGISTAR COLUNA DA TABELA ---------------------------------------------------------- */
 
-<TABLE>%[ \t]+	{	(columnType == 0 ? printf("</th>\n") : printf("</td>\n"));	
-					(columnType == 0 ? printf("<th>\n") : printf("<td>\n")) ;	}						
+<TABLE>%[ \t]+	{	(columnType == 0 ? fprintf(f, "</th>\n") : fprintf(f, "</td>\n"));	
+					(columnType == 0 ? fprintf(f, "<th>\n") : fprintf(f, "<td>\n")) ;	}	
+
+	/* -------------------------------- INÍCIO DO HEADER ------------------------------------------------------------------ */
+
+<NO_ENV>%%header%			{	BEGIN HEADER;
+								beginHeaderHtml() ;	}
+
+	/* -------------------------------- REGISTO DE TÍTULO, AUTOR E DATA --------------------------------------------------- */
+
+<HEADER>%title 				{	if(openItem == 1)
+									endHeaderTag();
+								else
+									openItem = 1;
+								beginHeaderLine("Title") ;	}
+
+<HEADER>%author 			{	if(openItem == 1)
+									endHeaderTag();
+								else
+									openItem = 1;
+								beginHeaderLine("Author") ;	}								
+
+<HEADER>%date 				{	if(openItem == 1)
+									endHeaderTag();
+								else
+									openItem = 1;
+								beginHeaderLine("Date") ;	}								
+
+	/* -------------------------------- FINAL DO HEADER ------------------------------------------------------------------ */
+
+<HEADER>%header%%		{		if(openItem == 1) {
+									endHeaderTag();
+									openItem = 0 ;
+								}	
+								endHeaderHtml();
+								BEGIN NO_ENV;	}
+
+	/* -------------------------------- REGISTAR O HEADER ------------------------------------------------------------------ */
+
+<HEADER>.			{	char *txt = substring(yytext, 0, 1) ;
+						tailInsertLinkedList(header, txt);	}	
+
+	/* -------------------------------- IMPRIMIR A CAPA ------------------------------------------------------------------ */	
+
+<NO_ENV>%cover%		{	createCoverHtml();	}
+
+	/* -------------------------------- MARCAR O ÍNDICE ------------------------------------------------------------------ */	
+
+<NO_ENV>%index%		{	markIndexHtml();
+						printIndex = 1 ;	}
+
+	/* -------------------------------- ACÇÃO POR DEFEITO ------------------------------------------------------------------ */							
+
+.|\n 				{	fprintf(f, "%s", yytext);	}
 
 %%
 
-int main () {
+int main (int argc, char* argv[]) {
 
+	outputFileName = "out.html" ;
+	f = fopen("temp.pah", "w+") ;
+	if(f == NULL){
+		fprintf(stderr, "Erro ao abrir o ficheiro temp.pah\n") ;
+		exit(-1) ;
+	}
 	closeTags = createLinkedList(NULL, NULL);
-	index = createLinkedList(NULL, NULL);
+	indexHtml = createLinkedList(NULL, NULL);
+	title = createLinkedList(NULL, NULL);
+	header = createLinkedList(NULL, NULL);
 	beginHtml();
 	yylex() ;
+	//makeIndexHtml() ;
 	endHtml();
+	fclose(f) ;
+	if(printIndex == 1) {
+		printIndexHtml();
+	}
+	/*LinkedElem l ;
+	for(l = header->elems; l != NULL; l = l->next)
+		fprintf(f, "%s", (char*)l->data) ;*/
 	return 0 ;
 }

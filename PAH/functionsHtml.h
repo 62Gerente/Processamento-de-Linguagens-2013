@@ -4,15 +4,21 @@
 #include "LinkedList/linkedlist.h"
 
 LinkedList closeTags ;
-LinkedList index ;
+LinkedList indexHtml ;
+LinkedList title ;
+LinkedList header ;
+
 int nImg ;
-int section,
-	subSection,
-	subSubSection ;
+int titleLevel ;
+int sect, subSect, subSubSect ;
+
+FILE *f ;
+
+char *outputFileName ;
 
 typedef struct sIndexEntry{
     int level ;
-    char *titulo ;
+    char *title ;
 }IndexEntry;
 
 void beginBoldHtml();
@@ -27,7 +33,7 @@ void beginDictionaryHtml();
 void beginDictionaryTitleHtml();
 void beginDictionaryItemHtml();
 
-void beginTitleHtml(int level);
+void beginTitleHtml();
 
 void beginImageHtml() ;
 void beginCaptionHtml() ;
@@ -52,9 +58,25 @@ void addCodeHtml(char* text);
 
 void beginTableHtml();
 
-void addIndexEntryHtml();
+void closeTitleHtml();
 
+void makeIndexHtml(FILE* file);
+void indexHeader(FILE* file) ;
+void indexLine(IndexEntry* entry, int section, int subSection, int subSubSection, FILE* file);
 
+void beginHeaderHtml();
+void endHeaderHtml();
+void beginHeaderLine();
+void endHeaderTag();
+void beginHeaderBoldHtml();
+void beginHeaderItalicHtml();
+void beginHeaderUnderlineHtml();
+
+void createCoverHtml();
+
+void markIndexHtml();
+
+void printIndexHtml();
 
 /*void endBoldHtml();
 void endItalicHtml();
