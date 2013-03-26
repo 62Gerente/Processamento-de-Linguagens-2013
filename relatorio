@@ -106,6 +106,7 @@ Ao longo do documento, partes do texto podem ser apresentadas em itálico, em ne
 %t2{Listas} 
 De seguida, são apresentadas os três tipos de listas suportadas pela ferramenta %it{PAH}.
  
+
 %t3{Listas Numeradas}
 
 %%ul%
@@ -113,12 +114,14 @@ De seguida, são apresentadas os três tipos de listas suportadas pela ferrament
     %it Cada item da lista é precedido por %%verb% %it %verb%%;
 %ul%%
 
+
 %t3{Listas Não Numeradas}
 
 %%ul%
     %it Iniciada por %%verb% %%ul% %verb%% e finalizada por %%verb% %ul%% %verb%%;
     %it Cada item da lista é precedido por %%verb% %it %verb%%;
 %ul%%
+
 
 %t3{Entradas de um dicionário}
 
@@ -136,6 +139,7 @@ De seguida, são apresentadas os três tipos de listas suportadas pela ferrament
     %it{Item} descrição do item
 %dl%%
 %verbatim%% 
+
 
 %t2{Imagens}
 Como qualquer outra ferramenta, é permitida a inclusão de imagens no documento. Para isso, basta usar o comando %%verb% %img{path,caption} %verb%%, sendo "path" o caminho para a respectiva imagem e "caption" a legenda da mesma.
@@ -172,3 +176,5 @@ As tabelas têm a seguinte estrutura:
     %it O comando %%verb% % %verb%% permite a separação das células da tabela, correspondendo, no entanto, ao número total de colunas.
 %ul%%
 
+
+%t2{Conclusão}
