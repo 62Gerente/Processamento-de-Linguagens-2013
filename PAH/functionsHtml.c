@@ -26,32 +26,32 @@ char 	closeI[] = "</i>",
 
 void beginBoldHtml() {
 
-	fprintf(f, "<b>") ;
+	fprintf(tempFile, "<b>") ;
 	pushLinkedList(closeTags, closeB) ;
 }
 
 void beginItalicHtml() {
 
-	fprintf(f, "<i>") ;
+	fprintf(tempFile, "<i>") ;
 	pushLinkedList(closeTags, closeI) ;
 }
 
 void beginUnderlineHtml() {
 
-	fprintf(f, "<u>") ;
+	fprintf(tempFile, "<u>") ;
 	pushLinkedList(closeTags, closeU) ;
 }
 
 void beginTitleHtml() {
 
-	fprintf(f, "<h%d>", titleLevel) ;
+	fprintf(tempFile, "<h%d>", titleLevel) ;
 	switch (titleLevel) {
 		case 1 :	{	sect++ ; subSect = 0 ; subSubSect = 0 ; 
-						fprintf(f, "<a id=\"section_%d\">", sect) ; break ;}
+						fprintf(tempFile, "<a id=\"section_%d\">", sect) ; break ;}
 		case 2 : 	{ 	subSect ++ ; subSubSect = 0 ; 
-						fprintf(f, "<a id=\"section_%d_%d\">", sect, subSect) ; break ;}
+						fprintf(tempFile, "<a id=\"section_%d_%d\">", sect, subSect) ; break ;}
 		case 3 : 	{ 	subSubSect ++ ; 
-						fprintf(f, "<a id=\"section_%d_%d_%d\">", sect, subSect, subSubSect) ; break ;}
+						fprintf(tempFile, "<a id=\"section_%d_%d_%d\">", sect, subSect, subSubSect) ; break ;}
 		default : ;
 	}	
 	char *closeTitle = (char*)malloc(6); // o free nunca é feito
@@ -62,48 +62,48 @@ void beginTitleHtml() {
 
 void beginOrderListHtml() {
 
-	fprintf(f, "<ol>") ;
+	fprintf(tempFile, "<ol>") ;
 	pushLinkedList(closeTags, closeOl) ;	
 }
 
 void beginUnorderListHtml() {
 
-	fprintf(f, "<ul>") ;
+	fprintf(tempFile, "<ul>") ;
 	pushLinkedList(closeTags, closeUl) ;		
 }
 void beginDictionaryHtml() {
 
-	fprintf(f, "<dl>") ;
+	fprintf(tempFile, "<dl>") ;
 	pushLinkedList(closeTags, closeDl) ;	
 }
 
 void beginItemHtml() {
 
-	fprintf(f, "<li>") ;
+	fprintf(tempFile, "<li>") ;
 	pushLinkedList(closeTags, closeLi) ;		
 }
 
 void beginDictionaryTitleHtml() {
 
-	fprintf(f, "<dt>") ;
+	fprintf(tempFile, "<dt>") ;
 	pushLinkedList(closeTags, closeDt) ;		
 }
 
 void beginDictionaryItemHtml() {
 
-	fprintf(f, "<dd>") ;
+	fprintf(tempFile, "<dd>") ;
 	pushLinkedList(closeTags, closeDd) ;		
 }
 
 void beginImageHtml() {
 
-	fprintf(f, "<figure>\n<img src='") ;
+	fprintf(tempFile, "<figure>\n<img src='") ;
 }
 
 void beginCaptionHtml()  {
 	
-	fprintf(f, "' alt='Image %d' />\n", nImg) ;
-	fprintf(f, "<figcaption>") ;
+	fprintf(tempFile, "' alt='Image %d' />\n", nImg) ;
+	fprintf(tempFile, "<figcaption>") ;
 	pushLinkedList(closeTags, closeFigure) ;
 }
 
@@ -111,59 +111,59 @@ void endTagHtml() {
 
 	char* tag = (char*)popLinkedList(closeTags) ;
 	if(tag != NULL)
-		fprintf(f, "%s", tag) ;
+		fprintf(tempFile, "%s", tag) ;
 }
 
 void beginHtml() {
 
-	fprintf(f, "<!DOCTYPE html>\n");
-	fprintf(f, "<html>\n") ;
-	fprintf(f, "<head>\n") ;
-	fprintf(f, "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\n") ;
-	fprintf(f, "</head>\n") ;
-	fprintf(f, "<body>\n") ;
+	fprintf(tempFile, "<!DOCTYPE html>\n");
+	fprintf(tempFile, "<html>\n") ;
+	fprintf(tempFile, "<head>\n") ;
+	fprintf(tempFile, "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\n") ;
+	fprintf(tempFile, "</head>\n") ;
+	fprintf(tempFile, "<body>\n") ;
 }
 
 void endHtml() {
 
-	fprintf(f, "</body>\n") ;
-	fprintf(f, "</html>") ;
+	fprintf(tempFile, "</body>\n") ;
+	fprintf(tempFile, "</html>") ;
 }
 
 void beginLinkHtml() {
 
-	fprintf(f, "<a href=\"http://") ;
+	fprintf(tempFile, "<a href=\"http://") ;
 	pushLinkedList(closeTags, closeLink) ;
 }
 
 void beginLinkTextHtml() {
 
-	fprintf(f, "\">") ;
+	fprintf(tempFile, "\">") ;
 }
 
 void addCommentHtml(char* text) {
 
-	fprintf(f, "<!--%s-->", text) ;
+	fprintf(tempFile, "<!--%s-->", text) ;
 }
 
 void addVerbatimLineHtml(char* text) {
 
-	fprintf(f, "<PER>%s</PER>", text) ;
+	fprintf(tempFile, "<PER>%s</PER>", text) ;
 }
 
 void addVerbatimHtml(char* text) {
 
-	fprintf(f, "\n<xmp>%s</xmp>\n", text) ;
+	fprintf(tempFile, "\n<xmp>%s</xmp>\n", text) ;
 }
 
 void addCodeHtml(char* text) {
 
-	fprintf(f, "%s", text) ;
+	fprintf(tempFile, "%s", text) ;
 }
 
 void beginTableHtml() {
 
-	fprintf(f, "<table>") ;
+	fprintf(tempFile, "<table>") ;
 }
 
 void closeTitleHtml() {
@@ -182,11 +182,11 @@ void closeTitleHtml() {
 	clearElemsLinkedList(title) ;
 }
 
-void makeIndexHtml(FILE* file) {
+void makeIndexHtml() {
 
 	int section = 0, subSection = 0, subSubSection = 0 ;
 	LinkedElem l ;
-	indexHeader(file) ;
+	indexHeader() ;
 	for(l = indexHtml->elems; l != NULL; l = l->next) {
 		IndexEntry *entry = (IndexEntry*)l->data ;
 		switch (entry->level) {
@@ -195,25 +195,27 @@ void makeIndexHtml(FILE* file) {
 			case 3 : subSubSection ++ ; break ;
 			default : ;
 		}
-		indexLine(entry, section, subSection, subSubSection, file) ;
+		indexLine(entry, section, subSection, subSubSection) ;
 	}
+	fprintf(outputFile, "<hr>\n") ;
 }
 
-void indexHeader(FILE* file) {
+void indexHeader() {
 
-	fprintf(file, "<h1>Table of Contents</h1>\n") ;
+	fprintf(outputFile, "<hr>\n") ;
+	fprintf(outputFile, "<h1>Table of Contents</h1>\n") ;
 }
 
-void indexLine(IndexEntry* entry, int section, int subSection, int subSubSection, FILE* file) {
+void indexLine(IndexEntry* entry, int section, int subSection, int subSubSection) {
 
-	fprintf(file, "<p>");
+	fprintf(outputFile, "<p>");
 	switch (entry->level) {
-		case 1 : fprintf(file, "<a href=\"#section_%d\">%d - %s</a>", section, section, entry->title) ; break ;
-		case 2 : fprintf(file, "&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"#section_%d_%d\">%d.%d - %s</a>", section, subSection, section, subSection, entry->title) ; break ;
-		case 3 : fprintf(file, "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href=\"#section_%d_%d_%d\">%d.%d.%d - %s</a>", section, subSection, subSubSection, section, subSection, subSubSection, entry->title); break ;
+		case 1 : fprintf(outputFile, "<a href=\"#section_%d\">%d - %s</a>", section, section, entry->title) ; break ;
+		case 2 : fprintf(outputFile, "&nbsp; &nbsp; &nbsp; &nbsp;<a href=\"#section_%d_%d\">%d.%d - %s</a>", section, subSection, section, subSection, entry->title) ; break ;
+		case 3 : fprintf(outputFile, "&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href=\"#section_%d_%d_%d\">%d.%d.%d - %s</a>", section, subSection, subSubSection, section, subSection, subSubSection, entry->title); break ;
 		default : ;
 	}
-	fprintf(file, "<p>\n") ;
+	fprintf(outputFile, "</p>\n") ;
 }
 
 void beginHeaderHtml() {
@@ -267,38 +269,10 @@ void createCoverHtml() {
 
 	LinkedElem l ;
 	for(l = header->elems; l != NULL; l = l->next)
-		fprintf(f, "%s", (char*)l->data) ;
+		fprintf(tempFile, "%s", (char*)l->data) ;
 }
 
 void markIndexHtml() {
 
-	fprintf(f, "\n%%index%%\n") ;
+	fprintf(tempFile, "\n%%index%%\n") ;
 }
-
-void printIndexHtml() {
-
-	char line[1000] ;	
-	f = fopen("temp.pah", "r") ;
-	if(f == NULL){
-		fprintf(stderr, "Erro ao abrir o ficheiro temp.pah\n") ;
-		exit(-1) ;
-	}
-	FILE *output = fopen(outputFileName, "w") ;
-	if(output == NULL){
-		fprintf(stderr, "Erro ao abrir o ficheiro %s\n", outputFileName) ;
-		exit(-1) ;
-	}
-	while(fgets(line, 1000, f) != NULL) {
-		if(strcmp(line, "%index%") == 0)
-			makeIndexHtml(output);
-		else
-			fprintf(output, "%s", line) ;
-	}
-	fclose(output) ;
-	fclose(f) ;
-}
-
-
-/*void endBoldHtml()  ;
-void endItalicHtml()  ;
-void endUnderlineHtml()  ;*/

@@ -9,16 +9,25 @@
 	#include "functionsHtml.h"
 	#include "utilities.h"
 
+	#define DIM_LINE	100
+
+	void generateOutput();
+
 	LinkedList closeTags ;
 	LinkedList indexHtml ;
 	LinkedList title ;
 	LinkedList header ;
+	
 	int nImg = 1,
 		titleLevel ;
 	int sect = 0, subSect = 0, subSubSect = 0;
 	int printIndex = 0 ;
-	FILE *f ;
-	char *outputFileName ;	
+
+	FILE *tempFile ;
+	FILE *output ;	
+
+	char *tempFileName = ".temp.pah" ;
+	char *newLine = "\n" ;
 %}
 
 	/* ------------------------------------ ESTADOS -------------------------------------------- */
@@ -59,7 +68,7 @@
 
 <HEADER>%b\{ 						{ 	beginHeaderBoldHtml();		}										
 <HEADER>%i\{						{ 	beginHeaderItalicHtml(); 	}
-<HEADER>%u\{						{ 	beginUnderlineHtml();		}										
+<HEADER>%u\{						{ 	beginHeaderUnderlineHtml();		}										
 
 	/* ------------------------ NEGRITO, ITÁLICO E SUBLINHADO ----------------------------- */
 
@@ -157,7 +166,7 @@
 
 <TITLE>.			{	char *txt = substring(yytext, 0, 1) ;
 						tailInsertLinkedList(title, txt);
-						fprintf(f, "%s", yytext) ;	}							
+						fprintf(tempFile, "%s", yytext) ;	}							
 
 
 	/* ---------------------- INÍCIO DE LINK E IMAGEM --------------------- */	              			
@@ -238,49 +247,49 @@
 	/* ------------------------------ INICIAR TABELA ---------------------------------------------------------- */
 
 <NO_ENV>%%table%		{	BEGIN TABLE;
-							fprintf(f, "<table border=\"1\">") ;	}
+							fprintf(tempFile, "<table border=\"1\">") ;	}
 
 	/* ------------------------------ INICIAR LINHA DA TABELA ---------------------------------------------------------- */
 
 <TABLE>%head 			{	if(openLine == 1) {
-								(columnType == 0 ? fprintf(f, "</th>\n") : fprintf(f, "</td>\n")) ;
-								fprintf(f, "</tr>\n");
+								(columnType == 0 ? fprintf(tempFile, "</th>\n") : fprintf(tempFile, "</td>\n")) ;
+								fprintf(tempFile, "</tr>\n");
 							}
 							else {
 								openLine = 1 ;
 								columnType = 0 ;
 							}
-							fprintf(f, "<tr>\n");
-							fprintf(f, "<th>") ;
+							fprintf(tempFile, "<tr>\n");
+							fprintf(tempFile, "<th>") ;
 							columnType = 0 ;	}							
 
 <TABLE>%row				{	if(openLine == 1) {
-								(columnType == 0 ? fprintf(f, "</th>\n") : fprintf(f, "</td>\n")) ;
-								fprintf(f, "</tr>\n");
+								(columnType == 0 ? fprintf(tempFile, "</th>\n") : fprintf(tempFile, "</td>\n")) ;
+								fprintf(tempFile, "</tr>\n");
 							}
 							else {
 								openLine = 1 ;
 								columnType = 1 ;
 							}
-							fprintf(f, "<tr>\n");
-							fprintf(f, "<td>") ;
+							fprintf(tempFile, "<tr>\n");
+							fprintf(tempFile, "<td>") ;
 							columnType = 1 ;	}										
 
 	/* ------------------------------ FECHAR TABELA ---------------------------------------------------------- */
 
 <TABLE>%table%%		{	if(openLine == 1) {
-							(columnType == 0 ? fprintf(f, "</th>\n") : fprintf(f, "</td>\n")) ;
-							fprintf(f, "</tr>\n");
+							(columnType == 0 ? fprintf(tempFile, "</th>\n") : fprintf(tempFile, "</td>\n")) ;
+							fprintf(tempFile, "</tr>\n");
 							openLine = 0 ;
 						}
-						fprintf(f, "</table>");
+						fprintf(tempFile, "</table>");
 						BEGIN NO_ENV ;	}							
 	
 
 	/* ------------------------------ REGISTAR COLUNA DA TABELA ---------------------------------------------------------- */
 
-<TABLE>%[ \t]+	{	(columnType == 0 ? fprintf(f, "</th>\n") : fprintf(f, "</td>\n"));	
-					(columnType == 0 ? fprintf(f, "<th>\n") : fprintf(f, "<td>\n")) ;	}	
+<TABLE>%[ \t]+	{	(columnType == 0 ? fprintf(tempFile, "</th>\n") : fprintf(tempFile, "</td>\n"));	
+					(columnType == 0 ? fprintf(tempFile, "<th>\n") : fprintf(tempFile, "<td>\n")) ;	}	
 
 	/* -------------------------------- INÍCIO DO HEADER ------------------------------------------------------------------ */
 
@@ -289,20 +298,26 @@
 
 	/* -------------------------------- REGISTO DE TÍTULO, AUTOR E DATA --------------------------------------------------- */
 
-<HEADER>%title 				{	if(openItem == 1)
+<HEADER>%title 				{	if(openItem == 1) {
 									endHeaderTag();
+									tailInsertLinkedList(header, newLine);
+								}
 								else
 									openItem = 1;
 								beginHeaderLine("Title") ;	}
 
-<HEADER>%author 			{	if(openItem == 1)
+<HEADER>%author 			{	if(openItem == 1) {
 									endHeaderTag();
+									tailInsertLinkedList(header, newLine);
+								}
 								else
 									openItem = 1;
 								beginHeaderLine("Author") ;	}								
 
-<HEADER>%date 				{	if(openItem == 1)
+<HEADER>%date 				{	if(openItem == 1) {
 									endHeaderTag();
+									tailInsertLinkedList(header, newLine);
+								}
 								else
 									openItem = 1;
 								beginHeaderLine("Date") ;	}								
@@ -312,6 +327,7 @@
 <HEADER>%header%%		{		if(openItem == 1) {
 									endHeaderTag();
 									openItem = 0 ;
+									tailInsertLinkedList(header, newLine);
 								}	
 								endHeaderHtml();
 								BEGIN NO_ENV;	}
@@ -320,6 +336,8 @@
 
 <HEADER>.			{	char *txt = substring(yytext, 0, 1) ;
 						tailInsertLinkedList(header, txt);	}	
+
+<HEADER>\n			{	}
 
 	/* -------------------------------- IMPRIMIR A CAPA ------------------------------------------------------------------ */	
 
@@ -332,32 +350,84 @@
 
 	/* -------------------------------- ACÇÃO POR DEFEITO ------------------------------------------------------------------ */							
 
-.|\n 				{	fprintf(f, "%s", yytext);	}
+.|\n 				{	fprintf(tempFile, "%s", yytext);	}
 
 %%
 
+void generateOutput () {	
+
+	char line[DIM_LINE] ;
+	char *indexMark = "%index%\n" ;
+	int unfinishedLine = 0 ;
+
+	if(printIndex == 1) {
+		while(fgets(line, DIM_LINE, tempFile) != NULL) {
+			if(unfinishedLine == 0 && strcmp(line, indexMark) == 0)
+				makeIndexHtml();
+			else
+				fprintf(outputFile, "%s", line) ;
+			if(strlen(line) == DIM_LINE-1 && line[DIM_LINE-1] != '\n')
+				unfinishedLine = 1 ;
+			else 
+				unfinishedLine = 0 ;
+		}
+	}
+	else 
+		while(fgets(line, DIM_LINE, tempFile) != NULL)
+			fprintf(outputFile, "%s", line) ;	
+}
+
+
 int main (int argc, char* argv[]) {
 
-	outputFileName = "out.html" ;
-	f = fopen("temp.pah", "w+") ;
-	if(f == NULL){
-		fprintf(stderr, "Erro ao abrir o ficheiro temp.pah\n") ;
-		exit(-1) ;
-	}
+	/* Inicializa as estruturas */	
 	closeTags = createLinkedList(NULL, NULL);
 	indexHtml = createLinkedList(NULL, NULL);
 	title = createLinkedList(NULL, NULL);
 	header = createLinkedList(NULL, NULL);
-	beginHtml();
-	yylex() ;
-	//makeIndexHtml() ;
-	endHtml();
-	fclose(f) ;
-	if(printIndex == 1) {
-		printIndexHtml();
+
+	/* Define qual o output */
+	if(argc > 1) {
+		outputFile = fopen(argv[1], "w") ;
+		if(outputFile == NULL) {
+			fprintf(stderr, "Erro ao abrir, para escrita, o ficheiro %s\n", argv[1]) ;
+			exit(-1) ;
+		}	
 	}
-	/*LinkedElem l ;
-	for(l = header->elems; l != NULL; l = l->next)
-		fprintf(f, "%s", (char*)l->data) ;*/
+	else
+		outputFile = stdout ;
+
+	/* Abre o ficheiro temporario para escrita */
+	tempFile = fopen(tempFileName, "w") ;	
+	if(tempFile == NULL){
+		fprintf(stderr, "Erro ao abrir, para escrita, o ficheiro %s\n", tempFileName) ;
+		exit(-1) ;
+	}
+	
+	/* Parser do ficheiro de entrada */
+	beginHtml();
+	yylex() ;	
+	endHtml();
+
+	/* Termina de escrever no ficheiro */
+	fclose(tempFile) ;
+
+	/* Abre o ficheiro temporário para leitura */	
+	tempFile = fopen(tempFileName, "r") ;	
+	if(tempFile == NULL){
+		fprintf(stderr, "Erro ao abrir, para leitura, o ficheiro %s\n", tempFileName) ;
+		exit(-1) ;
+	}
+
+	/* Gera o output */
+	generateOutput() ;	
+
+	/* Fecha ambos os ficheiros */
+	fclose(outputFile) ;
+	fclose(tempFile) ;
+
+	/* Apaga o ficheiro temporário criado */
+	remove(tempFileName);
+	
 	return 0 ;
 }

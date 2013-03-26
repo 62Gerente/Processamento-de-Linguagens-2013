@@ -12,9 +12,8 @@ int nImg ;
 int titleLevel ;
 int sect, subSect, subSubSect ;
 
-FILE *f ;
-
-char *outputFileName ;
+FILE *tempFile ;
+FILE *outputFile ;
 
 typedef struct sIndexEntry{
     int level ;
@@ -60,9 +59,9 @@ void beginTableHtml();
 
 void closeTitleHtml();
 
-void makeIndexHtml(FILE* file);
-void indexHeader(FILE* file) ;
-void indexLine(IndexEntry* entry, int section, int subSection, int subSubSection, FILE* file);
+void makeIndexHtml();
+void indexHeader() ;
+void indexLine(IndexEntry* entry, int section, int subSection, int subSubSection);
 
 void beginHeaderHtml();
 void endHeaderHtml();
@@ -75,11 +74,5 @@ void beginHeaderUnderlineHtml();
 void createCoverHtml();
 
 void markIndexHtml();
-
-void printIndexHtml();
-
-/*void endBoldHtml();
-void endItalicHtml();
-void endUnderlineHtml();*/
 
 #endif
