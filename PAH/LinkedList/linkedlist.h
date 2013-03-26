@@ -46,4 +46,7 @@ void applyLikedList(LinkedList list, void (*function)(void *, void *), void *par
 /* Função que insere um elemento no final de uma lista ligada */
 int tailInsertLinkedList(LinkedList list, void *newData);
 
+/* Função que apaga todos os elementos de uma lista ligada */
+int clearElemsLinkedList(LinkedList list);
+
 #endif

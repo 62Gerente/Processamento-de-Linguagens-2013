@@ -159,3 +159,17 @@ int tailInsertLinkedList(LinkedList list, void *newData) {
     return 0 ;
 }
 
+/* Função que apaga todos os elementos de uma lista ligada */
+
+int clearElemsLinkedList(LinkedList list) {
+
+    LinkedElem aux;
+
+    while (list->elems != NULL) {
+        aux = list->elems;
+        list->elems = list->elems->next;
+        free(aux);
+        list->nrelems -- ;
+    }
+    return 0 ;    
+}
