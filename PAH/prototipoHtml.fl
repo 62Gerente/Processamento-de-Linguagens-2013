@@ -22,6 +22,8 @@
 		titleLevel ;
 	int sect = 0, subSect = 0, subSubSect = 0;
 	int printIndex = 0 ;
+	int newLineEnable = 0 ;
+	int lastWasNewLine = 0 ;
 
 	FILE *tempFile ;
 	FILE *output ;	
@@ -98,14 +100,16 @@
 							openItem = 0 ;
 						}
 						BEGIN NO_ENV ;
-					  	endTagHtml(); 	}	
+					  	endTagHtml();
+					  	newLineEnable = 0 ; 	}	
 
 <LIST>%ol%%    		{ 	if(openItem == 1) {
 							endTagHtml() ;
 							openItem = 0 ;
 						}
 						BEGIN NO_ENV ;
-					  	endTagHtml(); 	}					  					  
+					  	endTagHtml();
+					  	newLineEnable = 0 ; 	}					  					  
 
 
 
@@ -114,7 +118,8 @@
 							endTagHtml() ;
 						}
 						BEGIN NO_ENV ;
-					  	endTagHtml(); 	}					  					  						
+					  	endTagHtml();
+					  	newLineEnable = 0 ; 	}					  					  						
 
 	/* ---------------------- ITEMS DE UM DICIONÁRIO --------------------- */
 
@@ -156,6 +161,7 @@
 <TITLE>\}			{ 		endTagHtml() ;							
 							if(itemTitleTags == 0) {								
 								BEGIN NO_ENV;
+								newLineEnable = 0 ;
 								endTagHtml();	
 								closeTitleHtml() ;
 							}
@@ -166,7 +172,11 @@
 
 <TITLE>.			{	char *txt = substring(yytext, 0, 1) ;
 						tailInsertLinkedList(title, txt);
-						fprintf(tempFile, "%s", yytext) ;	}							
+						fprintf(tempFile, "%s", yytext) ;	}	
+
+	/* ------------------------ REGISTAR MUDANÇA DE LINHA NO TÍTULO --------------------------------- */
+
+<TITLE>\n			{	fprintf(tempFile, "<br>") ;	}													
 
 
 	/* ---------------------- INÍCIO DE LINK E IMAGEM --------------------- */	              			
@@ -183,7 +193,8 @@
 <IMG>\}				{ 	endTagHtml() ;							
 						if(itemTitleTags == 0) {	
 							nImg ++ ;						
-							BEGIN NO_ENV;	
+							BEGIN NO_ENV;
+							newLineEnable = 0 ;	
 						}
 						else
 							itemTitleTags -- ;	}
@@ -192,7 +203,9 @@
 
 <LINK>\}			{ 		endTagHtml() ;							
 							if(itemTitleTags == 0) {								
-								BEGIN NO_ENV;	
+								BEGIN NO_ENV;
+								newLineEnable = 1 ;	
+								lastWasNewLine = 0 ;
 							}
 							else
 								itemTitleTags -- ;	}
@@ -283,7 +296,8 @@
 							openLine = 0 ;
 						}
 						fprintf(tempFile, "</table>");
-						BEGIN NO_ENV ;	}							
+						BEGIN NO_ENV ;
+						newLineEnable = 0 ;	}							
 	
 
 	/* ------------------------------ REGISTAR COLUNA DA TABELA ---------------------------------------------------------- */
@@ -293,7 +307,7 @@
 
 	/* -------------------------------- INÍCIO DO HEADER ------------------------------------------------------------------ */
 
-<NO_ENV>%%header%			{	BEGIN HEADER;
+<NO_ENV>%%header%			{	BEGIN HEADER;								
 								beginHeaderHtml() ;	}
 
 	/* -------------------------------- REGISTO DE TÍTULO, AUTOR E DATA --------------------------------------------------- */
@@ -330,7 +344,8 @@
 									tailInsertLinkedList(header, newLine);
 								}	
 								endHeaderHtml();
-								BEGIN NO_ENV;	}
+								BEGIN NO_ENV;
+								newLineEnable = 0 ;	}
 
 	/* -------------------------------- REGISTAR O HEADER ------------------------------------------------------------------ */
 
@@ -341,12 +356,24 @@
 
 	/* -------------------------------- IMPRIMIR A CAPA ------------------------------------------------------------------ */	
 
-<NO_ENV>%cover%		{	createCoverHtml();	}
+<NO_ENV>%cover%		{	createCoverHtml();
+						newLineEnable = 0 ;	}
 
 	/* -------------------------------- MARCAR O ÍNDICE ------------------------------------------------------------------ */	
 
 <NO_ENV>%index%		{	markIndexHtml();
-						printIndex = 1 ;	}
+						printIndex = 1 ;
+						newLineEnable = 0 ;	}
+
+	/* -------------------------------- TRATAMENTO DE MUDANÇA DE LINHA ------------------------------------------------------------------ */							
+
+<NO_ENV>. 				{	fprintf(tempFile, "%s", yytext);
+							newLineEnable = 1 ;
+							lastWasNewLine = 0 ;	}
+
+<NO_ENV>\n 				{	if(newLineEnable == 1 && lastWasNewLine == 0)
+								fprintf(tempFile, "<br>\n");
+							lastWasNewLine = 1 ;	}
 
 	/* -------------------------------- ACÇÃO POR DEFEITO ------------------------------------------------------------------ */							
 
