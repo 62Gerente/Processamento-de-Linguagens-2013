@@ -154,7 +154,9 @@
     /* --------------------------- TABELAS ------------------------- */    
 
 <INITIAL>%%table%               { BEGIN TABLE; }                            /* Começa estado tabela */
-<TABLE>%table%%                 { addTableLatex(table); }                   /* Cria tabela */
+<TABLE>%table%%                 { addTableLatex(table);                     /* Cria tabela */
+                                  BEGIN INITIAL;
+                                }
 <TABLE>%head[ \t][^%\n]*        { newRowLatex(table,yytext+6,1); }          /* Nova linha header */
 <TABLE>%row[ \t][^%\n]*         { newRowLatex(table,yytext+5,0); }          /* Nova linha */
 <TABLE>%[ \t][^%\n]*            { newColumnLatex(table,yytext+1); }         /* Nova Coluna */
