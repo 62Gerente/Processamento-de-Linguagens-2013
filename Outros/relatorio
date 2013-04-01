@@ -32,6 +32,7 @@ A ferramenta PAH está desenvolvida em flex, sendo esta constituída pelos segui
     %it{makefile:} cria o respectivo executável.
 %dl%%
  
+
 Para proceder à instalação da ferramenta, basta apenas copiar os ficheiros referidos anteriormente para uma directoria à escolha e executar a makefile. Desta forma, será criado um executável na mesma directoria, com o nome de %i{pah}.
 
 
@@ -111,6 +112,7 @@ Existem três tipos de títulos, sendo estes apresentados pela ordem de maior im
 %ul%%
 
 %%verb% %t2{Título de subsubsecção} %verb%%
+
  
 %t2{Texto Não Formatado}
 Uma das funcionalidades da ferramenta é permitir incluir texto que não seja interpretado pelo %it{PAH}. Desta forma, todo o texto compreendido entre os comandos %%verb% %%verbatim% e %verbatim%% %verb%%, não será interpretado aquando da compilação, sendo este apresentado no documento sem quaisquer modificações. Este último caso é utilizado aquando da introdução de várias linhas. Caso o pretendido seja apenas a introdução de uma linha, basta introduzir o conteúdo dessa linha entre os comandos %%verb% %%verb% e %verb%% %verb%%.
@@ -208,9 +210,11 @@ As tabelas têm a seguinte estrutura:
     %it O comando %%verb% % %verb%% permite a separação das células da tabela, correspondendo, no entanto, ao número total de colunas.
 %ul%%
 
-A introdução de tabelas é um exemplo dos objectivos da nova ferramenta, nomeadamente, a simplificação dos comandos. Neste caso, tratando-se da introdução de tabelas, é necessário apenas a introdução dos comandos acima referidos, tornando a sua introdução muito mais facilitada , diminuindo drasticamente a sua complexidade. 
+
+A introdução de tabelas é um exemplo dos objectivos da nova ferramenta, nomeadamente, a simplificação dos comandos. Neste caso, tratando-se da introdução de tabelas, é necessário apenas a introdução dos comandos acima referidos, tornando a sua introdução muito mais facilitada, diminuindo drasticamente a sua complexidade. 
 
 %%latex% \newpage %latex%%
 
 %t2{Conclusão}
-rghrehe
+
+neste lfgfldkjjdk
