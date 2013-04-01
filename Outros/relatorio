@@ -22,23 +22,42 @@ apresentação
 
 
 %t2{Composicão e Instalação}
-A ferramenta PAH está desenvolvida em flex, sendo esta constituído por dois ficheiros:
+A ferramenta PAH está desenvolvida em flex, sendo esta constituída pelos seguintes ficheiros:
 
 %%dl%
-    %it{pah.fl:} código fonte da ferramenta;
+    %it{latex.fl:} código fonte da ferramenta para gerar latex;
+    %it{html.fl:} código fonte da ferramenta para gerar html;
+    %it{pah.c:} main do programa;
+    %it{functionsLatex.c:} funções em C usadas pelo ficheiro latex.fl;
+    %it{functionsHtml.c:} funções em C usadas pelo ficheiro html.fl;
+    %it{linkedlist.c:} módulo de listas ligadas;
+    %it{utilities.c:} 
     %it{makefile:} cria o respectivo executável.
 %dl%%
  
-Para proceder à instalação da ferramenta, basta apenas copiar os dois ficheiros para uma directoria à escolha e executar a makefile. Desta forma, será criado um executável na mesma directoria, com o nome de %i{pah}.
+Para proceder à instalação da ferramenta, basta apenas copiar os ficheiros referidos anteriormente para uma directoria à escolha e executar a makefile. Desta forma, será criado um executável na mesma directoria, com o nome de %i{pah}.
 
 %t2{Invocação}
 Como um dos objectivos deste pré-processador é facilitar a conversão em latex e html, a invocação para gerar ficheiros para cada uma destas linguagens consiste em: 
 
 %%dl%
-    %it{Gerar LaTeX:} pah -l ficheiro.pre ficheiro.tex
-    %it{gerar HTML:} pah -h ficheiro.pre ficheiro.html
+    %it{Gerar LaTeX:} ./pah --latex exemplo ficheiro.tex
+    %it{Gerar HTML:} ./pah --html exemplo ficheiro.html
 %dl%%
 
+%t3{Outras situações:}
+%%ul%
+    %it %b{Gera filetex.tex e filehtml.html:} 
+    ./pah exemplo filetex.tex filehtml.html
+    %it %b{Gera file.tex e file.html} 
+    ./pah exemplo file
+    %it %b{Gera Latex.tex e Html.html:}
+    ./pah exemplo
+    %it %b{Erro por falta de ficheiro de input:}
+    ./pah --latex
+    ./pah --html
+    ./pah
+%ul%%
 
 %t2{Funcionalidades da ferramenta}
 Nas secções seguintes serão apresentadas e exemplificadas todas as funcionalidades oferecidas por parte desta nova ferramenta. 
