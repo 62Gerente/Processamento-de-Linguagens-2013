@@ -1,3 +1,4 @@
+
 %%header%
 
 %title Relatório PAH
@@ -7,21 +8,17 @@
 %header%%
 
 
-%index%
 %cover%
+    %index%
 
  
-%t2{Introdução}
-
-apresentação
- benefícios
- imagens
- tabelas
- diminuiu complexidade comandos
- ...
+%t1{Introdução}
+Linguagens como o LaTex e o Html trazem grandes benefícios para ..., contudo também possuem alguns pontos menos atraentes. Estes pontos dizem respeito a certas desvantagens das mesmas, nomeadamente, a complexidade de certos comandos. Além de outros aspectos, este foi um dos aspectos que levou à criação da ferramenta %i{PAH}. Uma maior facilidade na escrita de certos comandos leva a um maior desempenho por parte do programador, aumentado o seu tempo de trabalho. Deste modo, a simplificação de certos comandos foi um dos aspectos principais a serem melhorados. 
+Esta nova linguagem não acarreta, de longe, todas as potencialidades e funcionalidades das duas linguagens em causa. No entanto, foram trabalhadas grande parte das funcionalidades mais usuais, tais como, a introdução de capítulos, texto formatado e não formatado, formatação de tabelas e listas, inclusão d eimagens e links, introdução de comentários, geração de índices, entre outros. bla bla bla......
 
 
-%t2{Composicão e Instalação}
+%%latex% \newpage %latex%%
+%t1{Composicão e Instalação}
 A ferramenta PAH está desenvolvida em flex, sendo esta constituída pelos seguintes ficheiros:
 
 %%dl%
@@ -37,29 +34,34 @@ A ferramenta PAH está desenvolvida em flex, sendo esta constituída pelos segui
  
 Para proceder à instalação da ferramenta, basta apenas copiar os ficheiros referidos anteriormente para uma directoria à escolha e executar a makefile. Desta forma, será criado um executável na mesma directoria, com o nome de %i{pah}.
 
-%t2{Invocação}
+
+%t1{Invocação}
 Como um dos objectivos deste pré-processador é facilitar a conversão em latex e html, a invocação para gerar ficheiros para cada uma destas linguagens consiste em: 
 
 %%dl%
-    %it{Gerar LaTeX:} ./pah --latex exemplo ficheiro.tex
-    %it{Gerar HTML:} ./pah --html exemplo ficheiro.html
+    %it{Gerar LaTeX:} ./pah --latex ficheiro ficheiro.tex
+    %it{Gerar HTML:} ./pah --html ficheiro ficheiro.html
 %dl%%
 
-%t3{Outras situações:}
+
+%b{Outras situações:}
 %%ul%
-    %it %b{Gera filetex.tex e filehtml.html:} 
-    ./pah exemplo filetex.tex filehtml.html
-    %it %b{Gera file.tex e file.html} 
-    ./pah exemplo file
+    %it %b{Gera ficheirotex.tex e ficheirohtml.html:} 
+    ./pah ficheiro ficheirotex.tex ficheirohtml.html
+    %it %b{Gera ficheiro.tex e ficheiro.html} 
+    ./pah ficheiro ficheiro
     %it %b{Gera Latex.tex e Html.html:}
-    ./pah exemplo
+    ./pah ficheiro
     %it %b{Erro por falta de ficheiro de input:}
     ./pah --latex
     ./pah --html
     ./pah
 %ul%%
 
-%t2{Funcionalidades da ferramenta}
+
+%%latex% \newpage %latex%%
+
+%t1{Funcionalidades da ferramenta}
 Nas secções seguintes serão apresentadas e exemplificadas todas as funcionalidades oferecidas por parte desta nova ferramenta. 
  
 
@@ -75,7 +77,7 @@ Num cabeçalho de um documento é possível encontrar título, autores e data de
         %%verb% %date 02/04/2013 %verb%%
 %ul%%
 
-Além disso, para que seja possível que o documento possua uma capa, basta usar o comando %%verb% %cover% %verb%%, que em LaTeX diz respeito ao comando %%verb% \maketitle %verb%%, e em HTML diz respeito a uma zona do documento onde terá toda esta informação.
+Além disso, para que seja possível que o documento possua uma capa, basta usar o comando %%verb% %cover% %verb%%, que em LaTeX diz respeito ao comando %%verb% \maketitle %verb%%, e em Html diz respeito a uma zona do documento onde terá toda esta informação.
 
 
 %t2{Índices}
@@ -108,6 +110,7 @@ Existem três tipos de títulos, sendo estes apresentados pela ordem de maior im
     %it %%verb% %t3{Título de subsubsecção} %verb%%
 %ul%%
 
+%%verb% %t2{Título de subsubsecção} %verb%%
  
 %t2{Texto Não Formatado}
 Uma das funcionalidades da ferramenta é permitir incluir texto que não seja interpretado pelo %it{PAH}. Desta forma, todo o texto compreendido entre os comandos %%verb% %%verbatim% e %verbatim%% %verb%%, não será interpretado aquando da compilação, sendo este apresentado no documento sem quaisquer modificações. Este último caso é utilizado aquando da introdução de várias linhas. Caso o pretendido seja apenas a introdução de uma linha, basta introduzir o conteúdo dessa linha entre os comandos %%verb% %%verb% e %verb%% %verb%%.
@@ -151,7 +154,7 @@ De seguida, são apresentadas os três tipos de listas suportadas pela ferrament
     %it A descrição do item deve ser colocada após o fim dos parêntesis.
 %ul%%
 
-%t3{Exemplo:}
+%b{Exemplo:}
 
 %%verbatim%
 %%dl%
@@ -183,6 +186,14 @@ O uso de comentários é muito usual ao longo do texto, uma vez que facilitam a 
 %t2{Tabelas} 
 As tabelas têm a seguinte estrutura:
 
+%%table%
+
+            %head Nome  % Número 
+            %row  Helena Alves  % a61000
+
+%table%%
+
+
 %%verbatim%
     %%table%
             %head Célula  % Célula 
@@ -190,11 +201,16 @@ As tabelas têm a seguinte estrutura:
     %table%%
 %verbatim%%
 
+
 %%ul%
     %it A tabela é iniciada com %%verb% %%table% %verb%% e finalizada com %%verb% %table%% %verb%%;
     %it Cada célula da tabela deve ser colocada após %%verb% %head %verb%% ou %%verb% %row %verb%%. A única diferença entre estes, consiste no formato do texto. Enquanto que o comando %%verb% %head %verb%% coloca o texto centrado e a negrito, o comando %%verb% %row %verb%% coloca o texto num formato normal.
     %it O comando %%verb% % %verb%% permite a separação das células da tabela, correspondendo, no entanto, ao número total de colunas.
 %ul%%
 
+A introdução de tabelas é um exemplo dos objectivos da nova ferramenta, nomeadamente, a simplificação dos comandos. Neste caso, tratando-se da introdução de tabelas, é necessário apenas a introdução dos comandos acima referidos, tornando a sua introdução muito mais facilitada , diminuindo drasticamente a sua complexidade. 
+
+%%latex% \newpage %latex%%
 
 %t2{Conclusão}
+rghrehe
