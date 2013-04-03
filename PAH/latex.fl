@@ -30,7 +30,7 @@
 %%
     /* --------------------------- VARIAVEIS ----------------------- */    
 %{   
-    char delimiter;       /* Delimitador do verbatim de linha */    
+    char inlist=0;   
 %}
 
     /* --------------------------- LATEX --------------------------- */    
@@ -66,23 +66,29 @@
 
 <INITIAL>%%ol%                   { BEGIN LIST;                             /* Começa o estado de lista */
                                    beginOrderListLatex();                  /* Início de lista ordenada */
+                                   inlist=1;
                                  }                                        
 <LIST>%ol%%                      { BEGIN INITIAL;                          /* Volta ao estado normal */
                                    endOrderListLatex();                    /* Fim de lista ordenada*/
+                                   inlist=0;
                                  }                                         
 
 <INITIAL>%%ul%                   { BEGIN LIST;                             /* Começa o estado de lista */
                                    beginUnorderListLatex();                /* Início de lista não ordenada */
+                                   inlist=1;
                                  }
 <LIST>%ul%%                      { BEGIN INITIAL;                          /* Volta ao estado normal */
                                    endUnorderListLatex();                  /* Fim de lista não ordenada */
+                                   inlist=0;
                                  }
 
 <INITIAL>%%dl%                   { BEGIN DICTIONARY;                       /* Começa o estado de dicionário*/
                                    beginDictionaryLatex();                 /* Início de entradas de um dicionário */
+                                   inlist=1;
                                  }
 <DICTIONARY>%dl%%                { BEGIN INITIAL;                          /* Volta ao estado normal */
                                    endDictionaryLatex();                   /* Fim de entradas de um dicionario */
+                                   inlist=0;
                                  }
 
     /* --------------------------- ITEMS -------------------------- */    
@@ -136,12 +142,15 @@
                                    endVerbatimLatex();                     /* Fim de verbatim */
                                  }
 
-<INITIAL>%%verb%                 { BEGIN VERB_LINE;                        /* Começa o estado verbatim de linha */
+<INITIAL,LIST>%%verb%            { BEGIN VERB_LINE;                        /* Começa o estado verbatim de linha */
                                    beginVerbatimLineLatex();               /* Inicio de verbatim de linha */
                                  }
 <VERB_LINE>%verb%%               { BEGIN INITIAL;                          /* Volta ao estado normal do Latex */
                                    endVerbatimLineLatex();                 /* Fim de verbatim de linha */
-                                 }
+                                   if(inlist){ 
+                                       BEGIN LIST;
+                                   }
+                                  }
 
     /* --------------------------- LATEX E HTML --------------------- */    
 
@@ -154,7 +163,9 @@
     /* --------------------------- TABELAS ------------------------- */    
 
 <INITIAL>%%table%               { BEGIN TABLE; }                            /* Começa estado tabela */
-<TABLE>%table%%                 { addTableLatex(table); }                   /* Cria tabela */
+<TABLE>%table%%                 { addTableLatex(table);                     /* Cria tabela */
+                                  BEGIN INITIAL;
+                                }
 <TABLE>%head[ \t][^%\n]*        { newRowLatex(table,yytext+6,1); }          /* Nova linha header */
 <TABLE>%row[ \t][^%\n]*         { newRowLatex(table,yytext+5,0); }          /* Nova linha */
 <TABLE>%[ \t][^%\n]*            { newColumnLatex(table,yytext+1); }         /* Nova Coluna */

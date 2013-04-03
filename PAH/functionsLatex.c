@@ -5,6 +5,10 @@
 #include "LinkedList/linkedlist.h"
 #include "utilities.h"
 
+int maxim = 0;
+int nrColumns = 0;
+int columnAct = 0;
+
 /* Função que fecha a ultima tag aberta */
 void endLatexTag(LinkedList l){
     printf("%s",(char*)(popLinkedList(l)));
@@ -45,7 +49,8 @@ void addCloseTagLatex(LinkedList l){
 
 /* Tag de índice em latex */
 void addIndexLatex(){
-	printf("\\tableofcontents");
+	printf("\\tableofcontents\n");
+	printf("\\newpage\n");
 }
 
 /* Início de uma lista ordenada em latex */
@@ -160,7 +165,8 @@ void endVerbatimLineLatex(){
 
 /* Capa em Latex */
 void addCoverLatex(){
-    printf("\\maketitle");
+    printf("\\maketitle\n");
+    printf("\\newpage");
 }
 
 /* Título em Latex */
@@ -181,17 +187,23 @@ void addDateLatex(char* date){
 /* Imprime as colunas de uma tabela */
 void printColumns(LinkedElem columns, int head){
     if(columns){
-        char* column = (char*) columns->data;
         printColumns(columns->next,head);
+       
+        char* column = (char*) columns->data;
         
         if(head){
             printf(" \\textbf{ %s } ",column);
         }else{
             printf(" %s ",column);
         }
-
-        if(!columns->next){
+        
+        if(columnAct<nrColumns){
             printf("&");
+            columnAct++;
+        }else{
+            for (; columnAct < maxim; columnAct++) {
+                printf(" %s","&");
+            }
         }
     }
 }
@@ -199,15 +211,18 @@ void printColumns(LinkedElem columns, int head){
 /* Imprime as linhas de uma tabela */
 void printRows(LinkedElem table){
     if(table){
+        printRows(table->next);
 
         Row row = (Row) table->data;
         
-        printRows(table->next);
         if(table->next){
             printf("\\\\\n"); 
         }
         printf("\\hline\n");  
-    
+
+        nrColumns = row->nrColumns-1;
+        columnAct = 0;
+
         printColumns(row->columns->elems,row->head);
     }
 }
@@ -228,16 +243,20 @@ void addTableLatex(LinkedList table){
     printf("\\centering\n");
     printf("\\begin{tabular}{||");
     for(i=0;i<max;i++){
-        printf("c|");
+        printf("c|",i);
     }
+
     printf("|}\n");
+
+    maxim = max-1;
 
     printRows(table->elems);
 
     printf("\\\\\n\\hline\n\\end{tabular}\n");
     printf("\\end{table}\n");
 
-    clearLinkedList(table);
+    free(table);
+    table = createLinkedList(NULL,NULL);
 }
 
 /* Coluna de uma tabela em Latex */
@@ -256,9 +275,9 @@ void newColumnLatex(LinkedList table, char* c){
 /* Linha de uma tabela em Latex */
 void newRowLatex(LinkedList table, char* c, int head){
     Row row = createRow(head);
-    
+
     row->nrColumns++;
-    
+
     char* column = (char*) malloc (sizeof (c));
     strcpy(column,c);
 
@@ -282,7 +301,7 @@ void beginDocumentLatex(){
     printf("\\usepackage{a4wide}\n");
     printf("\\usepackage{biblatex}\n");
     printf("\\onehalfspacing\n");
-    printf("\\usepackage[pdftex]{hyperref}\n")
+    printf("\\usepackage[pdftex]{hyperref}\n");
     printf("\\begin{document}\n\n");
 }
 

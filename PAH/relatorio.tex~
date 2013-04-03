@@ -1,0 +1,240 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes}
+\usepackage[utf8]{inputenc} 
+\usepackage{setspace}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{verbatim}
+\pagenumbering{arabic}
+\usepackage{a4wide}
+\usepackage{biblatex}
+\onehalfspacing
+\usepackage[pdftex]{hyperref}
+\begin{document}
+
+
+
+
+\title{ Relatório PAH }
+\author{ André Santos, Helena Alves, Pedro Carneiro }
+\date{ --/--/2013 }
+
+
+
+
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+
+
+ 
+\section{Introdução}
+Linguagens como o LaTex e o Html trazem grandes benefícios para ..., contudo também possuem alguns pontos menos atraentes. Estes pontos dizem respeito a certas desvantagens das mesmas, nomeadamente, a complexidade de certos comandos. Além de outros aspectos, este foi um dos aspectos que levou à criação da ferramenta \textit{PAH}. Uma maior facilidade na escrita de certos comandos leva a um maior desempenho por parte do programador, aumentado o seu tempo de trabalho. Deste modo, a simplificação de certos comandos foi um dos aspectos principais a serem melhorados. 
+Esta nova linguagem não acarreta, de longe, todas as potencialidades e funcionalidades das duas linguagens em causa. No entanto, foram trabalhadas grande parte das funcionalidades mais usuais, tais como, a introdução de capítulos, texto formatado e não formatado, formatação de tabelas e listas, inclusão d eimagens e links, introdução de comentários, geração de índices, entre outros. bla bla bla......
+
+
+ \newpage 
+\section{Composicão e Instalação}
+A ferramenta PAH está desenvolvida em flex, sendo esta constituída pelos seguintes ficheiros:
+
+\begin{description}
+    \item[latex.fl:] código fonte da ferramenta para gerar latex;
+    \item[html.fl:] código fonte da ferramenta para gerar html;
+    \item[pah.c:] main do programa;
+    \item[functionsLatex.c:] funções em C usadas pelo ficheiro latex.fl;
+    \item[functionsHtml.c:] funções em C usadas pelo ficheiro html.fl;
+    \item[linkedlist.c:] módulo de listas ligadas;
+    \item[utilities.c:] 
+    \item[makefile:] cria o respectivo executável.
+\end{description}
+ 
+
+Para proceder à instalação da ferramenta, basta apenas copiar os ficheiros referidos anteriormente para uma directoria à escolha e executar a makefile. Desta forma, será criado um executável na mesma directoria, com o nome de \textit{pah}.
+
+
+\section{Invocação}
+Como um dos objectivos deste pré-processador é facilitar a conversão em latex e html, a invocação para gerar ficheiros para cada uma destas linguagens consiste em: 
+
+\begin{description}
+    \item[Gerar LaTeX:] ./pah --latex ficheiro ficheiro.tex
+    \item[Gerar HTML:] ./pah --html ficheiro ficheiro.html
+\end{description}
+
+
+\textbf{Outras situações:}
+\begin{itemize}
+    \item \textbf{Gera ficheirotex.tex e ficheirohtml.html:} 
+    ./pah ficheiro ficheirotex.tex ficheirohtml.html
+    \item \textbf{Gera ficheiro.tex e ficheiro.html} 
+    ./pah ficheiro ficheiro
+    \item \textbf{Gera Latex.tex e Html.html:}
+    ./pah ficheiro
+    \item \textbf{Erro por falta de ficheiro de input:}
+    ./pah --latex
+    ./pah --html
+    ./pah
+\end{itemize}
+
+
+ \newpage 
+
+\section{Funcionalidades da ferramenta}
+Nas secções seguintes serão apresentadas e exemplificadas todas as funcionalidades oferecidas por parte desta nova ferramenta. 
+ 
+
+\subsection{Cabeçalhos do documento}
+Num cabeçalho de um documento é possível encontrar título, autores e data de um documento. Como seria de esperar, a ferramente %it{PAH(null) também proporciona esta funcionalidade, baseando-se nos seguintes comandos:
+
+\begin{itemize}
+    \item \textbf{Título do documento:} 
+        %%verb% %title Título %verb%%
+    \item \textbf{Autor do documento:}
+        %%verb% %author Autor %verb%%
+    \item \textbf{Data do documento}
+        %%verb% %date 02/04/2013 %verb%%
+\end{itemize}
+
+Além disso, para que seja possível que o documento possua uma capa, basta usar o comando \verb@ %cover% @, que em LaTeX diz respeito ao comando \verb@ \maketitle @, e em Html diz respeito a uma zona do documento onde terá toda esta informação.
+
+
+\subsection{Índices}
+Para um índice de um documento ser gerado, basta introduzir o comando:
+
+\begin{itemize}
+    \item %%verb% %index% %verb%%
+\end{itemize}
+
+Este comando deve ser colocado após a capa do documento e antes de qualquer conteúdo.
+ 
+
+\subsection{Comandos em LaTeX e HTML}
+Em qualquer momento, a introdução de comandos nativos de LaTeX/HTML pode ser necessária, de forma a cobrir as funcionalidades que a ferramente %it{PAH(null) não proporciona. Desta forma, para ambas as linguagens, a introdução destes comandos é feita de forma muito simples, bastando para isso seguir os seguintes comandos:
+
+ \begin{itemize}
+    \item \textbf{Para LaTeX:} 
+        %%verb% %%latex% Comandos nativos em latex %latex%% %verb%%
+    \item \textbf{Para HTML:}
+        %%verb% %%html% Comandos nativos em html %html %% %verb%%
+\end{itemize}
+
+
+\subsection{Títulos do documento}
+Existem três tipos de títulos, sendo estes apresentados pela ordem de maior importância.
+
+\begin{itemize}
+    \item %%verb% %t1{Título da secção(null) %verb%%
+    \item %%verb% %t2{Título da subsecção(null) %verb%%
+    \item %%verb% %t3{Título de subsubsecção(null) %verb%%
+\end{itemize}
+
+\verb@ %t2{Título de subsubsecção} @
+
+ 
+\subsection{Texto Não Formatado}
+Uma das funcionalidades da ferramenta é permitir incluir texto que não seja interpretado pelo %it{PAH(null). Desta forma, todo o texto compreendido entre os comandos \verb@ %%verbatim% e %verbatim%% @, não será interpretado aquando da compilação, sendo este apresentado no documento sem quaisquer modificações. Este último caso é utilizado aquando da introdução de várias linhas. Caso o pretendido seja apenas a introdução de uma linha, basta introduzir o conteúdo dessa linha entre os comandos \verb@ %%verb% e @ %verb%%.
+
+
+\subsection{Texto Formatado}
+Ao longo do documento, partes do texto podem ser apresentadas em itálico, em negrito, ou até mesmo sublinhadas. Para isso, basta seguir os próximos comandos:
+
+\begin{description}
+    \item[Itálico:] %%verb% \textit{Texto em itálico} %verb%%
+    \item[Negrito:] %%verb% \textbf{Texto em negrito} %verb%%
+    \item[Sublinhado:] %%verb% \underline{Textto sublinhado} %verb%%
+\end{description}
+
+
+\subsection{Listas} 
+De seguida, são apresentadas os três tipos de listas suportadas pela ferramenta %it{PAH(null).
+ 
+
+\subsubsection{Listas Numeradas}
+
+\begin{itemize}
+    \item Iniciada por %%verb% %%ol% %verb%% e finalizada por %%verb% \end{enumerate} %verb%%;
+    %it Cada item da lista é precedido por \verb@ %it @;
+%ul%%
+
+
+\subsubsection{Listas Não Numeradas}
+
+\begin{itemize}
+    \item Iniciada por %%verb% %%ul% %verb%% e finalizada por %%verb% \end{itemize} %verb%%;
+    %it Cada item da lista é precedido por \verb@ %it @;
+%ul%%
+
+
+\subsubsection{Entradas de um dicionário}
+
+\begin{itemize}
+    \item Iniciada por %%verb% %%dl% %verb%% e finalizada por %%verb% %dl%% %verb%%;
+    \item Cada item é precedido por %%verb% %it{(null) %verb%% e o texto que ficará a negrito deverá ser colocado entre os parêntesis;
+    \item A descrição do item deve ser colocada após o fim dos parêntesis.
+\end{itemize}
+
+\textbf{Exemplo:}
+
+\begin{verbatim}
+%%dl%
+    %it{Item} descrição do item
+    %it{Item} descrição do item
+%dl%%
+\end{verbatim} 
+
+
+\subsection{Imagens}
+Como qualquer outra ferramenta, é permitida a inclusão de imagens no documento. Para isso, basta usar o comando \verb@ %img{path,caption} @, sendo "path" o caminho para a respectiva imagem e "caption" a legenda da mesma.
+
+\subsubsection{Exemplo}
+\verb@ %img{exemplo.png, Legenda da imagem} @
+
+
+\subsection{Links}
+A presença de links num documento é permitida usando o comando \verb@ %link{url,texto} @. No campo "texto" é inserido o texto que fica associado ao link colocado no campo "url".
+ 
+
+\subsection{Comentários}
+O uso de comentários é muito usual ao longo do texto, uma vez que facilitam a leitura do mesmo e não aparecem no documento final. No caso de o comentário abrangir várias linhas, estas devem ser colocadas entre os comandos \verb@ %%coment% e %coment%% @. Por outro lado, se o pretendido for apenas um comentário de linha, coloca-se o texto a comentar após o comando \verb@ %%% @.
+
+\begin{itemize}
+    \item %%verb% %%% Isto é um comentário de linha %verb%%
+\end{itemize}
+
+
+\subsection{Tabelas} 
+As tabelas têm a seguinte estrutura:
+
+
+
+
+\begin{verbatim}
+    %%table%
+            %head Célula  % Célula 
+            %row  Célula  % Célula  
+    %table%%
+\end{verbatim}
+
+
+\begin{itemize}
+    \item A tabela é iniciada com %%verb% %%table% %verb%% e finalizada com %%verb% %table%% %verb%%;
+    \item Cada célula da tabela deve ser colocada após %%verb% %head %verb%% ou %%verb% %row %verb%%. A única diferença entre estes, consiste no formato do texto. Enquanto que o comando %%verb% %head %verb%% coloca o texto centrado e a negrito, o comando %%verb% %row %verb%% coloca o texto num formato normal.
+    \item O comando %%verb% % %verb%% permite a separação das células da tabela, correspondendo, no entanto, ao número total de colunas.
+\end{itemize}
+
+
+A introdução de tabelas é um exemplo dos objectivos da nova ferramenta, nomeadamente, a simplificação dos comandos. Neste caso, tratando-se da introdução de tabelas, é necessário apenas a introdução dos comandos acima referidos, tornando a sua introdução muito mais facilitada, diminuindo drasticamente a sua complexidade. 
+
+ \newpage 
+
+\subsection{Conclusão}
+kjghgjhg\end{document}
+kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
+\end{document}
+nuindo drasticamente a sua complexidade. 
+
+ \newpage 
+
+\subsection{Conclusão
