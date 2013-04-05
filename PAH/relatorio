@@ -72,7 +72,6 @@ Nas secções seguintes serão apresentadas e exemplificadas todas as funcionali
 
 
 %t2{Cabeçalhos do documento}
-
 Num cabeçalho de um documento é possível encontrar título, autores e data de um documento. Como seria de esperar, a ferramente %i{PAH} também proporciona esta funcionalidade, baseando-se nos seguintes comandos:%%latex% \\ %latex%%
 
 %%ul%
@@ -202,7 +201,7 @@ A presença de links num documento é permitida usando o comando %%verb% %link{u
  
 
 %t2{Comentários}
-O uso de comentários é muito usual ao longo do texto, uma vez que facilitam a leitura do mesmo e não aparecem no documento final. No caso de o comentário abrangir várias linhas, estas devem ser colocadas entre os comandos %%verb% %%coment% e %coment%% %verb%%. Por outro lado, se o pretendido for apenas um comentário de linha, coloca-se o texto a comentar após o comando %%verb% %%% %verb%%.%%latex% \\ %latex%% 
+O uso de comentários é muito usual ao longo do texto, uma vez que facilitam a leitura do mesmo e não aparecem no documento final. No caso de o comentário abrangir várias linhas, estas devem ser colocadas entre os comandos %%verb% %%coment% e %coment%% %verb%%. Por outro lado, se o pretendido for apenas um comentário de linha, coloca-se o texto a comentar após o comando %%verb% %%% %verb%%.
 
 %%ul%
     %it %%verb% %%% Isto é um comentário de linha %verb%%
@@ -215,7 +214,7 @@ As tabelas têm a seguinte estrutura:
 
 %%table%
             %head Nome % Número 
-            %row Helena Alves  % 50
+            %row 30  % 50
 
 %table%%
 
@@ -235,7 +234,7 @@ As tabelas têm a seguinte estrutura:
 %ul%%
 
 
-Na introdução de tabelas, um dos aspectos principais tido em conta consistiu em reduzir grande parte da complexidade dos comandos necessários para a sua implementação, tornando esta muito mais facilitada. Desta forma, apenas é necessário a introdução dos comandos acima referidos, tornando mais prática a sua introdução.%%latex% \\ %latex%% 
+Na introdução de tabelas, um dos objectivos consistia em reduzir grande parte da complexidade dos comandos, tornando a sua implementação muito mais facilitada é um exemplo dos objectivos da nova ferramenta, nomeadamente, a simplificação dos comandos. Neste caso, tratando-se da introdução de tabelas, é necessário apenas a introdução dos comandos acima referidos, tornando a sua introdução muito mais facilitada, diminuindo drasticamente a sua complexidade. 
 
 %%latex% \newpage %latex%%
 
