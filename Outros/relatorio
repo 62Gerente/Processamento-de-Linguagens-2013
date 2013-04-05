@@ -67,7 +67,7 @@ Nas secções seguintes serão apresentadas e exemplificadas todas as funcionali
  
 
 %t2{Cabeçalhos do documento}
-Num cabeçalho de um documento é possível encontrar título, autores e data de um documento. Como seria de esperar, a ferramente %it{PAH} também proporciona esta funcionalidade, baseando-se nos seguintes comandos:
+Num cabeçalho de um documento é possível encontrar título, autores e data de um documento. Como seria de esperar, a ferramente %i{PAH} também proporciona esta funcionalidade, baseando-se nos seguintes comandos:
 
 %%ul%
     %it %b{Título do documento:} 

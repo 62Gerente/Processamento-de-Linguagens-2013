@@ -1,9 +1,13 @@
-pah: latex
+pah: latex html
 	gcc -o pah pah.c
 	rm *.o *.yy.c
 
 latex: linkedlist.o utilities.o functionsLatex.o latex.yy.c
 	gcc -o latex latex.yy.c utilities.o linkedlist.o functionsLatex.o -lfl 
+
+html: linkedlist.o utilities.o functionsHtml.o html.yy.c
+	gcc -o html html.yy.c utilities.o linkedlist.o functionsHtml.o -lfl 
+
 
 utilities.o: utilities.c
 	gcc -c utilities.c
@@ -14,11 +18,23 @@ linkedlist.o: LinkedList/linkedlist.c
 functionsLatex.o: functionsLatex.c
 	gcc -c functionsLatex.c
 
+functionsHtml.o: functionsHtml.c
+	gcc -c functionsHtml.c	
+
 latex.yy.c: latex.fl
 	flex -o latex.yy.c latex.fl
+
+html.yy.c: html.fl
+	flex -o html.yy.c html.fl	
 
 test: pah
 	./pah ../Exemplos/exemplo
 
+testHtml: pah
+	./pah --html ../Exemplos/exemplo
+
+testLatex: pah
+	./pah --latex ../Exemplos/exemplo	
+
 clear:
-	rm *.o *.yy.c latex pah Latex.tex Html.html
+	rm *.o *.yy.c latex html pah *.tex *.html
