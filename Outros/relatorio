@@ -13,11 +13,11 @@
 
  
 %t1{Introdução}
-A resolução do trabalho prático descrita no presente relatório refere-se à especificação de um pré-processador para gerar LaTeX e Html. Pretende-se neste trablaho que seja implementada uma nova linguagem, de maneira a simplificar a escrita das funcionalidades que essa nova linguagem irá permitir.%%latex% \\ %latex%%
+A resolução do trabalho prático descrita no presente relatório refere-se à especificação de um pré-processador para gerar ficheiros em LaTeX e Html. Pretende-se neste trablaho que seja implementada uma nova linguagem, de maneira a simplificar a escrita das diversas funcionalidades que essa nova linguagem irá permitir.%%latex% \\ %latex%%
 
 
 Assim, neste trabalho prático pretende-se aplicar os conceitos adquiridos na Unidade
-Curricular de Processamento de Linguagens associados à utilização de expressões regulares para descrever padrões de textos, para futuramente gerar ficheiros, através da ferramneta Flex. %%latex% \newpage %latex%%
+Curricular de Processamento de Linguagens associados à utilização de expressões regulares para descrever padrões de textos, para futuramente gerar ficheiros, através da ferramenta Flex. %%latex% \newpage %latex%%
 
 
 %t1{Descrição do trabalho}
@@ -116,7 +116,7 @@ Num cabeçalho de um documento é possível encontrar título, autores e data de
 
 
 
-Além disso, para que seja possível que o documento possua uma capa, basta usar o comando %%verb% %cover% %verb%%, que em LaTeX diz respeito ao comando %%verb% \maketitle %verb%%, e em Html diz respeito a uma zona do documento onde terá toda esta informação.%%latex% \\ %latex%%
+Além disso, para que seja possível que o documento possua uma capa, basta usar o comando %%verb% %cover% %verb%%, que em LaTeX diz respeito ao comando %%verb% \maketitle %verb%%, e em Html diz respeito a uma zona do documento, mais propriamente no início do dumento, onde terá toda esta informação.%%latex% \\ %latex%%
 
 
 
@@ -133,7 +133,7 @@ Este comando deve ser colocado após a capa do documento e antes de qualquer con
 
 
 %t2{Comandos em LaTeX e HTML}
-Em qualquer momento, a introdução de comandos nativos de LaTeX/HTML pode ser necessária, de forma a cobrir as funcionalidades que a ferramente %it{PAH} não proporciona. Desta forma, para ambas as linguagens, a introdução destes comandos é feita de forma muito simples, bastando para isso seguir os seguintes comandos:%%latex% \\ %latex%% 
+Em qualquer momento, a introdução de comandos nativos de LaTeX/HTML pode ser necessária, de forma a cobrir as funcionalidades que a ferramente %i{PAH} não proporciona. Desta forma, para ambas as linguagens, a introdução destes comandos é feita de forma muito simples, bastando para isso seguir os seguintes comandos:%%latex% \\ %latex%% 
 
  %%ul%
     %it %b{Para LaTeX:} 
@@ -157,7 +157,7 @@ Existem três tipos de títulos, sendo estes apresentados pela ordem de maior im
  
 
 %t2{Texto Não Formatado}
-Uma das funcionalidades da ferramenta é permitir incluir texto que não seja interpretado pelo %i{PAH}. Desta forma, todo o texto compreendido entre os comandos %%verb% %%verbatim% e %verbatim%% %verb%%, não será interpretado aquando da compilação, sendo este apresentado no documento sem quaisquer modificações. Este último caso é utilizado aquando da introdução de várias linhas. Caso o pretendido seja apenas a introdução de uma linha, basta introduzir o conteúdo dessa linha entre os comandos %%verbatim% %%verb% e %verb%% %verbatim%%.%%latex% \\ %latex%% 
+Uma das funcionalidades da ferramenta é permitir incluir texto que não seja interpretado pelo %i{PAH}. Desta forma, todo o texto compreendido entre os comandos %%verb% %%verbatim% e %verbatim%% %verb%%, não será interpretado aquando da compilação, sendo este apresentado no documento sem quaisquer modificações. Este último caso é utilizado aquando da introdução de várias linhas. Caso o pretendido seja apenas a introdução de uma linha, basta introduzir o conteúdo dessa linha entre os comandos %%verbatim% %%verb% e %verb%%. %verbatim%%.%%latex% \\ %latex%% 
 
 
 
@@ -207,7 +207,7 @@ De seguida, são apresentadas os três tipos de listas suportadas pela ferrament
 
 
 
-%b{Exemplo:}%%latex% \\ %latex%% 
+%b{Exemplo:}
 
 %%verbatim%
 %%dl%
@@ -219,7 +219,7 @@ De seguida, são apresentadas os três tipos de listas suportadas pela ferrament
 
 
 %t2{Imagens}
-Como qualquer outra ferramenta, é permitida a inclusão de imagens no documento. Para isso, basta usar o comando %%verb% %img{path,caption} %verb%%, sendo "path" o caminho para a respectiva imagem e "caption" a legenda da mesma.%%latex% \\ %latex%% 
+Como qualquer outra ferramenta, esta também permite a inclusão de imagens no documento. Para isso, basta usar o comando %%verb% %img{path,caption} %verb%%, sendo "path" o caminho para a respectiva imagem e "caption" a legenda da mesma.%%latex% \\ %latex%% 
 
 %b{Exemplo}
 %%verb% %img{exemplo.png, Legenda da imagem} %verb%%
@@ -265,7 +265,7 @@ As tabelas têm a seguinte estrutura:
 %ul%%
 
 
-Na introdução de tabelas, um dos aspectos principais tidos em conta consistiu em reduzir grande parte da complexidade dos comandos necessários para a sua implementação, tornando esta muito mais facilitada. Desta forma, apenas é necessário a introdução dos comandos acima referidos, tornando mais prática a sua implementação.%%latex% \\ %latex%% 
+Na introdução de tabelas, um dos aspectos principais tidos em conta consistiu em reduzir grande parte da complexidade dos comandos necessários para a sua implementação, tornando esta muito mais facilitada. Desta forma, apenas é necessário a introdução dos comandos acima referidos, tornando mais prática a sua introdução.%%latex% \\ %latex%% 
 
 %%latex% \newpage %latex%%
 
