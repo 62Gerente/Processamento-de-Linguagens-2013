@@ -13,12 +13,43 @@
 
  
 %t1{Introdução}
-Linguagens como o LaTex e o Html trazem grandes benefícios para ..., contudo também possuem alguns pontos menos atraentes. Estes pontos dizem respeito a certas desvantagens das mesmas, nomeadamente, a complexidade de certos comandos. Além de outros aspectos, este foi um dos aspectos que levou à criação da ferramenta %i{PAH}. Uma maior facilidade na escrita de certos comandos leva a um maior desempenho por parte do programador, aumentado o seu tempo de trabalho. Deste modo, a simplificação de certos comandos foi um dos aspectos principais a serem melhorados. 
-Esta nova linguagem não acarreta, de longe, todas as potencialidades e funcionalidades das duas linguagens em causa. No entanto, foram trabalhadas grande parte das funcionalidades mais usuais, tais como, a introdução de capítulos, texto formatado e não formatado, formatação de tabelas e listas, inclusão d eimagens e links, introdução de comentários, geração de índices, entre outros. bla bla bla......
+A resolução do trabalho prático descrita no presente relatório refere-se à especificação de um pré-processador para gerar LaTeX e Html. Pretende-se neste trablaho que seja implementada uma nova linguagem, de maneira a simplificar a escrita das funcionalidades que essa nova linguagem irá permitir.%%latex% \\ %latex%%
+
+
+Assim, neste trabalho prático pretende-se aplicar os conceitos adquiridos na Unidade
+Curricular de Processamento de Linguagens associados à utilização de expressões regulares para descrever padrões de textos, para futuramente gerar ficheiros, através da ferramneta Flex. %%latex% \newpage %latex%%
+
+
+%t1{Descrição do trabalho}
+Linguagens como o LaTex e o Html trazem grandes benefícios para a sociedade actual, contudo também possuem alguns pontos menos atraentes. Estes pontos dizem respeito a certas desvantagens das mesmas, nomeadamente, a complexidade de certos comandos. Além de outros aspectos, este foi um dos aspectos que levou à criação da ferramenta %i{PAH}. Uma maior facilidade na escrita de certos comandos leva a um maior desempenho por parte do programador, aumentado o seu tempo de trabalho. Deste modo, a simplificação de certos comandos foi um dos aspectos principais a serem melhorados. 
+Esta nova linguagem não acarreta, de longe, todas as potencialidades e funcionalidades das duas linguagens em questão, no entanto, foram trabalhadas grande parte das funcionalidades mais usuais, tais como: 
+
+%%ul%
+    %it Introdução de capítulos;
+    %it Texto formatado;
+    %it Texto não formatado;
+    %it Formatação de tabelas;
+    %it Formatação de listas não numeradas;
+    %it Formatação de listas numeradas;
+    %it Formatação de listas descritivas;
+    %it Inclusão de imagens;
+    %it Inclusão de links;
+    %it Introdução de comentários no texto;
+    %it Geração de índices;
+    %it Geração de capa de documento;
+    %it Entre outros.
+%ul%%
+
+
+%t1{Estrutura de dados}
+Para a criação dos ficheiros em LaTeX e Html, é necessário armazenar determinados dados, de maneira que, após o processamento do ficheiro de entrada, seja possível imprimir esses dados para os ficheiros finais  respectivos. Desta forma, é necessário uma estrutura de dados capaz de suportar estes dados e permitir o seu acesso rápido e eficiente. Portanto, foi considerada uma implementação de listas ligadas para guardar os dados referentes às tags de fecho e aos cabeçalhos do documento. 
 
 
 %%latex% \newpage %latex%%
-%t1{Composicão e Instalação}
+
+%t1{Ferramenta PAH}
+
+%t2{Composicão e Instalação}
 A ferramenta PAH está desenvolvida em flex, sendo esta constituída pelos seguintes ficheiros:%%latex% \\ %latex%% 
 
 %%dl%
@@ -37,7 +68,7 @@ Para proceder à instalação da ferramenta, basta apenas copiar os ficheiros re
 
 
 
-%t1{Invocação}
+%t2{Invocação}
 Como um dos objectivos deste pré-processador é facilitar a conversão em latex e html, a invocação para gerar ficheiros para cada uma destas linguagens consiste em: %%latex% \\ %latex%%
 
 %%dl%
@@ -49,7 +80,7 @@ Como um dos objectivos deste pré-processador é facilitar a conversão em latex
 
 
 %%latex% \newpage %latex%%
-%t2{Outras situações:}
+%t3{Outras situações:}
 %%ul%
     %it %b{Gera ficheirotex.tex e ficheirohtml.html:} 
     ./pah ficheiro ficheirotex.tex ficheirohtml.html
@@ -69,7 +100,6 @@ Como um dos objectivos deste pré-processador é facilitar a conversão em latex
 %t1{Funcionalidades da ferramenta}
 Nas secções seguintes serão apresentadas e exemplificadas todas as funcionalidades oferecidas por parte desta nova ferramenta.%%latex% \\ %latex%% 
  
-
 
 %t2{Cabeçalhos do documento}
 
@@ -235,7 +265,7 @@ As tabelas têm a seguinte estrutura:
 %ul%%
 
 
-Na introdução de tabelas, um dos aspectos principais tido em conta consistiu em reduzir grande parte da complexidade dos comandos necessários para a sua implementação, tornando esta muito mais facilitada. Desta forma, apenas é necessário a introdução dos comandos acima referidos, tornando mais prática a sua introdução.%%latex% \\ %latex%% 
+Na introdução de tabelas, um dos aspectos principais tidos em conta consistiu em reduzir grande parte da complexidade dos comandos necessários para a sua implementação, tornando esta muito mais facilitada. Desta forma, apenas é necessário a introdução dos comandos acima referidos, tornando mais prática a sua implementação.%%latex% \\ %latex%% 
 
 %%latex% \newpage %latex%%
 
