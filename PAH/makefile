@@ -28,13 +28,13 @@ html.yy.c: html.fl
 	flex -o html.yy.c html.fl	
 
 test: pah
-	./pah ../Exemplos/exemplo
+	./pah relatorio
 
 testHtml: pah
-	./pah --html ../Exemplos/exemplo
+	./pah --html relatorio
 
 testLatex: pah
-	./pah --latex ../Exemplos/exemplo	
+	./pah --latex relatorio
 
 clear:
 	rm *.o *.yy.c latex html pah *.tex *.html

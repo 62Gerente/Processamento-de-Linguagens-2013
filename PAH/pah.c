@@ -116,8 +116,8 @@ int main(int argc, const char *argv[])
         if(!pidHtml){
             dup2(inputFile,0);
             dup2(outputFileHtml,1);
-	    execlp("./html","./html",NULL);            
-            fprintf(stderr,"Ficheiro html gerado com êxito.\n") ;
+	    fprintf(stderr,"Ficheiro html gerado com êxito.\n") ;
+	    execlp("./html","./html",NULL);                       
             exit(0);
         }
     }
