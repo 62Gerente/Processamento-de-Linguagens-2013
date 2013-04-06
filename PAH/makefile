@@ -1,6 +1,5 @@
 pah: latex html
-	gcc -o pah pah.c
-	rm *.o *.yy.c
+	gcc -o pah pah.c	
 
 latex: linkedlist.o utilities.o functionsLatex.o latex.yy.c
 	gcc -o latex latex.yy.c utilities.o linkedlist.o functionsLatex.o -lfl 
@@ -36,5 +35,5 @@ testHtml: pah
 testLatex: pah
 	./pah --latex relatorio
 
-clear:
+clean:
 	rm *.o *.yy.c latex html pah *.tex *.html
