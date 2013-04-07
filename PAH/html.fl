@@ -1,5 +1,6 @@
 
 %option noyywrap 
+%option stack
 
 %{
 	#include <stdlib.h>
@@ -84,14 +85,37 @@
 
 	/* -------------------------- INÍCIO DE LISTAS ----------------------------------------- */
 
-<NO_ENV>%%dl%		{ 	BEGIN DICT ;	
+<NO_ENV>%%dl%		{ 	yy_push_state(DICT)	;
 						beginDictionaryHtml(); 	}
 
-<NO_ENV>%%ol%		{ 	BEGIN LIST ;
+<NO_ENV>%%ol%		{ 	yy_push_state(LIST) ;
 					  	beginOrderListHtml(); 	}	
 
-<NO_ENV>%%ul%		{ 	BEGIN LIST ;
+<NO_ENV>%%ul%		{ 	yy_push_state(LIST) ;
 					  	beginUnorderListHtml(); 	}	
+
+	/* -------------------------- INÍCIO DE LISTAS DENTRO DE LISTAS ----------------------------------------- */
+
+<LIST,DICT>%%ol%	{	if(openItem == 1) {
+							endTagHtml() ;
+							openItem = 0 ;
+						}
+						yy_push_state(LIST) ;
+						beginOrderListHtml();	}
+
+<LIST,DICT>%%ul%	{	if(openItem == 1) {
+							endTagHtml() ;
+							openItem = 0 ;
+						}
+						yy_push_state(LIST) ;
+						beginUnorderListHtml();	}	
+
+<LIST,DICT>%%dl%	{	if(openItem == 1) {
+							endTagHtml() ;
+							openItem = 0 ;
+						}
+						yy_push_state(DICT) ;
+						beginDictionaryHtml();	}											
 
 	/* -------------------------- FIM DE LISTAS ------------------------------------------- */
 
@@ -99,17 +123,21 @@
 							endTagHtml() ;
 							openItem = 0 ;
 						}
-						BEGIN NO_ENV ;
+						int stateL = yy_top_state() ;
+						yy_pop_state() ;					  	
 					  	endTagHtml();
-					  	newLineEnable = 0 ; 	}	
+					  	if(stateL == NO_ENV)
+					  		newLineEnable = 0 ; 	}	
 
 <LIST>%ol%%    		{ 	if(openItem == 1) {
 							endTagHtml() ;
 							openItem = 0 ;
-						}
-						BEGIN NO_ENV ;
+						}						
+						int stateL = yy_top_state() ;
+						yy_pop_state() ;					  	
 					  	endTagHtml();
-					  	newLineEnable = 0 ; 	}					  					  
+					  	if(stateL == NO_ENV)
+					  		newLineEnable = 0 ; 	}					  					  
 
 
 
@@ -117,9 +145,11 @@
 							openItem = 0 ;
 							endTagHtml() ;
 						}
-						BEGIN NO_ENV ;
+						int stateL = yy_top_state() ;
+						yy_pop_state() ;					  	
 					  	endTagHtml();
-					  	newLineEnable = 0 ; 	}					  					  						
+					  	if(stateL == NO_ENV)
+					  		newLineEnable = 0 ;  	}					  					  						
 
 	/* ---------------------- ITEMS DE UM DICIONÁRIO --------------------- */
 
@@ -397,11 +427,14 @@ void generateOutput () {
 				unfinishedLine = 1 ;
 			else 
 				unfinishedLine = 0 ;
+			memset(line, '\0', DIM_LINE) ;
 		}
 	}
 	else 
-		while(fgets(line, DIM_LINE, tempFile) != NULL)
+		while(fgets(line, DIM_LINE, tempFile) != NULL) {
 			fprintf(outputFile, "%s", line) ;	
+			memset(line, '\0', DIM_LINE) ;
+		}
 }
 
 
