@@ -8,7 +8,8 @@
 int main(int argc, const char *argv[])
 {
     int outputFileLatex, outputFileHtml , inputFile,  output=0; //0-Ambos, 1-Latex, 2-Html
-     
+    int input =0;
+
     if(argc < 2){   // Nenhum argumento = ERRO
 
         fprintf(stderr, "Erro, introduza o path do ficheiro de input.\n") ;
@@ -23,6 +24,7 @@ int main(int argc, const char *argv[])
         }else{  // Abre argumento e gera Latex e Html
 
             inputFile = open(argv[1],O_RDONLY);
+            input=1;
             outputFileLatex = open("Latex.tex",O_WRONLY|O_CREAT,0644);
             outputFileHtml = open("Html.html",O_WRONLY|O_CREAT,0644);
 
@@ -34,18 +36,21 @@ int main(int argc, const char *argv[])
             output=1;
         
             inputFile = open(argv[2],O_RDONLY);
+            input =1;
             outputFileLatex = open("Latex.tex",O_WRONLY|O_CREAT,0644);
 
          }else if( strcmp(argv[1],"--html")==0 ){ // Abre argumento e gera Html
              output=2;
 
              inputFile = open(argv[2],O_RDONLY);
+             input=2;
              outputFileHtml = open("Html.html",O_WRONLY|O_CREAT,0644);
 
          }else{ // Abre argumento e geram Latex e Html com o mesmo nome
              
             inputFile = open(argv[1],O_RDONLY);
-            
+            input =1;
+
             char auxl[strlen(argv[2])+4];
             char auxh[strlen(argv[2])+5];
 
@@ -66,6 +71,7 @@ int main(int argc, const char *argv[])
             output=1;
         
             inputFile = open(argv[2],O_RDONLY);
+            input=2;
             outputFileLatex = open(argv[3],O_WRONLY|O_CREAT,0644);
 
          }else if( strcmp(argv[1],"--html")==0 ){ // Abre argumento e gera Html
@@ -73,12 +79,14 @@ int main(int argc, const char *argv[])
              output=2;
 
              inputFile = open(argv[2],O_RDONLY);
+             input=2; 
              outputFileHtml = open(argv[3],O_WRONLY|O_CREAT,0644);
 
          }else{ // Abre argumento e gera Html e Latex
              
             inputFile = open(argv[1],O_RDONLY);
-            
+            input=1;
+
             outputFileLatex = open(argv[2],O_WRONLY|O_CREAT,0644);
             outputFileHtml = open(argv[3],O_WRONLY|O_CREAT,0644);
 
@@ -111,6 +119,10 @@ int main(int argc, const char *argv[])
             exit(0);
         }
     }
+    wait(0);
+    inputFile = open(argv[input],O_RDONLY);
+
+
     if(output==0 || output==2){
         int pidHtml= fork();
         if(!pidHtml){
@@ -121,10 +133,7 @@ int main(int argc, const char *argv[])
             exit(0);
         }
     }
-
     wait(0);
-    wait(0);
-
 
     return 0;
 }

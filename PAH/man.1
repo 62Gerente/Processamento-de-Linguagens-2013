@@ -1,0 +1,66 @@
+.Dd 07/04/13               
+.Dt PAH      
+.Os PAH
+.Sh NAME                 
+.Nm PAH - Preprocessor for TeX and/or HTML
+.Sh SYNOPSIS             
+.Nm pah
+.Op Fl OPTIONS            
+.Ar input    
+.Op output      
+.Op outputLatex            
+.Op outputHtml               
+.Sh DESCRIPTION          
+.Nm
+is a preprocessor for HTML and/or TeX, created to help generating simple documents in these formats.
+.Pp
+This tool allows easily create organized documents with a simple language, simplifying the worst of these formats.
+.Pp
+If no OPTIONS are given, both formats are generated. The default output files are 
+.Ar Latex.tex
+and/or 
+.Ar Html.html
+.
+.Nm The following options are available:
+.Pp                      
+.Bl -tag -width -indent  
+.It Fl -latex                
+Create only Latex for the input given.
+.It Fl -html
+Create only HTML for the input given.     
+.El             
+.Pp          
+.Sh EXAMPLES
+.Bl -item -width -indent                
+.It 
+.Nm pah input 
+- Generates both formats on default output.
+.Pp
+.It 
+.Nm pah --latex input 
+- Generates Latex on default output.
+.Pp
+.It 
+.Nm pah --latex input output.tex
+- Generates Latex on output.tex.
+.Pp
+.It 
+.Nm pah --html input 
+- Generates Html on default output.
+.Pp
+.It 
+.Nm pah --html input output.html 
+- Generates Html on output.html.
+.Pp
+.It 
+.Nm pah input output
+- Generates both formats on files output.tex and output.html.
+.Pp
+.It 
+.Nm pah input output.tex output.html
+- Generates both formats on files output.tex and output.html.                      
+.El
+.Sh SEE ALSO 
+.Xr FLEX 1 , 
+.Xr PDFTEX 1 ,
+.Xr GCC 1 
