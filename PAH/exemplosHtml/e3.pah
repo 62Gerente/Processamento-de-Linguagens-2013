@@ -1,0 +1,41 @@
+%t1{Primeiro capítulo}
+
+Este documento tem o objectivo de %u{testar} a %b{construção} das tabelas. 
+A tabela terá três linhas e três colunas.
+
+
+
+
+Posso fazer várias quebras de linha, que apenas uma é gerada. %%verb%Um pouco de verbatim de %i{linha}.%verb%%
+
+%t2{A dita tabela}
+
+%%table%
+	%head Coluna 1 % Coluna 2 % Coluna 3
+	%%% A primeira linha terá o texto a negrito por se tratar de uma %head.
+	%row %i{nice %u{one!}} % Aqui vai outra % last
+	%row yeah!   %   %b{%u{49}}    	%  Last but not the Least!
+%table%%
+
+%%comment%A tabela acima foi criada espectacularmente. Isto é um comentário multi-linha. Aqui vai uma lista:
+%%% Ser ou não ser? Eis a questão.
+	%%ol%
+		%i Item 1
+		%i %u{Item} %%verb%2%verb%%
+	%ol%%
+	
+E assim termina o comentário multi-linha. %comment%%
+
+%t3{Análise à tabela elaborada}
+
+Consta-se que a tabela elaborada, com base em %link{www.wikipedia.com/table, SITE de %i{tables}} está, de facto, %u{mui bonita}.
+Para terminar, segue-se uma imagem esplêndida! 
+
+%img{info.jpg, Símbolo de %i{informação!}}
+
+
+%t2{Wait!}
+
+E que tal um indíce no fim do documento? 
+
+%index%

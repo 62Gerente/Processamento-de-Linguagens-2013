@@ -1,0 +1,47 @@
+%t1{Teste a listas dentro de listas}
+
+%%ol%
+		%it Item 1
+		%%ol%
+			%it Item 1.1		
+			%it %u{Item} 1.%%verb%2%verb%%
+			
+			%%ol%
+				%it Item 1.2.1		
+				%it %u{Item} 1.2.%%verb%2%verb%%
+				
+				%%ul%
+					%it %i{Item 1.2.2.1}		
+					%it %u{Item} 1.2.2.%%verb%2%verb%%					
+
+					%%dl%
+						%it{d_1} %i{Item from dictionary 1}		
+						%it{d_2} %u{Item} from %b{dictionary 2}				
+					%dl%%
+
+				%ul%%				
+
+			%ol%%
+
+		%ol%% 
+		%it %u{Item} %%verb%2%verb%%
+
+		%%dl%
+			%it{d_3} %i{almost finished..}		
+			%it{d_4} %u{end of list}	
+
+			%%ul%
+				%it Um item de uma ul dentro de um dicionário.		
+				%it outro! %%%e um comentário!!!!!!			
+			%ul%%
+
+			%it{d_5} Afinal acaba aqui.
+
+		%dl%%
+%ol%%
+
+%t1{Um título para sinalizar o fim da lista!}
+
+
+
+Ufa, acabou!
