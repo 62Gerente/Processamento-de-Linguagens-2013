@@ -1,4 +1,6 @@
 %option noyywrap
+%option stack
+
 %{
     /* --------------------------- INCLUDES ----------------------- */    
 
@@ -28,17 +30,11 @@
 %x TABLE
 
 %%
-    /* --------------------------- VARIAVEIS ----------------------- */    
-%{   
-    char inlist=0;   
-%}
-
-    /* --------------------------- LATEX --------------------------- */    
     
     /* --------------------------- HEADER -------------------------- */    
 
-<INITIAL>%%header%               { BEGIN HEADER; }                        /* Começa o estado de header */
-<HEADER>%header%%                { BEGIN INITIAL; }                       /* Volta ao estado inicial */
+<INITIAL>%%header%               { yy_push_state(HEADER); }               /* Começa o estado de header */
+<HEADER>%header%%                { yy_pop_state(); }                      /* Volta ao estado inicial */
 
 <HEADER>%title[ \t].*            { addTitleLatex(yytext+7); }             /* Título */
 <HEADER>%author[ \t].*           { addAuthorLatex(yytext+8); }            /* Autor */
@@ -64,31 +60,25 @@
 
     /* --------------------------- LISTAS -------------------------- */    
 
-<INITIAL>%%ol%                   { BEGIN LIST;                             /* Começa o estado de lista */
+<INITIAL,LIST,DICTIONARY>%%ol%   { yy_push_state(LIST);                    /* Começa o estado de lista */
                                    beginOrderListLatex();                  /* Início de lista ordenada */
-                                   inlist=1;
                                  }                                        
-<LIST>%ol%%                      { BEGIN INITIAL;                          /* Volta ao estado normal */
+<LIST>%ol%%                      { yy_pop_state();                         /* Volta ao estado anterior */
                                    endOrderListLatex();                    /* Fim de lista ordenada*/
-                                   inlist=0;
                                  }                                         
 
-<INITIAL>%%ul%                   { BEGIN LIST;                             /* Começa o estado de lista */
+<INITIAL,LIST,DICTIONARY>%%ul%   { yy_push_state(LIST);                    /* Começa o estado de lista */
                                    beginUnorderListLatex();                /* Início de lista não ordenada */
-                                   inlist=1;
                                  }
-<LIST>%ul%%                      { BEGIN INITIAL;                          /* Volta ao estado normal */
+<LIST>%ul%%                      { yy_pop_state();                         /* Volta ao estado anterior */
                                    endUnorderListLatex();                  /* Fim de lista não ordenada */
-                                   inlist=0;
                                  }
 
-<INITIAL>%%dl%                   { BEGIN DICTIONARY;                       /* Começa o estado de dicionário*/
+<INITIAL,LIST,DICTIONARY>%%dl%   { yy_push_state(DICTIONARY);              /* Começa o estado de dicionário*/
                                    beginDictionaryLatex();                 /* Início de entradas de um dicionário */
-                                   inlist=1;
                                  }
-<DICTIONARY>%dl%%                { BEGIN INITIAL;                          /* Volta ao estado normal */
+<DICTIONARY>%dl%%                { yy_pop_state();                         /* Volta ao estado anterior */
                                    endDictionaryLatex();                   /* Fim de entradas de um dicionario */
-                                   inlist=0;
                                  }
 
     /* --------------------------- ITEMS -------------------------- */    
@@ -99,63 +89,62 @@
 
     /* --------------------------- IMAGENS -------------------------- */    
 
-<INITIAL>%img\{                  { BEGIN IMG;                              /* Começa o estado de imagem */
+<INITIAL,LIST,DICTIONARY>%img\{  { yy_push_state(IMG);                     /* Começa o estado de imagem */
                                    beginImageLatex(closeTags);             /* Tags de início de uma imagem */
                                  }
 
 <IMG>,                           { endImagePathLatex();                    /* Fim do includegraphics */
                                    beginImageCaptionLatex();               /* Início da legenda */
-                                   BEGIN INITIAL;                          /* Volta ao estado normal do Latex */
+                                   yy_pop_state();                         /* Volta ao estado anterior do Latex */
                                  }
 
     /* --------------------------- LINKS -------------------------- */    
 
-<INITIAL>%link\{                 { BEGIN LINK;                             /* Começa o estado de link */
+<INITIAL,LIST,DICTIONARY>%link\{ { yy_push_state(LINK);                    /* Começa o estado de link */
                                    beginLinkLatex(closeTags);              /* Tags de início de um link */
                                  }
 
 <LINK>,                          { endURLLatex();                          /* Fim do url */
                                    beginLinkTextLatex();                   /* Início do texto do link */
-                                   BEGIN INITIAL;                          /* Volta ao estado normal do Latex */
+                                   yy_pop_state();                         /* Volta ao estado anterior do Latex */
                                  }
 
     /* --------------------------- COMENTARIOS -------------------- */    
 
-<INITIAL>%%%                     { addLineCommentLatex();                  /* Tag de comentário de linha */
-                                   BEGIN COMMENT_LINE;                     /* Começa o estado de comentário */
+<INITIAL,LIST,DICTIONARY>%%%     { addLineCommentLatex();                  /* Tag de comentário de linha */
+                                   yy_push_state(COMMENT_LINE);            /* Começa o estado de comentário */
                                  }
-<COMMENT_LINE>\n                 { BEGIN INITIAL; }                        /* Volta ao estado normal*/
+<COMMENT_LINE>\n                 { yy_pop_state(); }                       /* Volta ao estado anterior*/
 
-<INITIAL>%%comment%              { beginCommentLatex();                    /* Início de comentário */
-                                   BEGIN COMMENT;                          /* Começa o estado de comentário */
+<INITIAL,LIST,DICTIONARY>%%comment%  { 
+                                   beginCommentLatex();                    /* Início de comentário */
+                                   yy_push_state(COMMENT);                 /* Começa o estado de comentário */
                                  }
 <COMMENT>%comment%%              { endCommentLatex();                      /* Fim de comentário */
-                                   BEGIN INITIAL;                          /* Volta ao estado normal*/
+                                   yy_pop_state();                         /* Volta ao estado anterior*/
                                  }
 
     /* --------------------------- VERBATIM ---------------------- */    
 
-<INITIAL>%%verbatim%             { BEGIN VERB;                             /* Começa o estado verbatim */
+<INITIAL,LIST,DICTIONARY>%%verbatim% { 
+                                   yy_push_state(VERB);                    /* Começa o estado verbatim */
                                    beginVerbatimLatex();                   /* Inicio de verbatim */
                                  }
-<VERB>%verbatim%%                { BEGIN INITIAL;                          /* Volta ao estado normal do Latex */
+<VERB>%verbatim%%                { yy_pop_state();                         /* Volta ao estado anterior do Latex */
                                    endVerbatimLatex();                     /* Fim de verbatim */
                                  }
 
-<INITIAL,LIST>%%verb%            { BEGIN VERB_LINE;                        /* Começa o estado verbatim de linha */
+<INITIAL,LIST,DICTIONARY>%%verb% { yy_push_state(VERB_LINE);               /* Começa o estado verbatim de linha */
                                    beginVerbatimLineLatex();               /* Inicio de verbatim de linha */
                                  }
-<VERB_LINE>%verb%%               { BEGIN INITIAL;                          /* Volta ao estado normal do Latex */
+<VERB_LINE>%verb%%               { yy_pop_state();                         /* Volta ao estado anterior do Latex */
                                    endVerbatimLineLatex();                 /* Fim de verbatim de linha */
-                                   if(inlist){ 
-                                       BEGIN LIST;
-                                   }
-                                  }
+                                 }
 
     /* --------------------------- LATEX E HTML --------------------- */    
 
-<INITIAL>%%latex%                { BEGIN LATEX; }                          /* Começa estado LATEX */
-<LATEX>%latex%%                  { BEGIN INITIAL; }                        /* Volta ao estado normal */
+<INITIAL>%%latex%                { yy_push_state(LATEX); }                 /* Começa estado LATEX */
+<LATEX>%latex%%                  { yy_pop_state(); }                       /* Volta ao estado anterior */
                          
 <INITIAL>%%html%(.|\n)*%html%%   { }                                       /* Ignora */
 
