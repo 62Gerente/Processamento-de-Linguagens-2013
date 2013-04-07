@@ -7,7 +7,6 @@ latex: linkedlist.o utilities.o functionsLatex.o latex.yy.c
 html: linkedlist.o utilities.o functionsHtml.o html.yy.c
 	gcc -o html html.yy.c utilities.o linkedlist.o functionsHtml.o -lfl 
 
-
 utilities.o: utilities.c
 	gcc -c utilities.c
 
@@ -34,6 +33,16 @@ testHtml: pah
 
 testLatex: pah
 	./pah --latex relatorio
+
+install: pah	
+	chmod 755 pah
+	cp pah /usr/local/bin/pah
+	cp man.1 /usr/share/man/man1/pah.1
+
+uninstall: 
+	rm -f /usr/local/bin/pah
+	rm -f /usr/share/man/man1/pah.1
+	make clean	
 
 clean:
 	rm *.o *.yy.c latex html pah *.tex *.html
