@@ -44,6 +44,28 @@ Esta nova linguagem não acarreta, de longe, todas as potencialidades e funciona
 %t1{Estrutura de dados}
 Para a criação dos ficheiros em LaTeX e Html, é necessário armazenar determinados dados, de maneira que, após o processamento do ficheiro de entrada, seja possível imprimir esses dados para os ficheiros finais  respectivos. Desta forma, é necessário uma estrutura de dados capaz de suportar estes dados e permitir o seu acesso rápido e eficiente. Portanto, foi considerada uma implementação de listas ligadas para guardar os dados referentes às tags de fecho e aos cabeçalhos do documento. 
 
+%t1{Implementação}
+Como o objectivo do trabalho consiste em gerar ficheiros em LaTeX e Html, foi decidido elaborar dois ficheiros flex. Sendo assim, de seguida vai ser apresentada uma breve explicação como este ficheiro foi implemenmtado, no caso do latex.
+
+O ficheiro flex foi desenvolvido recorrendo a um autómato, sendo este constituído pelos estados: HEADER, LATEX, TABLE, VERB, VERB_LINE, COMMENT_LINE, COMMENT, IMG, LINK, LIST, DICTIONARY.
+
+Na parte inicial são efectuados os includes dos ficheiros necessários, assim como a declaração de variáveis. Seguidamente inicia-se o estado INITIAl, de onde se pode saltar para a maioria dos outros estados. Quando é encontrada a tag %%verb% %%header% %verb%%, ele automaticamente inicia o estado HEADER. Neste estado, podem-se encontrar as tags %%verb% %title %verb%%, %%verb% %author %verb%% e %%verb% %date %verb%%, que dizem respeito ao título, autor e data do documento, respectivamente. Ainda no estado INITIAl, quando são encontradas as tags %%verb% %t[1-3]\{ %verb%%, %%verb% %index% %verb%%, %%verb% %cover% %verb%%, são adicionados o título, o índice e a capa do documento ao ficheiro final.
+
+Quando nos estados INITIAL, LIST, DICTIONARY é encontrada a tag %%verb% %%ol %verb%% e %%verb% %%ul %verb%%, inicia-se o estado LIST, onde se inicia o inicício de listas ordenadas e listas não ordenadas, respectivamente. Entretanto, dentro do estado LIST, quando encontrado a tag %%verb% %ol%% %verb%% e %%verb% %ul%% %verb%%, dá-se o fim das duas listas, e volta-se para o estado anterior. As listas descritivas caracterizadas pela tag %%verb% %%dl %verb%%, funcionam de forma análoga, contudo, neste caso, inicia-se o estado DICTIONARY. Neste último estado, juntamente com o estado LIST, quando encontradas as tags %%verb% %it %verb%%, possibilitam a inserção de itens dentros das respectivas listas.
+
+As tags %%verb% %b %verb%%, %%verb% %i %verb%% e %%verb% %u %verb%% representam os diversos tipos de formatação do texto, nomeadamente, texto escrito em negrito, texto escrito em itálico e texto sublinhado. Estas são inicializadas quando encontrados os estados INITIAl, LIST, DICTIONARY, querendo isto dizer que é possível inserir texto formatado em qualquer parte do texto, dentro de listas e dentro de entradas de dicionário.
+
+Nos estados INITIAL, LIST, DICTIONARY são encontradas as tags %%verb% %img %verb%% e %%verb% %link% %verb%%, é iniciado o estado IMG e LINK, respectivamente. Ainda nestes últimos três estados podem encontrar-se as tags  %%verb% %%% %verb%% e %%verb% %%comment% %verb%%, que dizem respeitos aos comentários de linha e multi-linha, iniciando-se os estados COMMENT LINE e COMMENT, respectivamente. Dentro do estado COMMENT LINE, quando é encontrado a tag %%verb% \n %verb%%, significa que o comentário de linha termina ali, e então volta-se para o estado anterior. Em relação ao estado COMMENT, este funciona de forma análoga ao anterior, contudo volta ao estado anterior quando encontra a tag %%verb% %comment%% %verb%%. Relativamente aos estados VERB e VERB LINE, que dizem repseito ao verbatim multi-linha e verbatim de linha, funcionam de forma idêntica ao estados anteriores.
+
+Quando no estado INITIAL, são encontradas as tags %%verb% %%table% %verb%% e %%verb% %%latex% %verb%%, são iniciados os estados TABLE e LATEX, correspondendo à inserção de tabelas e à inserção de comandos nativos LaTeX, respectivamente.
+
+Por fim,
+
+
+
+
+
+
 
 %%latex% \newpage %latex%%
 
