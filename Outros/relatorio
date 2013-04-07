@@ -1,57 +1,10 @@
+%%header%
+    %title Relatório PAH
+    %author André Santos, Helena Alves, Pedro Carneiro
+    %date --/--/2013
+%header%%
 
-%%latex%
-\begin{titlepage}
-\onehalfspacing
-
-\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
-
-\center % Center everything on the page
- 
-%----------------------------------------------------------------------------------------
-%    HEADING SECTIONS
-%----------------------------------------------------------------------------------------
-
-\textsc{\LARGE Universidade do Minho}\\[1.5cm] % Name of your university/college
-\textsc{\Large Licenciatura em Engenharia Informática}\\[0.5cm] % Major heading such as course name
-\textsc{\large Modelos Estocásticos de Investigação Operacional}\\[0.5cm] % Minor heading such as course title
-\textsc{Ano lectivo 2012/2013}\\[0.5cm]
-
-%----------------------------------------------------------------------------------------
-%    TITLE SECTION
-%----------------------------------------------------------------------------------------
-
-\HRule \\[0.4cm]
-\textsc{\Large Trabalho Prático Nº1}\\[0.4cm] % Title of your document
-\textsc{ \large ( Problema de Programação Dinâmica Estocástica )}\\[0.4cm] % Title of your document
-\HRule \\[1.5cm]
- 
-%----------------------------------------------------------------------------------------
-%    AUTHOR SECTION
-%----------------------------------------------------------------------------------------
-
-\textsc{\large Autores:}\\
-{André Santos nº60994 \\ Helena Alves nº61000 \\ Pedro Carneiro nº61085}\\[3cm] % Your name
-
-%----------------------------------------------------------------------------------------
-%    DATE SECTION
-%----------------------------------------------------------------------------------------
-
-Braga, {\large \today}\\[1cm] % Date, change the \today to a set date if you want to be precise
-
-%----------------------------------------------------------------------------------------
-%    LOGO SECTION
-%----------------------------------------------------------------------------------------
-
-\includegraphics[scale=0.8]{escola_eng.png}\\[0cm] % Include a department/university logo - this will require the graphicx package
- 
-%----------------------------------------------------------------------------------------
-
-\vfill % Fill the rest of the page with whitespace
-
-\end{titlepage}
-
-
-%latex%%
+%cover%
     %index%
 
  
@@ -80,6 +33,7 @@ Esta nova linguagem não acarreta, de longe, todas as potencialidades e funciona
     %it Introdução de comentários no texto;
     %it Geração de índices;
     %it Geração de capa de documento;
+    %it Proteçção dos seguintes caracteres especiais em latex: %, ", $, _, &, #, ~, {, }, \ e ^. (excepto nas tabelas) 
     %it Entre outros.
 %ul%%
 
@@ -88,9 +42,9 @@ Esta nova linguagem não acarreta, de longe, todas as potencialidades e funciona
 Para a criação dos ficheiros em LaTeX e Html, é necessário armazenar determinados dados, de maneira que, após o processamento do ficheiro de entrada, seja possível imprimir esses dados para os ficheiros finais  respectivos. Desta forma, é necessário uma estrutura de dados capaz de suportar estes dados e permitir o seu acesso rápido e eficiente. Portanto, foi considerada uma implementação de listas ligadas para guardar os dados referentes às tags de fecho e aos cabeçalhos do documento. 
 
 %t1{Implementação}
-Como o objectivo do trabalho consiste em gerar ficheiros em LaTeX e Html, foi decidido elaborar dois ficheiros flex. Sendo assim, de seguida vai ser apresentada uma breve explicação como este ficheiro foi implemenmtado, no caso do latex.
+Como o objectivo do trabalho consiste em gerar ficheiros em LaTeX e Html, foi decidido elaborar dois ficheiros flex. Sendo assim, de seguida vai ser apresentada uma breve explicação sobre a implemenmtação deste ficheiro, no caso do latex, embora grande parte das situações são equivalentes para ambos os ficheiros.
 
-O ficheiro flex foi desenvolvido recorrendo a um autómato, sendo este constituído pelos estados: HEADER, LATEX, TABLE, VERB, VERB LINE, COMMENT LINE, COMMENT, IMG, LINK, LIST, DICTIONARY.
+O ficheiro flex foi desenvolvido recorrendo a um autómato, sendo este constituído pelos estados: HEADER, LATEX, TABLE, VERB, VERB%%latex%\_%latex%% LINE, COMMENT%%latex%\_%latex%%LINE, COMMENT, IMG, LINK, LIST, DICTIONARY.
 
 Na parte inicial são efectuados os includes dos ficheiros necessários, assim como a declaração de variáveis. Seguidamente inicia-se o estado INITIAl, de onde se pode saltar para a maioria dos outros estados. Quando é encontrada a tag %%verb% %%header% %verb%%, ele automaticamente inicia o estado HEADER. Neste estado, podem-se encontrar as tags %%verb% %title %verb%%, %%verb% %author %verb%% e %%verb% %date %verb%%, que dizem respeito ao título, autor e data do documento, respectivamente. Ainda no estado INITIAl, quando são encontradas as tags %%verb% %t[1-3] %verb%%, %%verb% %index% %verb%%, %%verb% %cover% %verb%%, são adicionados o título, o índice e a capa do documento ao ficheiro final.
 
@@ -98,14 +52,11 @@ Quando nos estados INITIAL, LIST, DICTIONARY é encontrada a tag %%verb% %%ol% %
 
 As tags %%verb% %b %verb%%, %%verb% %i %verb%% e %%verb% %u %verb%% representam os diversos tipos de formatação do texto, nomeadamente, texto escrito em negrito, texto escrito em itálico e texto sublinhado. Estas são inicializadas quando encontrados os estados INITIAl, LIST, DICTIONARY, querendo isto dizer que é possível inserir texto formatado em qualquer parte do texto, dentro de listas e dentro de entradas de dicionário.
 
-Nos estados INITIAL, LIST, DICTIONARY são encontradas as tags %%verb% %img %verb%% e %%verb% %link% %verb%%, é iniciado o estado IMG e LINK, respectivamente. Ainda nestes últimos três estados podem encontrar-se as tags  %%verb% %%% %verb%% e %%verb% %%comment% %verb%%, que dizem respeitos aos comentários de linha e multi-linha, iniciando-se os estados COMMENT LINE e COMMENT, respectivamente. Dentro do estado COMMENT LINE, quando é encontrado a tag %%verb% \n %verb%%, significa que o comentário de linha termina ali, e então volta-se para o estado anterior. Em relação ao estado COMMENT, este funciona de forma análoga ao anterior, contudo volta ao estado anterior quando encontra a tag %%verb% %comment%% %verb%%. Relativamente aos estados VERB e VERB LINE, que dizem repseito ao verbatim multi-linha e verbatim de linha, funcionam de forma idêntica ao estados anteriores.
+Nos estados INITIAL, LIST, DICTIONARY são encontradas as tags %%verb% %img %verb%% e %%verb% %link% %verb%%, é iniciado o estado IMG e LINK, respectivamente. Ainda nestes últimos três estados podem encontrar-se as tags  %%verb% %%% %verb%% e %%verb% %%comment% %verb%%, que dizem respeitos aos comentários de linha e multi-linha, iniciando-se os estados COMMENT%%latex%\_%latex%%LINE e COMMENT, respectivamente. Dentro do estado COMMENT%%latex%\_%latex%%LINE, quando é encontrado a tag %%verb% \n %verb%%, significa que o comentário de linha termina ali, e então volta-se para o estado anterior. Em relação ao estado COMMENT, este funciona de forma análoga ao anterior, contudo volta ao estado anterior quando encontra a tag %%verb% %comment%% %verb%%. Relativamente aos estados VERB e VERB LINE, que dizem repseito ao verbatim multi-linha e verbatim de linha, funcionam de forma idêntica ao estados anteriores.
 
 Quando no estado INITIAL, são encontradas as tags %%verb% %%table% %verb%% e %%verb% %%latex% %verb%%, são iniciados os estados TABLE e LATEX, correspondendo à inserção de tabelas e à inserção de comandos nativos LaTeX, respectivamente.
 
-
-
-
-
+Em ambos os ficheiros flex, é implementada uma stack de estados, disponível pela ferramenta flex, onde são utilizados as funções yy%%latex%\_%latex%% push%%latex%\_%latex%%state e yy%%latex%\_%latex%%pop%%latex%\_%latex%%state. Esta stack de estados, permite a implentação de estados dentro de outros estados, como por exemplo, imagens dentro de listas, listas dentro de listas, links dentro de listas, etc.
 
 
 %%latex% \newpage %latex%%
@@ -122,7 +73,7 @@ A ferramenta PAH está desenvolvida em flex, sendo esta constituída pelos segui
     %it{functionsLatex.c:} funções em C usadas pelo ficheiro latex.fl;
     %it{functionsHtml.c:} funções em C usadas pelo ficheiro html.fl;
     %it{linkedlist.c:} módulo de listas ligadas;
-    %it{utilities.c:} 
+    %it{utilities.c:} funções em C usadas pelo ficheiro latex.fl;
     %it{makefile:} cria o respectivo executável.
 %dl%%
  
@@ -221,7 +172,7 @@ Existem três tipos de títulos, sendo estes apresentados pela ordem de maior im
 %t2{Texto Não Formatado}
 Uma das funcionalidades da ferramenta é permitir incluir texto que não seja interpretado pelo %i{PAH}. Desta forma, todo o texto compreendido entre os comandos %%verb% %%verbatim% e %verbatim%% %verb%%, não será interpretado aquando da compilação, sendo este apresentado no documento sem quaisquer modificações. Este último caso é utilizado aquando da introdução de várias linhas. Caso o pretendido seja apenas a introdução de uma linha, basta introduzir o conteúdo dessa linha entre os comandos %%verbatim% %%verb% e %verb%% %verbatim%%. %%latex% \\ %latex%% 
 
-Sabendo que o texto presente entre os comandos acima referidos, não vai ser interpretado, isso também acontece com os comandos da própria linguagem, como por exemplo, se dentro das tags %%verb% %%verbatim% e %verbatim%% %verb%% se encontrar a tag %%verb% %b{Latex} %verb%%, a palavra "Latex" não ficará a negrito, pois dentro desta tag não existe interpretação de comandos. 
+Sabendo que o texto presente entre os comandos acima referidos, não vai ser interpretado, isso também acontece com os comandos da própria linguagem, como por exemplo, se dentro das tags %%verb% %%verbatim% e %verbatim%% %verb%% se encontrar a tag %%verb% %b{Latex} %verb%%, a palavra "Latex" não ficará a negrito, pois dentro destas tags não existe interpretação de comandos. 
 
 
 
@@ -234,7 +185,7 @@ Ao longo do documento, partes do texto podem ser apresentadas em itálico, em ne
     %it{Sublinhado:} %%verb% %u{Textto sublinhado} %verb%%
 %dl%%
 
-Estas operações de formatação de texto são muito usuais na escrita de documentos, e tendo isso em conta, esta nova  ferramenta permite a formatação do texto em várias situações, nomeadamente, em listas numeradas, listas não numeradas, listas descritivas, imagens (só em html), links (só em html) e em situações normais ao longo do documento. %%latex% \\ %latex%%
+Estas operações de formatação de texto são muito usuais na escrita de documentos, e tendo isso em conta, esta nova  ferramenta permite a formatação do texto em várias situações, nomeadamente, em listas numeradas, listas não numeradas, listas descritivas, links e em situações normais ao longo do documento. %%latex% \\ %latex%%
 
 %t2{Listas} 
 De seguida, são apresentadas os três tipos de listas suportadas pela ferramenta %it{PAH}.%%latex% \\ %latex%% 
@@ -259,7 +210,6 @@ De seguida, são apresentadas os três tipos de listas suportadas pela ferrament
 %ul%%
 
 
-
 %t3{Entradas de um dicionário}
 
 
@@ -280,7 +230,8 @@ De seguida, são apresentadas os três tipos de listas suportadas pela ferrament
 %dl%%
 %verbatim%% 
 
-
+Em relação aos três tipos de lista é possível implementar outros comandos dentro destas, como por exemplo, colocar o texto a negrito, a itálico e ainda, existe a possibilidade de poder colocar listas dentro de listas, sendo esta uma funcionalidade muito utilizada.%%latex% \\ %latex%%
+ 
 
 %t2{Imagens}
 Como qualquer outra ferramenta, esta também permite a inclusão de imagens no documento. Para isso, basta usar o comando %%verb% %img{path,caption} %verb%%, sendo "path" o caminho para a respectiva imagem e "caption" a legenda da mesma.%%latex% \\ %latex%% 
@@ -315,12 +266,14 @@ O uso de comentários é muito usual ao longo do texto, uma vez que facilitam a 
 
 %%latex% \newpage %latex%% 
 %t2{Tabelas} 
-As tabelas têm a seguinte estrutura:
+As tabelas têm a seguinte estrutura: %%latex% \\ %latex%% 
 
 
 %%table%
-            %head Nome % Número 
-            %row Helena Alves  % 50 % 1000
+            %head Nome % Idade 
+            %row André  % 17 
+            %row Maria % 10
+            %row Rui % 15
 
 %table%%
 
@@ -340,45 +293,14 @@ As tabelas têm a seguinte estrutura:
 %ul%%
 
 
-Na introdução de tabelas, um dos aspectos principais tidos em conta consistiu em reduzir grande parte da complexidade dos comandos necessários para a sua implementação, tornando esta muito mais facilitada. Desta forma, apenas é necessário a introdução dos comandos acima referidos, tornando mais prática a sua introdução.%%latex% \\ %latex%% 
-
-%%latex% \newpage %latex%%
-
-%t2{Conclusão}
-
-neste lfgfldkjjdk
-
-
-%t2{Tabelas} 
-As tabelas têm a seguinte estrutura:
-
-
-%%table%
-            %head Nome % Número 
-            %row Helena Alves  % 50
-
-%table%%
-
-
-%%verbatim%
-    %%table%
-            %head Célula  % Célula 
-            %row  Célula  % Célula  
-    %table%%
-%verbatim%%
-
-
-%%ul%
-    %it A tabela é iniciada com %%verb% %%table% %verb%% e finalizada com %%verb% %table%% %verb%%;
-    %it Cada célula da tabela deve ser colocada após %%verb% %head %verb%% ou %%verb% %row %verb%%. A única diferença entre estes, consiste no formato do texto. Enquanto que o comando %%verb% %head %verb%% coloca o texto centrado e a negrito, o comando %%verb% %row %verb%% coloca o texto num formato normal.
-    %it O comando %%verb% % %verb%% permite a separação das células da tabela, correspondendo, no entanto, ao número total de colunas.
-%ul%%
-
+Numa tabela, caso seja inserido um nova linha com apenas uma célula, e a tabela em geral possuir mais que uma coluna, automaticamente são desenhadas as restantes células em branco.
 
 Na introdução de tabelas, um dos aspectos principais tidos em conta consistiu em reduzir grande parte da complexidade dos comandos necessários para a sua implementação, tornando esta muito mais facilitada. Desta forma, apenas é necessário a introdução dos comandos acima referidos, tornando mais prática a sua introdução.%%latex% \\ %latex%% 
 
 %%latex% \newpage %latex%%
 
 %t2{Conclusão}
+Como forma de conclusão pode-se referir que o trabalho prático foi, no entender do grupo, realizado com sucesso.As funcionalidades propostas pelo enunciado foram concluídas com sucesso, juntamente com a implementação de alguns extras. 
 
-neste lfgfldkjjdk
+De uma forma geral, os resultados produzidos foram satisfatórios, de modo a obter uma solução simples e eficiente. 
+
