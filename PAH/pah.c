@@ -134,6 +134,7 @@ int main(int argc, const char *argv[])
         }
     }
     wait(0);
+    close(inputFile) ;
 
     return 0;
 }
