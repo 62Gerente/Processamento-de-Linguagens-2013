@@ -29,7 +29,17 @@ O Gregs vai buscar o %b{%u{pão} e a broa}.
 	com new line
 	%it Item 2
 	%it %u{Item 3} 
+	%it %link{google.pt,%u{Google dentro de uma lista}}
+	%it %img{info.jpg, Imagem de %u{informações} dentro de uma ol!}
 %ol%%
+
+%t1{Um dicionário interessante}
+
+%%dl%
+	%it{link para a SAPO} %link{sapo.pt,%u{Sapo dentro de uma %i{lista}}}		
+	%it{imagem de informações} %img{info.jpg, Imagem de %u{informações dentro} %b{de uma ol!}}
+%dl%%
+
 
 %t1{Galeria de fotos}
 

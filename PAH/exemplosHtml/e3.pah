@@ -15,6 +15,9 @@ Posso fazer várias quebras de linha, que apenas uma é gerada. %%verb%Um pouco 
 	%%% A primeira linha terá o texto a negrito por se tratar de uma %head.
 	%row %i{nice %u{one!}} % Aqui vai outra % last
 	%row yeah!   %   %b{%u{49}}    	%  Last but not the Least!
+	%row %link{sapo.pt,%u{Sapo dentro de uma %i{tabela}}} % uma coluna % duas %b{colunas}	
+	%row yeah!   %   %b{%u{49}}    	%  Last but not the Least!		
+	%head %img{info.jpg, Imagem de %u{informações dentro} de uma ol!} % %i{last line} % %b{AGORA ACABOU!}
 %table%%
 
 %%comment%A tabela acima foi criada espectacularmente. Isto é um comentário multi-linha. Aqui vai uma lista:

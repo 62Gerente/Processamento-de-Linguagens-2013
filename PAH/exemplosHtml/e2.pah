@@ -15,11 +15,13 @@ O Gregs vai buscar o %b{%u{pão} e a broa}.
 
 %t3{Uma lista interessante}
 
-%%ol%
+%%ul%
 	%it Item 1
 	%it Item 2
+	%it %link{sapo.pt,%u{Sapo dentro de uma %i{lista}}}
+	%it %img{info.jpg, %i{Imagem de %u{informações} dentro} de uma ul!}
 	%it %u{Item 3} 
-%ol%%
+%ul%%
 
 %t1{Galeria de fotos}
 

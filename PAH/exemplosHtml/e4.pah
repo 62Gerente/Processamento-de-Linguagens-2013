@@ -15,8 +15,8 @@
 					%it %u{Item} 1.2.2.%%verb%2%verb%%					
 
 					%%dl%
-						%it{d_1} %i{Item from dictionary 1}		
-						%it{d_2} %u{Item} from %b{dictionary 2}				
+						%it{link para a SAPO} %link{sapo.pt,%u{Sapo dentro de uma %i{lista}}}		
+						%it{imagem de informações} %img{info.jpg, Imagem de %u{informações dentro} %b{de uma ol!}}
 					%dl%%
 
 				%ul%%				
@@ -27,21 +27,19 @@
 		%it %u{Item} %%verb%2%verb%%
 
 		%%dl%
-			%it{d_3} %i{almost finished..}		
-			%it{d_4} %u{end of list}	
+			%it{dict it 3} %i{almost finished..}		
+			%it{dict it 4} %u{end of list}	
 
 			%%ul%
 				%it Um item de uma ul dentro de um dicionário.		
 				%it outro! %%%e um comentário!!!!!!			
 			%ul%%
 
-			%it{d_5} Afinal acaba aqui.
+			%it{dict it 5} Afinal acaba aqui.
 
 		%dl%%
 %ol%%
 
 %t1{Um título para sinalizar o fim da lista!}
-
-
 
 Ufa, acabou!
