@@ -162,7 +162,7 @@
     /* --------------------------- GERAL --------------------------- */    
 
 <INITIAL,LIST,DICTIONARY>\}      { endLatexTag(closeTags); }               /* Fecha ultima tag aberta */
-<INITIAL,LIST,DISCTIONARY>\%|\$|\_|\"|\&|\#|\~|\{|\}|\\|\^                 {printf("\\");ECHO;}
+<INITIAL,LIST,DICTIONARY>\%|\$|\_|\"|\&|\#|\~|\{|\}|\\|\^                 {printf("\\");ECHO;}
 <*>.|\n                          { ECHO; }
 
 %%
