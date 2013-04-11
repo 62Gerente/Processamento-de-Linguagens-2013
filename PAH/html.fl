@@ -212,19 +212,24 @@
 	/* ---------------------- INÍCIO DE LINK E IMAGEM --------------------- */	              			
 
 
-<NO_ENV>%img\{		{	BEGIN IMG;
-						beginImageHtml() ;	} 
+<NO_ENV,LIST,DICT,TABLE>%img\{	{	//BEGIN IMG;
+								yy_push_state(IMG) ;
+								beginImageHtml() ;	} 
 
-<NO_ENV>%link\{		{	BEGIN LINK ;
-						beginLinkHtml();	}					
+<NO_ENV,LIST,DICT,TABLE>%link\{	{	//BEGIN LINK ;
+								yy_push_state(LINK) ;
+								beginLinkHtml();	}					
 
 	/* ------------------------ FIM DE LINK --------------------------------- */
 
 <IMG>\}				{ 	endTagHtml() ;							
 						if(itemTitleTags == 0) {	
 							nImg ++ ;						
-							BEGIN NO_ENV;
-							newLineEnable = 0 ;	
+							//BEGIN NO_ENV;
+							int topState = yy_top_state() ;
+							yy_pop_state() ;
+							if(topState == NO_ENV)
+								newLineEnable = 0 ;	
 						}
 						else
 							itemTitleTags -- ;	}
@@ -233,9 +238,15 @@
 
 <LINK>\}			{ 		endTagHtml() ;							
 							if(itemTitleTags == 0) {								
-								BEGIN NO_ENV;
-								newLineEnable = 1 ;	
-								lastWasNewLine = 0 ;
+								//BEGIN NO_ENV;
+								//newLineEnable = 1 ;	
+								//lastWasNewLine = 0 ;
+								int topState = yy_top_state() ;
+								yy_pop_state() ;
+								if(topState == NO_ENV) {
+									newLineEnable = 1 ;	
+									lastWasNewLine = 0 ;
+								}
 							}
 							else
 								itemTitleTags -- ;	}
