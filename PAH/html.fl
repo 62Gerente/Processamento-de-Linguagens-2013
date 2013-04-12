@@ -58,6 +58,13 @@
 
 			BEGIN NO_ENV ;
 	
+	/* -------------------------------- PROTECÇÃO DAS CHAVETAS	------------------------------------- */
+
+\\\{			{	fprintf(tempFile, "{") ;}
+\\\}			{ 	fprintf(tempFile, "}") ;}
+\\\%			{	char a[2] = "%" ;
+					fprintf(tempFile, "%s", a) ;}
+
 	/* ------ NEGRITO, ITÁLICO E SUBLINHADO EM AMBIENTES ESPECIAIS (QUE TERMINAM COM '}') ------- */
 
 <DICT_TIT,IMG,LINK,TITLE>%b\{ 		{ 	beginBoldHtml();

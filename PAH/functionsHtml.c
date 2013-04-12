@@ -132,7 +132,7 @@ void endHtml() {
 
 void beginLinkHtml() {
 
-	fprintf(tempFile, "<a href=\"http://") ;
+	fprintf(tempFile, "<a href=\"") ;
 	pushLinkedList(closeTags, closeLink) ;
 }
 

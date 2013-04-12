@@ -1,7 +1,7 @@
 %%header%
     %title Relatório PAH
     %author André Santos, Helena Alves, Pedro Carneiro
-    %date --/--/2013
+    %date 12/04/2013
 %header%%
 
 %cover%
@@ -12,8 +12,7 @@
 A resolução do trabalho prático descrita no presente relatório refere-se à especificação de um pré-processador para gerar ficheiros em LaTeX e Html. Pretende-se neste trablaho que seja implementada uma nova linguagem, de maneira a simplificar a escrita das diversas funcionalidades que essa nova linguagem irá permitir.%%latex% \\ %latex%%
 
 
-Assim, neste trabalho prático pretende-se aplicar os conceitos adquiridos na Unidade
-Curricular de Processamento de Linguagens associados à utilização de expressões regulares para descrever padrões de textos, para futuramente gerar ficheiros, através da ferramenta Flex. %%latex% \newpage %latex%%
+Assim, neste trabalho prático pretende-se aplicar os conceitos adquiridos na Unidade Curricular de Processamento de Linguagens associados à utilização de expressões regulares para descrever padrões de textos, para futuramente gerar ficheiros nos formatos referidos, através da ferramenta Flex. %%latex% \newpage %latex%%
 
 
 %t1{Descrição do trabalho}
@@ -33,7 +32,7 @@ Esta nova linguagem não acarreta, de longe, todas as potencialidades e funciona
     %it Introdução de comentários no texto;
     %it Geração de índices;
     %it Geração de capa de documento;
-    %it Proteçção dos seguintes caracteres especiais em latex: %, ", $, _, &, #, ~, {, }, \ e ^. (excepto nas tabelas) 
+    %it Proteçção dos seguintes caracteres especiais em latex: \%, $, _, &, #, \{, \}, ~, \, ^. (excepto nas tabelas) 
     %it Entre outros.
 %ul%%
 
@@ -56,7 +55,9 @@ Nos estados INITIAL, LIST, DICTIONARY são encontradas as tags %%verb% %img %ver
 
 Quando no estado INITIAL, são encontradas as tags %%verb% %%table% %verb%% e %%verb% %%latex% %verb%%, são iniciados os estados TABLE e LATEX, correspondendo à inserção de tabelas e à inserção de comandos nativos LaTeX, respectivamente.
 
-Em ambos os ficheiros flex, é implementada uma stack de estados, disponível pela ferramenta flex, onde são utilizados as funções yy%%latex%\_%latex%% push%%latex%\_%latex%%state e yy%%latex%\_%latex%%pop%%latex%\_%latex%%state. Esta stack de estados, permite a implentação de estados dentro de outros estados, como por exemplo, imagens dentro de listas, listas dentro de listas, links dentro de listas, etc.
+Relativamente à implementação do conversor para html desenvolvido em flex, esta segue as linhas gerais da implementação do conversor para latex, como seria de esperar.
+
+Em ambos os ficheiros flex, é implementada uma stack de estados, disponível pela ferramenta flex, onde são utilizados as funções %%verb%yy_push_state%verb%% e %%verb%yy_pop_state%verb%%. Esta stack de estados, permite a implentação de estados dentro de outros estados, como por exemplo, imagens dentro de listas, listas dentro de listas, links dentro de listas, etc.
 
 
 %%latex% \newpage %latex%%
@@ -73,12 +74,12 @@ A ferramenta PAH está desenvolvida em flex, sendo esta constituída pelos segui
     %it{functionsLatex.c:} funções em C usadas pelo ficheiro latex.fl;
     %it{functionsHtml.c:} funções em C usadas pelo ficheiro html.fl;
     %it{linkedlist.c:} módulo de listas ligadas;
-    %it{utilities.c:} funções em C usadas pelo ficheiro latex.fl;
-    %it{makefile:} cria o respectivo executável.
+    %it{utilities.c:} módulo auxiliar em C que serve de suporte à implementação de ambos os ficheiros flex;
+    %it{makefile:} responsável pela configuração da ferramenta no sistema.
 %dl%%
  
 
-Para proceder à instalação da ferramenta, basta apenas copiar os ficheiros referidos anteriormente para uma directoria à escolha e executar a makefile. Desta forma, será criado um executável na mesma directoria, com o nome de %i{pah}.%%latex% \\ %latex%% %%latex% \\ %latex%%
+Para proceder à instalação da ferramenta, basta apenas copiar os ficheiros referidos anteriormente para uma directoria à escolha e executar a makefile. Desta forma, será criado um executável na mesma directoria, com o nome de %i{pah}, bem como será criada uma cópia do manual da ferramenta na directoria UNIX destinada a tal.%%latex% \\ %latex%% %%latex% \\ %latex%%
 
 
 
@@ -87,19 +88,19 @@ Como um dos objectivos deste pré-processador é facilitar a conversão em latex
 
 %%dl%
     %it{Gerar LaTeX:} 
-       ./pah --latex ficheiro ficheiro.tex
+       ./pah --latex ficheiroInput output.tex
     %it{Gerar HTML:} 
-       ./pah --html ficheiro ficheiro.html
+       ./pah --html ficheiroInput output.html
 %dl%%
 
 
 %%latex% \newpage %latex%%
-%t3{Outras situações:}
+%t3{Outras opções}
 %%ul%
     %it %b{Gera ficheirotex.tex e ficheirohtml.html:} 
-    ./pah ficheiro ficheirotex.tex ficheirohtml.html
+    ./pah ficheiroInput ficheirotex.tex ficheirohtml.html    
     %it %b{Gera ficheiro.tex e ficheiro.html} 
-    ./pah ficheiro ficheiro
+    ./pah ficheiroInput ficheiro
     %it %b{Gera Latex.tex e Html.html:}
     ./pah ficheiro
     %it %b{Erro por falta de ficheiro de input:}
@@ -170,7 +171,7 @@ Existem três tipos de títulos, sendo estes apresentados pela ordem de maior im
  
 
 %t2{Texto Não Formatado}
-Uma das funcionalidades da ferramenta é permitir incluir texto que não seja interpretado pelo %i{PAH}. Desta forma, todo o texto compreendido entre os comandos %%verb% %%verbatim% e %verbatim%% %verb%%, não será interpretado aquando da compilação, sendo este apresentado no documento sem quaisquer modificações. Este último caso é utilizado aquando da introdução de várias linhas. Caso o pretendido seja apenas a introdução de uma linha, basta introduzir o conteúdo dessa linha entre os comandos %%verbatim% %%verb% e %verb%% %verbatim%%. %%latex% \\ %latex%% 
+Uma das funcionalidades da ferramenta é permitir incluir texto que não seja interpretado pelo %i{PAH}. Desta forma, todo o texto compreendido entre os comandos %%verb% %%verbatim% e %verbatim%% %verb%%, não será interpretado aquando da conversão entre os formatos, sendo este apresentado no documento sem quaisquer modificações. Este último caso é utilizado aquando da introdução de várias linhas. Caso o pretendido seja apenas a introdução de uma linha, basta introduzir o conteúdo dessa linha entre os comandos %%verbatim% %%verb% e %verb%% %verbatim%%. %%latex% \\ %latex%% 
 
 Sabendo que o texto presente entre os comandos acima referidos, não vai ser interpretado, isso também acontece com os comandos da própria linguagem, como por exemplo, se dentro das tags %%verb% %%verbatim% e %verbatim%% %verb%% se encontrar a tag %%verb% %b{Latex} %verb%%, a palavra "Latex" não ficará a negrito, pois dentro destas tags não existe interpretação de comandos. 
 
@@ -185,10 +186,10 @@ Ao longo do documento, partes do texto podem ser apresentadas em itálico, em ne
     %it{Sublinhado:} %%verb% %u{Textto sublinhado} %verb%%
 %dl%%
 
-Estas operações de formatação de texto são muito usuais na escrita de documentos, e tendo isso em conta, esta nova  ferramenta permite a formatação do texto em várias situações, nomeadamente, em listas numeradas, listas não numeradas, listas descritivas, links e em situações normais ao longo do documento. %%latex% \\ %latex%%
+Estas operações de formatação de texto são muito usuais na escrita de documentos, e tendo isso em conta, esta nova  ferramenta permite a formatação do texto em várias situações, nomeadamente, em listas numeradas, listas não numeradas, listas descritivas, links e em situações normais ao longo do documento. A composição destas é também suportada pela ferramenta, sendo assim possível, por exemplo, que o mesmo texto seja destacado a negrito e a sublinhado. %%latex% \\ %latex%%
 
 %t2{Listas} 
-De seguida, são apresentadas os três tipos de listas suportadas pela ferramenta %it{PAH}.%%latex% \\ %latex%% 
+De seguida, são apresentadas os três tipos de listas suportadas pela ferramenta %i{PAH}.%%latex% \\ %latex%% 
  
 
 %t3{Listas Numeradas}
@@ -196,7 +197,7 @@ De seguida, são apresentadas os três tipos de listas suportadas pela ferrament
 
 %%ul%
     %it Iniciada por %%verb% %%ol% %verb%% e finalizada por %%verb% %ol%% %verb%%;
-    %it Cada item da lista é precedido por %%verb% %it %verb%%;
+    %it Cada item da lista é precedido por %%verb% %it %verb%%.
 %ul%%
 
 
@@ -206,7 +207,7 @@ De seguida, são apresentadas os três tipos de listas suportadas pela ferrament
 
 %%ul%
     %it Iniciada por %%verb% %%ul% %verb%% e finalizada por %%verb% %ul%% %verb%%;
-    %it Cada item da lista é precedido por %%verb% %it %verb%%;
+    %it Cada item da lista é precedido por %%verb% %it %verb%%.
 %ul%%
 
 
@@ -293,14 +294,14 @@ As tabelas têm a seguinte estrutura: %%latex% \\ %latex%%
 %ul%%
 
 
-Numa tabela, caso seja inserido um nova linha com apenas uma célula, e a tabela em geral possuir mais que uma coluna, automaticamente são desenhadas as restantes células em branco.
+Numa tabela, e em latex, caso seja inserido uma nova linha com um número de colunas inferior ao número de colunas da linha com mais colunas, automaticamente são desenhadas as restantes células em branco. Uma vez que em html é perfeitamente possível que cada linha tenha um número de colunas distintas, esse problema não se coloca.
 
 Na introdução de tabelas, um dos aspectos principais tidos em conta consistiu em reduzir grande parte da complexidade dos comandos necessários para a sua implementação, tornando esta muito mais facilitada. Desta forma, apenas é necessário a introdução dos comandos acima referidos, tornando mais prática a sua introdução.%%latex% \\ %latex%% 
 
 %%latex% \newpage %latex%%
 
-%t2{Conclusão}
-Como forma de conclusão pode-se referir que o trabalho prático foi, no entender do grupo, realizado com sucesso.As funcionalidades propostas pelo enunciado foram concluídas com sucesso, juntamente com a implementação de alguns extras. 
+%t1{Conclusão}
+Como forma de conclusão pode-se referir que o trabalho prático foi, no entender do grupo, realizado com sucesso. As funcionalidades propostas pelo enunciado foram implementadas com sucesso, juntamente com a adição de algumas funcionalidades extras. 
 
 De uma forma geral, os resultados produzidos foram satisfatórios, de modo a obter uma solução simples e eficiente. 
 
