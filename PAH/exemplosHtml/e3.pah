@@ -11,11 +11,10 @@ Posso fazer várias quebras de linha, que apenas uma é gerada. %%verb%Um pouco 
 %t2{A dita tabela}
 
 %%table%
-	%head Coluna 1 % Coluna 2 % Coluna 3
-	%%% A primeira linha terá o texto a negrito por se tratar de uma %head.
+	%head Coluna 1 % Coluna 2 % Coluna 3	
 	%row %i{nice %u{one!}} % Aqui vai outra % last
 	%row yeah!   %   %b{%u{49}}    	%  Last but not the Least!
-	%row %link{sapo.pt,%u{Sapo dentro de uma %i{tabela}}} % uma coluna % duas %b{colunas}	
+	%row %link{https://www.sapo.pt,%u{Sapo dentro de uma %i{tabela}}} % uma coluna % duas %b{colunas}	
 	%row yeah!   %   %b{%u{49}}    	%  Last but not the Least!		
 	%head %img{info.jpg, Imagem de %u{informações dentro} de uma ol!} % %i{last line} % %b{AGORA ACABOU!}
 %table%%
@@ -31,7 +30,7 @@ E assim termina o comentário multi-linha. %comment%%
 
 %t3{Análise à tabela elaborada}
 
-Consta-se que a tabela elaborada, com base em %link{www.wikipedia.com/table, SITE de %i{tables}} está, de facto, %u{mui bonita}.
+Consta-se que a tabela elaborada, com base em %link{http://www.wikipedia.com/table, SITE de %i{tables}} está, de facto, %u{mui bonita}.
 Para terminar, segue-se uma imagem esplêndida! 
 
 %img{info.jpg, Símbolo de %i{informação!}}

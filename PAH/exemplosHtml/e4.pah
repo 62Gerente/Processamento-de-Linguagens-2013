@@ -15,7 +15,7 @@
 					%it %u{Item} 1.2.2.%%verb%2%verb%%					
 
 					%%dl%
-						%it{link para a SAPO} %link{sapo.pt,%u{Sapo dentro de uma %i{lista}}}		
+						%it{link para a SAPO} %link{https://www.sapo.pt,%u{Sapo dentro de uma %i{lista}}}		
 						%it{imagem de informações} %img{info.jpg, Imagem de %u{informações dentro} %b{de uma ol!}}
 					%dl%%
 

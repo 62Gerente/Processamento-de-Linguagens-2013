@@ -15,7 +15,7 @@ Este é o primeiro capítulo do documento.
 
 %t1{Segundo capítulo}
 
-Hoje está um dia muito chuvoso.
+Hoje está um dia muito chuvoso. E que tal os caracteres protegidos %b{\{}, %b{\}} e %b{\%}?
 
 %t2{Algumas informações úteis}
 
@@ -29,14 +29,14 @@ O Gregs vai buscar o %b{%u{pão} e a broa}.
 	com new line
 	%it Item 2
 	%it %u{Item 3} 
-	%it %link{google.pt,%u{Google dentro de uma lista}}
+	%it %link{https://www.google.pt,%u{Google dentro de uma lista}}
 	%it %img{info.jpg, Imagem de %u{informações} dentro de uma ol!}
 %ol%%
 
 %t1{Um dicionário interessante}
 
 %%dl%
-	%it{link para a SAPO} %link{sapo.pt,%u{Sapo dentro de uma %i{lista}}}		
+	%it{link para a SAPO} %link{https://www.sapo.pt,%u{Sapo dentro de uma %i{lista}}}		
 	%it{imagem de informações} %img{info.jpg, Imagem de %u{informações dentro} %b{de uma ol!}}
 %dl%%
 
@@ -49,8 +49,8 @@ Fotos bem intessantes são apresentadas de seguida.
 
 %t2{Links úteis}
 
-O link para o site do Google: %link{google.pt,%u{Google}}
-O link para o site da Sapo: %link{www.sapo.pt,Sapo}
+O link para o site do Google: %link{https://www.google.pt,%u{Google}}
+O link para o site da Sapo: %link{https://www.sapo.pt,Sapo}
 
 Ambos em %%verb%Língua Portuguesa!%verb%%.
 

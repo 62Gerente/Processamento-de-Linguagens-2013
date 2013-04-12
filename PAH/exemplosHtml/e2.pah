@@ -18,7 +18,7 @@ O Gregs vai buscar o %b{%u{pão} e a broa}.
 %%ul%
 	%it Item 1
 	%it Item 2
-	%it %link{sapo.pt,%u{Sapo dentro de uma %i{lista}}}
+	%it %link{https://www.sapo.pt,%u{Sapo dentro de uma %i{lista}}}
 	%it %img{info.jpg, %i{Imagem de %u{informações} dentro} de uma ul!}
 	%it %u{Item 3} 
 %ul%%
@@ -31,8 +31,8 @@ Fotos bem intessantes são apresentadas de seguida.
 
 %t2{Links úteis}
 
-%link{google.pt,%u{Google}}
-%link{www.sapo.pt,Sapo}
+%link{https://www.google.pt,%u{Google}}
+%link{https://www.sapo.pt,Sapo}
 
 %t3{Conclusão}
 
