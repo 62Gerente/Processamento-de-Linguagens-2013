@@ -44,11 +44,11 @@ install: pah
 	cp man.1 /usr/share/man/man1/pah.1
 
 uninstall: 
+	rm -f /usr/local/bin/pah_latex
+	rm -f /usr/local/bin/pah_html
 	rm -f /usr/local/bin/pah
 	rm -f /usr/share/man/man1/pah.1
 	make clean	
 
 clean:
-	rm -f /usr/local/bin/pah_latex
-	rm -f /usr/local/bin/pah_html
 	rm *.o *.yy.c pah_latex pah_html pah *.tex *.html

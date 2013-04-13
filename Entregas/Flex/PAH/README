@@ -1,0 +1,22 @@
+make install
+
+	Utilizar sudo.
+	Para instalar o programa no sistema, assim como o respectivo manual.
+
+make uninstall
+
+	Utilizar sudo.
+	Para proceder à desinstalação e remoção dos ficheiros criados pelo programa.
+
+make
+
+	Para criar o executável do programa.
+
+make clean 
+
+	Para remover os ficheiros criados pelo programa.
+
+
+
+
+PARA MAIS INFORMAÇÕES CONSULTAR RELATÓRIO E MANUAL DA APLICAÇÃO

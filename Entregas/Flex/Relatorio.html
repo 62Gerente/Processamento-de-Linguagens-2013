@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+</head>
+<body>
+<hr>
+    <h3><u>Title:</u> Relatório PAH    </h3>
+<h3><u>Author:</u> André Santos, Helena Alves, Pedro Carneiro    </h3>
+<h3><u>Date:</u> 12/04/2013</h3>
+<hr>
+    
+<hr>
+<h1>Table of Contents</h1>
+<p><a href="#section_1">1 - Introdução</a></p>
+<p><a href="#section_2">2 - Descrição do trabalho</a></p>
+<p><a href="#section_3">3 - Estrutura de dados</a></p>
+<p><a href="#section_4">4 - Implementação</a></p>
+<p><a href="#section_5">5 - Ferramenta PAH</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_5_1">5.1 - Composicão e Instalação</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_5_2">5.2 - Invocação</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_5_2_1">5.2.1 - Outras opções</a></p>
+<p><a href="#section_6">6 - Funcionalidades da ferramenta</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_6_1">6.1 - Cabeçalhos do documento</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_6_2">6.2 - Índices</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_6_3">6.3 - Comandos em LaTeX e HTML</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_6_4">6.4 - Títulos do documento</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_6_5">6.5 - Texto Não Formatado</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_6_6">6.6 - Texto Formatado</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_6_7">6.7 - Listas</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_6_7_1">6.7.1 - Listas Numeradas</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_6_7_2">6.7.2 - Listas Não Numeradas</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_6_7_3">6.7.3 - Entradas de um dicionário</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_6_8">6.8 - Imagens</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_6_9">6.9 - Links</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_6_10">6.10 - Comentários</a></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp;<a href="#section_6_11">6.11 - Tabelas</a></p>
+<p><a href="#section_7">7 - Conclusão</a></p>
+<hr>
+ <br>
+<h1><a id="section_1">Introdução</a></h1>A resolução do trabalho prático descrita no presente relatório refere-se à especificação de um pré-processador para gerar ficheiros em LaTeX e Html. Pretende-se neste trablaho que seja implementada uma nova linguagem, de maneira a simplificar a escrita das diversas funcionalidades que essa nova linguagem irá permitir.<br>
+Assim, neste trabalho prático pretende-se aplicar os conceitos adquiridos na Unidade Curricular de Processamento de Linguagens associados à utilização de expressões regulares para descrever padrões de textos, para futuramente gerar ficheiros nos formatos referidos, através da ferramenta Flex. <br>
+<h1><a id="section_2">Descrição do trabalho</a></h1>Linguagens como o LaTex e o Html trazem grandes benefícios para a sociedade actual, contudo também possuem alguns pontos menos atraentes. Estes pontos dizem respeito a certas desvantagens das mesmas, nomeadamente, a complexidade de certos comandos. Além de outros aspectos, este foi um dos aspectos que levou à criação da ferramenta <i>PAH</i>. Uma maior facilidade na escrita de certos comandos leva a um maior desempenho por parte do programador, aumentado o seu tempo de trabalho. Deste modo, a simplificação de certos comandos foi um dos aspectos principais a serem melhorados. <br>
+Esta nova linguagem não acarreta, de longe, todas as potencialidades e funcionalidades das duas linguagens em questão, no entanto, foram trabalhadas grande parte das funcionalidades mais usuais, tais como: <br>
+<ul>
+    <li> Introdução de capítulos;
+    </li><li> Texto formatado;
+    </li><li> Texto não formatado;
+    </li><li> Formatação de tabelas;
+    </li><li> Formatação de listas não numeradas;
+    </li><li> Formatação de listas numeradas;
+    </li><li> Formatação de listas descritivas;
+    </li><li> Inclusão de imagens;
+    </li><li> Inclusão de links;
+    </li><li> Introdução de comentários no texto;
+    </li><li> Geração de índices;
+    </li><li> Geração de capa de documento;
+    </li><li> Proteçção dos seguintes caracteres especiais em latex: %, $, _, &, #, {, }, ~, \, ^. (excepto nas tabelas) 
+    </li><li> Entre outros.
+</li></ul><h1><a id="section_3">Estrutura de dados</a></h1>Para a criação dos ficheiros em LaTeX e Html, é necessário armazenar determinados dados, de maneira que, após o processamento do ficheiro de entrada, seja possível imprimir esses dados para os ficheiros finais  respectivos. Desta forma, é necessário uma estrutura de dados capaz de suportar estes dados e permitir o seu acesso rápido e eficiente. Portanto, foi considerada uma implementação de listas ligadas para guardar os dados referentes às tags de fecho e aos cabeçalhos do documento. <br>
+<h1><a id="section_4">Implementação</a></h1>Como o objectivo do trabalho consiste em gerar ficheiros em LaTeX e Html, foi decidido elaborar dois ficheiros flex. Sendo assim, de seguida vai ser apresentada uma breve explicação sobre a implemenmtação deste ficheiro, no caso do latex, embora grande parte das situações são equivalentes para ambos os ficheiros.<br>
+O ficheiro flex foi desenvolvido recorrendo a um autómato, sendo este constituído pelos estados: HEADER, LATEX, TABLE, VERB, VERB LINE, COMMENTLINE, COMMENT, IMG, LINK, LIST, DICTIONARY.<br>
+Na parte inicial são efectuados os includes dos ficheiros necessários, assim como a declaração de variáveis. Seguidamente inicia-se o estado INITIAl, de onde se pode saltar para a maioria dos outros estados. Quando é encontrada a tag <PER> %%header% </PER>, ele automaticamente inicia o estado HEADER. Neste estado, podem-se encontrar as tags <PER> %title </PER>, <PER> %author </PER> e <PER> %date </PER>, que dizem respeito ao título, autor e data do documento, respectivamente. Ainda no estado INITIAl, quando são encontradas as tags <PER> %t[1-3] </PER>, <PER> %index% </PER>, <PER> %cover% </PER>, são adicionados o título, o índice e a capa do documento ao ficheiro final.<br>
+Quando nos estados INITIAL, LIST, DICTIONARY é encontrada a tag <PER> %%ol% </PER> e <PER> %%ul% </PER>, inicia-se o estado LIST, onde se inicia o inicício de listas ordenadas e listas não ordenadas, respectivamente. Entretanto, dentro do estado LIST, quando encontrado a tag <PER> %ol%% </PER> e <PER> %ul%% </PER>, dá-se o fim das duas listas, e volta-se para o estado anterior. As listas descritivas caracterizadas pela tag <PER> %%dl% </PER>, funcionam de forma análoga, contudo, neste caso, inicia-se o estado DICTIONARY. Neste último estado, juntamente com o estado LIST, quando encontradas as tags <PER> %it </PER>, possibilitam a inserção de itens dentros das respectivas listas.<br>
+As tags <PER> %b </PER>, <PER> %i </PER> e <PER> %u </PER> representam os diversos tipos de formatação do texto, nomeadamente, texto escrito em negrito, texto escrito em itálico e texto sublinhado. Estas são inicializadas quando encontrados os estados INITIAl, LIST, DICTIONARY, querendo isto dizer que é possível inserir texto formatado em qualquer parte do texto, dentro de listas e dentro de entradas de dicionário.<br>
+Nos estados INITIAL, LIST, DICTIONARY são encontradas as tags <PER> %img </PER> e <PER> %link% </PER>, é iniciado o estado IMG e LINK, respectivamente. Ainda nestes últimos três estados podem encontrar-se as tags  <PER> %%% </PER> e <PER> %%comment% </PER>, que dizem respeitos aos comentários de linha e multi-linha, iniciando-se os estados COMMENTLINE e COMMENT, respectivamente. Dentro do estado COMMENTLINE, quando é encontrado a tag <PER> \n </PER>, significa que o comentário de linha termina ali, e então volta-se para o estado anterior. Em relação ao estado COMMENT, este funciona de forma análoga ao anterior, contudo volta ao estado anterior quando encontra a tag <PER> %comment%% </PER>. Relativamente aos estados VERB e VERB LINE, que dizem repseito ao verbatim multi-linha e verbatim de linha, funcionam de forma idêntica ao estados anteriores.<br>
+Quando no estado INITIAL, são encontradas as tags <PER> %%table% </PER> e <PER> %%latex% </PER>, são iniciados os estados TABLE e LATEX, correspondendo à inserção de tabelas e à inserção de comandos nativos LaTeX, respectivamente.<br>
+Relativamente à implementação do conversor para html desenvolvido em flex, esta segue as linhas gerais da implementação do conversor para latex, como seria de esperar.<br>
+Em ambos os ficheiros flex, é implementada uma stack de estados, disponível pela ferramenta flex, onde são utilizados as funções <PER>yy_push_state</PER> e <PER>yy_pop_state</PER>. Esta stack de estados, permite a implentação de estados dentro de outros estados, como por exemplo, imagens dentro de listas, listas dentro de listas, links dentro de listas, etc.<br>
+<h1><a id="section_5">Ferramenta PAH</a></h1><h2><a id="section_5_1">Composicão e Instalação</a></h2>A ferramenta PAH está desenvolvida em flex, sendo esta constituída pelos seguintes ficheiros: <br>
+<dl>
+    <dt>latex.fl:</dt><dd> código fonte da ferramenta para gerar latex;
+    </dd><dt>html.fl:</dt><dd> código fonte da ferramenta para gerar html;
+    </dd><dt>pah.c:</dt><dd> main do programa;
+    </dd><dt>functionsLatex.c:</dt><dd> funções em C usadas pelo ficheiro latex.fl;
+    </dd><dt>functionsHtml.c:</dt><dd> funções em C usadas pelo ficheiro html.fl;
+    </dd><dt>linkedlist.c:</dt><dd> módulo de listas ligadas;
+    </dd><dt>utilities.c:</dt><dd> módulo auxiliar em C que serve de suporte à implementação de ambos os ficheiros flex;
+    </dd><dt>makefile:</dt><dd> responsável pela configuração da ferramenta no sistema.
+</dd></dl> <br>
+Para proceder à instalação da ferramenta, basta apenas copiar os ficheiros referidos anteriormente para uma directoria à escolha e executar a makefile. Desta forma, será criado um executável na mesma directoria, com o nome de <i>pah</i>, bem como será criada uma cópia do manual da ferramenta na directoria UNIX destinada a tal. <br>
+<h2><a id="section_5_2">Invocação</a></h2>Como um dos objectivos deste pré-processador é facilitar a conversão em latex e html, a invocação para gerar ficheiros para cada uma destas linguagens consiste em: <br>
+<dl>
+    <dt>Gerar LaTeX:</dt><dd> 
+       ./pah --latex ficheiroInput output.tex
+    </dd><dt>Gerar HTML:</dt><dd> 
+       ./pah --html ficheiroInput output.html
+</dd></dl><h3><a id="section_5_2_1">Outras opções</a></h3><ul>
+    <li> <b>Gera ficheirotex.tex e ficheirohtml.html:</b> 
+    ./pah ficheiroInput ficheirotex.tex ficheirohtml.html    
+    </li><li> <b>Gera ficheiro.tex e ficheiro.html</b> 
+    ./pah ficheiroInput ficheiro
+    </li><li> <b>Gera Latex.tex e Html.html:</b>
+    ./pah ficheiro
+    </li><li> <b>Erro por falta de ficheiro de input:</b>
+    ./pah --latex
+    ./pah --html
+    ./pah
+</li></ul><h1><a id="section_6">Funcionalidades da ferramenta</a></h1>Nas secções seguintes serão apresentadas e exemplificadas todas as funcionalidades oferecidas por parte desta nova ferramenta. <br>
+ <br>
+<h2><a id="section_6_1">Cabeçalhos do documento</a></h2>Num cabeçalho de um documento é possível encontrar título, autores e data de um documento. Como seria de esperar, a ferramente <i>PAH</i> também proporciona esta funcionalidade, baseando-se nos seguintes comandos:<br>
+<ul>
+    <li> <b>Título do documento:</b> 
+        <PER> %title Título </PER>
+    </li><li> <b>Autor do documento:</b>
+        <PER> %author Autor </PER>
+    </li><li> <b>Data do documento</b>
+        <PER> %date 02/04/2013 </PER>
+</li></ul>Além disso, para que seja possível que o documento possua uma capa, basta usar o comando <PER> %cover% </PER>, que em LaTeX diz respeito ao comando <PER> \maketitle </PER>, e em Html diz respeito a uma zona do documento, mais propriamente no início do dumento, onde terá toda esta informação.<br>
+<h2><a id="section_6_2">Índices</a></h2>Para um índice de um documento ser gerado, basta introduzir o comando:<br>
+<ul>
+    <li> <PER> %index% </PER>
+</li></ul>Este comando deve ser colocado após a capa do documento e antes de qualquer conteúdo. <br>
+ <br>
+<h2><a id="section_6_3">Comandos em LaTeX e HTML</a></h2>Em qualquer momento, a introdução de comandos nativos de LaTeX/HTML pode ser necessária, de forma a cobrir as funcionalidades que a ferramente <i>PAH</i> não proporciona. Desta forma, para ambas as linguagens, a introdução destes comandos é feita de forma muito simples, bastando para isso seguir os seguintes comandos: <br>
+ <ul>
+    <li> <b>Para LaTeX:</b> 
+        <PER> %%latex% Comandos nativos em latex %latex%% </PER>
+    </li><li> <b>Para HTML:</b>
+        <PER> %%html% Comandos nativos em html %html%% </PER>
+</li></ul>A introdução de comandos nativos pode ser efectuado em qualquer parte do documento. <br>
+<h2><a id="section_6_4">Títulos do documento</a></h2>Existem três tipos de títulos, sendo estes apresentados pela ordem de maior importância. <br>
+<ul>
+    <li> <PER> %t1{Título da secção} </PER>
+    </li><li> <PER> %t2{Título da subsecção} </PER>
+    </li><li> <PER> %t3{Título de subsubsecção} </PER>
+</li></ul> <br>
+<h2><a id="section_6_5">Texto Não Formatado</a></h2>Uma das funcionalidades da ferramenta é permitir incluir texto que não seja interpretado pelo <i>PAH</i>. Desta forma, todo o texto compreendido entre os comandos <PER> %%verbatim% e %verbatim%% </PER>, não será interpretado aquando da conversão entre os formatos, sendo este apresentado no documento sem quaisquer modificações. Este último caso é utilizado aquando da introdução de várias linhas. Caso o pretendido seja apenas a introdução de uma linha, basta introduzir o conteúdo dessa linha entre os comandos 
+<xmp> %%verb% e %verb%% </xmp>
+.  <br>
+Sabendo que o texto presente entre os comandos acima referidos, não vai ser interpretado, isso também acontece com os comandos da própria linguagem, como por exemplo, se dentro das tags <PER> %%verbatim% e %verbatim%% </PER> se encontrar a tag <PER> %b{Latex} </PER>, a palavra "Latex" não ficará a negrito, pois dentro destas tags não existe interpretação de comandos. <br>
+<h2><a id="section_6_6">Texto Formatado</a></h2>Ao longo do documento, partes do texto podem ser apresentadas em itálico, em negrito, ou até mesmo sublinhadas. Para isso, basta seguir os próximos comandos: <br>
+<dl>
+    <dt>Itálico:</dt><dd> <PER> %i{Texto em itálico} </PER>
+    </dd><dt>Negrito:</dt><dd> <PER> %b{Texto em negrito} </PER>
+    </dd><dt>Sublinhado:</dt><dd> <PER> %u{Textto sublinhado} </PER>
+</dd></dl>Estas operações de formatação de texto são muito usuais na escrita de documentos, e tendo isso em conta, esta nova  ferramenta permite a formatação do texto em várias situações, nomeadamente, em listas numeradas, listas não numeradas, listas descritivas, links e em situações normais ao longo do documento. A composição destas é também suportada pela ferramenta, sendo assim possível, por exemplo, que o mesmo texto seja destacado a negrito e a sublinhado. <br>
+<h2><a id="section_6_7">Listas</a></h2> <br>
+De seguida, são apresentadas os três tipos de listas suportadas pela ferramenta <i>PAH</i>. <br>
+ <br>
+<h3><a id="section_6_7_1">Listas Numeradas</a></h3><ul>
+    <li> Iniciada por <PER> %%ol% </PER> e finalizada por <PER> %ol%% </PER>;
+    </li><li> Cada item da lista é precedido por <PER> %it </PER>.
+</li></ul><h3><a id="section_6_7_2">Listas Não Numeradas</a></h3><ul>
+    <li> Iniciada por <PER> %%ul% </PER> e finalizada por <PER> %ul%% </PER>;
+    </li><li> Cada item da lista é precedido por <PER> %it </PER>.
+</li></ul><h3><a id="section_6_7_3">Entradas de um dicionário</a></h3><ul>
+    <li> Iniciada por <PER> %%dl% </PER> e finalizada por <PER> %dl%% </PER>;
+    </li><li> Cada item é precedido por <PER> %it{} </PER> e o texto que ficará a negrito deverá ser colocado entre os parêntesis;
+    </li><li> A descrição do item deve ser colocada após o fim dos parêntesis.
+</li></ul><b>Exemplo:</b><br>
+
+<xmp>
+%%dl%
+    %it{Item} descrição do item
+    %it{Item} descrição do item
+%dl%%
+</xmp>
+ <br>
+Em relação aos três tipos de lista é possível implementar outros comandos dentro destas, como por exemplo, colocar o texto a negrito, a itálico e ainda, existe a possibilidade de poder colocar listas dentro de listas, sendo esta uma funcionalidade muito utilizada.<br>
+ <br>
+<h2><a id="section_6_8">Imagens</a></h2>Como qualquer outra ferramenta, esta também permite a inclusão de imagens no documento. Para isso, basta usar o comando <PER> %img{path,caption} </PER>, sendo "path" o caminho para a respectiva imagem e "caption" a legenda da mesma. <br>
+<b>Exemplo:</b><br>
+Este comando que a seguir se apresenta é o reponsável pela a inclusão da imagem, que depois deste se encontra. <br>
+<PER> %img{exemplo.png, Logotipo Escolha de Engenharia} </PER><figure>
+<img src='escola_eng.png' alt='Image 1' />
+<figcaption> Logotipo Escolha de Engenharia</figcaption>
+</figure><h2><a id="section_6_9">Links</a></h2>A presença de links num documento é permitida usando o comando <PER> %link{url,texto} </PER>. No campo "texto" é inserido o texto que fica associado ao link colocado no campo "url", como mostra o exemplo. <br>
+<b>Exemplo:</b> <br>
+
+<xmp> %link{https://elearning.uminho.pt/, Se clicar aqui será redireccionado para a 
+página blackboard da uminho.} </xmp>
+<a href="https://elearning.uminho.pt/"> Se clicar aqui será redireccionado para a página blackboard da uminho.</a><br>
+ <br>
+<h2><a id="section_6_10">Comentários</a></h2>O uso de comentários é muito usual ao longo do texto, uma vez que facilitam a leitura do mesmo e não aparecem no documento final. No caso de o comentário abrangir várias linhas, estas devem ser colocadas entre os comandos <PER> %%coment% e %coment%% </PER>. Por outro lado, se o pretendido for apenas um comentário de linha, coloca-se o texto a comentar após o comando <PER> %%% </PER>. <br>
+<ul>
+    <li> <PER> %%% Isto é um comentário de linha </PER>
+</li></ul> <br>
+<h2><a id="section_6_11">Tabelas</a></h2> <br>
+As tabelas têm a seguinte estrutura:  <br>
+<table border="1">
+            <tr>
+<th> Nome </th>
+<th>
+Idade 
+            </th>
+</tr>
+<tr>
+<td> André  </td>
+<td>
+17 
+            </td>
+</tr>
+<tr>
+<td> Maria </td>
+<td>
+10
+            </td>
+</tr>
+<tr>
+<td> Rui </td>
+<td>
+15
+
+</td>
+</tr>
+</table>
+<xmp>
+    %%table%
+            %head Célula  % Célula 
+            %row  Célula  % Célula  
+    %table%%
+</xmp>
+<ul>
+    <li> A tabela é iniciada com <PER> %%table% </PER> e finalizada com <PER> %table%% </PER>;
+    </li><li> Cada célula da tabela deve ser colocada após <PER> %head </PER> ou <PER> %row </PER>. A única diferença entre estes, consiste no formato do texto. Enquanto que o comando <PER> %head </PER> coloca o texto centrado e a negrito, o comando <PER> %row </PER> coloca o texto num formato normal.
+    </li><li> O comando <PER> % </PER> permite a separação das células da tabela, correspondendo, no entanto, ao número total de colunas.
+</li></ul>Numa tabela, e em latex, caso seja inserido uma nova linha com um número de colunas inferior ao número de colunas da linha com mais colunas, automaticamente são desenhadas as restantes células em branco. Uma vez que em html é perfeitamente possível que cada linha tenha um número de colunas distintas, esse problema não se coloca.<br>
+Na introdução de tabelas, um dos aspectos principais tidos em conta consistiu em reduzir grande parte da complexidade dos comandos necessários para a sua implementação, tornando esta muito mais facilitada. Desta forma, apenas é necessário a introdução dos comandos acima referidos, tornando mais prática a sua introdução. <br>
+<h1><a id="section_7">Conclusão</a></h1>Como forma de conclusão pode-se referir que o trabalho prático foi, no entender do grupo, realizado com sucesso. As funcionalidades propostas pelo enunciado foram implementadas com sucesso, juntamente com a adição de algumas funcionalidades extras. <br>
+De uma forma geral, os resultados produzidos foram satisfatórios, de modo a obter uma solução simples e eficiente. <br>
+</body>
+</html>
