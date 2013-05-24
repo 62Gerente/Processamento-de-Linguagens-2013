@@ -148,7 +148,7 @@ void addCommentHtml(char* text) {
 
 void addVerbatimLineHtml(char* text) {
 
-	fprintf(tempFile, "<PER>%s</PER>", text) ;
+	fprintf(tempFile, "<PRE>%s</PRE>", text) ;
 }
 
 void addVerbatimHtml(char* text) {

@@ -1,0 +1,345 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes}
+\usepackage[utf8]{inputenc} 
+\usepackage{setspace}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{verbatim}
+\pagenumbering{arabic}
+\usepackage{a4wide}
+\usepackage{biblatex}
+\onehalfspacing
+\usepackage[pdftex]{hyperref}
+\begin{document}
+
+
+    \title{ Relatório PAH }
+    \author{ André Santos, Helena Alves, Pedro Carneiro }
+    \date{ 12/04/2013 }
+
+
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+
+
+ 
+\section{Introdução}
+A resolução do trabalho prático descrita no presente relatório refere-se à especificação de um pré-processador para gerar ficheiros em LaTeX e Html. Pretende-se neste trablaho que seja implementada uma nova linguagem, de maneira a simplificar a escrita das diversas funcionalidades que essa nova linguagem irá permitir. \\ 
+
+
+Assim, neste trabalho prático pretende-se aplicar os conceitos adquiridos na Unidade Curricular de Processamento de Linguagens associados à utilização de expressões regulares para descrever padrões de textos, para futuramente gerar ficheiros nos formatos referidos, através da ferramenta Flex.  \newpage 
+
+
+\section{Descrição do trabalho}
+Linguagens como o LaTex e o Html trazem grandes benefícios para a sociedade actual, contudo também possuem alguns pontos menos atraentes. Estes pontos dizem respeito a certas desvantagens das mesmas, nomeadamente, a complexidade de certos comandos. Além de outros aspectos, este foi um dos aspectos que levou à criação da ferramenta \textit{PAH}. Uma maior facilidade na escrita de certos comandos leva a um maior desempenho por parte do programador, aumentado o seu tempo de trabalho. Deste modo, a simplificação de certos comandos foi um dos aspectos principais a serem melhorados. 
+Esta nova linguagem não acarreta, de longe, todas as potencialidades e funcionalidades das duas linguagens em questão, no entanto, foram trabalhadas grande parte das funcionalidades mais usuais, tais como: 
+
+\begin{itemize}
+    \item Introdução de capítulos;
+    \item Texto formatado;
+    \item Texto não formatado;
+    \item Formatação de tabelas;
+    \item Formatação de listas não numeradas;
+    \item Formatação de listas numeradas;
+    \item Formatação de listas descritivas;
+    \item Inclusão de imagens;
+    \item Inclusão de links;
+    \item Introdução de comentários no texto;
+    \item Geração de índices;
+    \item Geração de capa de documento;
+    \item Proteçção dos seguintes caracteres especiais em latex: \%, \$, \_, \&, \#, \{, \}, \textasciitilde , \textbackslash , \textasciicircum . (excepto nas tabelas) 
+    \item Entre outros.
+\end{itemize}
+
+
+\section{Estrutura de dados}
+Para a criação dos ficheiros em LaTeX e Html, é necessário armazenar determinados dados, de maneira que, após o processamento do ficheiro de entrada, seja possível imprimir esses dados para os ficheiros finais  respectivos. Desta forma, é necessário uma estrutura de dados capaz de suportar estes dados e permitir o seu acesso rápido e eficiente. Portanto, foi considerada uma implementação de listas ligadas para guardar os dados referentes às tags de fecho e aos cabeçalhos do documento. 
+
+\section{Implementação}
+Como o objectivo do trabalho consiste em gerar ficheiros em LaTeX e Html, foi decidido elaborar dois ficheiros flex. Sendo assim, de seguida vai ser apresentada uma breve explicação sobre a implemenmtação deste ficheiro, no caso do latex, embora grande parte das situações são equivalentes para ambos os ficheiros.
+
+O ficheiro flex foi desenvolvido recorrendo a um autómato, sendo este constituído pelos estados: HEADER, LATEX, TABLE, VERB, VERB\_ LINE, COMMENT\_LINE, COMMENT, IMG, LINK, LIST, DICTIONARY.
+
+Na parte inicial são efectuados os includes dos ficheiros necessários, assim como a declaração de variáveis. Seguidamente inicia-se o estado INITIAl, de onde se pode saltar para a maioria dos outros estados. Quando é encontrada a tag \verb@ %%header% @, ele automaticamente inicia o estado HEADER. Neste estado, podem-se encontrar as tags \verb@ %title @, \verb@ %author @ e \verb@ %date @, que dizem respeito ao título, autor e data do documento, respectivamente. Ainda no estado INITIAl, quando são encontradas as tags \verb@ %t[1-3] @, \verb@ %index% @, \verb@ %cover% @, são adicionados o título, o índice e a capa do documento ao ficheiro final.
+
+Quando nos estados INITIAL, LIST, DICTIONARY é encontrada a tag \verb@ %%ol% @ e \verb@ %%ul% @, inicia-se o estado LIST, onde se inicia o inicício de listas ordenadas e listas não ordenadas, respectivamente. Entretanto, dentro do estado LIST, quando encontrado a tag \verb@ %ol%% @ e \verb@ %ul%% @, dá-se o fim das duas listas, e volta-se para o estado anterior. As listas descritivas caracterizadas pela tag \verb@ %%dl% @, funcionam de forma análoga, contudo, neste caso, inicia-se o estado DICTIONARY. Neste último estado, juntamente com o estado LIST, quando encontradas as tags \verb@ %it @, possibilitam a inserção de itens dentros das respectivas listas.
+
+As tags \verb@ %b @, \verb@ %i @ e \verb@ %u @ representam os diversos tipos de formatação do texto, nomeadamente, texto escrito em negrito, texto escrito em itálico e texto sublinhado. Estas são inicializadas quando encontrados os estados INITIAl, LIST, DICTIONARY, querendo isto dizer que é possível inserir texto formatado em qualquer parte do texto, dentro de listas e dentro de entradas de dicionário.
+
+Nos estados INITIAL, LIST, DICTIONARY são encontradas as tags \verb@ %img @ e \verb@ %link% @, é iniciado o estado IMG e LINK, respectivamente. Ainda nestes últimos três estados podem encontrar-se as tags  \verb@ %%% @ e \verb@ %%comment% @, que dizem respeitos aos comentários de linha e multi-linha, iniciando-se os estados COMMENT\_LINE e COMMENT, respectivamente. Dentro do estado COMMENT\_LINE, quando é encontrado a tag \verb@ \n @, significa que o comentário de linha termina ali, e então volta-se para o estado anterior. Em relação ao estado COMMENT, este funciona de forma análoga ao anterior, contudo volta ao estado anterior quando encontra a tag \verb@ %comment%% @. Relativamente aos estados VERB e VERB LINE, que dizem repseito ao verbatim multi-linha e verbatim de linha, funcionam de forma idêntica ao estados anteriores.
+
+Quando no estado INITIAL, são encontradas as tags \verb@ %%table% @ e \verb@ %%latex% @, são iniciados os estados TABLE e LATEX, correspondendo à inserção de tabelas e à inserção de comandos nativos LaTeX, respectivamente.
+
+Relativamente à implementação do conversor para html desenvolvido em flex, esta segue as linhas gerais da implementação do conversor para latex, como seria de esperar.
+
+Em ambos os ficheiros flex, é implementada uma stack de estados, disponível pela ferramenta flex, onde são utilizados as funções \verb@yy_push_state@ e \verb@yy_pop_state@. Esta stack de estados, permite a implentação de estados dentro de outros estados, como por exemplo, imagens dentro de listas, listas dentro de listas, links dentro de listas, etc.
+
+
+ \newpage 
+
+\section{Ferramenta PAH}
+
+\subsection{Composicão e Instalação}
+A ferramenta PAH está desenvolvida em flex, sendo esta constituída pelos seguintes ficheiros: \\  
+
+\begin{description}
+    \item[latex.fl:] código fonte da ferramenta para gerar latex;
+    \item[html.fl:] código fonte da ferramenta para gerar html;
+    \item[pah.c:] main do programa;
+    \item[functionsLatex.c:] funções em C usadas pelo ficheiro latex.fl;
+    \item[functionsHtml.c:] funções em C usadas pelo ficheiro html.fl;
+    \item[linkedlist.c:] módulo de listas ligadas;
+    \item[utilities.c:] módulo auxiliar em C que serve de suporte à implementação de ambos os ficheiros flex;
+    \item[makefile:] responsável pela configuração da ferramenta no sistema.
+\end{description}
+ 
+
+Para proceder à instalação da ferramenta, basta apenas copiar os ficheiros referidos anteriormente para uma directoria à escolha e executar a makefile. Desta forma, será criado um executável na mesma directoria, com o nome de \textit{pah}, bem como será criada uma cópia do manual da ferramenta na directoria UNIX destinada a tal. \\   \\ 
+
+
+
+\subsection{Invocação}
+Como um dos objectivos deste pré-processador é facilitar a conversão em latex e html, a invocação para gerar ficheiros para cada uma destas linguagens consiste em:  \\ 
+
+\begin{description}
+    \item[Gerar LaTeX:] 
+       ./pah --latex ficheiroInput output.tex
+    \item[Gerar HTML:] 
+       ./pah --html ficheiroInput output.html
+\end{description}
+
+
+ \newpage 
+\subsubsection{Outras opções}
+\begin{itemize}
+    \item \textbf{Gera ficheirotex.tex e ficheirohtml.html:} 
+    ./pah ficheiroInput ficheirotex.tex ficheirohtml.html    
+    \item \textbf{Gera ficheiro.tex e ficheiro.html} 
+    ./pah ficheiroInput ficheiro
+    \item \textbf{Gera Latex.tex e Html.html:}
+    ./pah ficheiro
+    \item \textbf{Erro por falta de ficheiro de input:}
+    ./pah --latex
+    ./pah --html
+    ./pah
+\end{itemize}
+
+
+ \newpage 
+
+\section{Funcionalidades da ferramenta}
+Nas secções seguintes serão apresentadas e exemplificadas todas as funcionalidades oferecidas por parte desta nova ferramenta. \\  
+ 
+
+\subsection{Cabeçalhos do documento}
+
+Num cabeçalho de um documento é possível encontrar título, autores e data de um documento. Como seria de esperar, a ferramente \textit{PAH} também proporciona esta funcionalidade, baseando-se nos seguintes comandos: \\ 
+
+\begin{itemize}
+    \item \textbf{Título do documento:} 
+        \verb@ %title Título @
+    \item \textbf{Autor do documento:}
+        \verb@ %author Autor @
+    \item \textbf{Data do documento}
+        \verb@ %date 02/04/2013 @
+\end{itemize}
+
+
+
+Além disso, para que seja possível que o documento possua uma capa, basta usar o comando \verb@ %cover% @, que em LaTeX diz respeito ao comando \verb@ \maketitle @, e em Html diz respeito a uma zona do documento, mais propriamente no início do dumento, onde terá toda esta informação. \\ 
+
+
+
+\subsection{Índices}
+Para um índice de um documento ser gerado, basta introduzir o comando:
+
+\begin{itemize}
+    \item \verb@ %index% @
+\end{itemize}
+
+
+Este comando deve ser colocado após a capa do documento e antes de qualquer conteúdo. \\  
+ 
+
+
+\subsection{Comandos em LaTeX e HTML}
+Em qualquer momento, a introdução de comandos nativos de LaTeX/HTML pode ser necessária, de forma a cobrir as funcionalidades que a ferramente \textit{PAH} não proporciona. Desta forma, para ambas as linguagens, a introdução destes comandos é feita de forma muito simples, bastando para isso seguir os seguintes comandos: \\  
+
+ \begin{itemize}
+    \item \textbf{Para LaTeX:} 
+        \verb@ %%latex% Comandos nativos em latex %latex%% @
+    \item \textbf{Para HTML:}
+        \verb@ %%html% Comandos nativos em html %html%% @
+\end{itemize}
+
+A introdução de comandos nativos pode ser efectuado em qualquer parte do documento. \\  
+
+\subsection{Títulos do documento}
+Existem três tipos de títulos, sendo estes apresentados pela ordem de maior importância. \\  
+
+\begin{itemize}
+    \item \verb@ %t1{Título da secção} @
+    \item \verb@ %t2{Título da subsecção} @
+    \item \verb@ %t3{Título de subsubsecção} @
+\end{itemize}
+
+ 
+
+\subsection{Texto Não Formatado}
+Uma das funcionalidades da ferramenta é permitir incluir texto que não seja interpretado pelo \textit{PAH}. Desta forma, todo o texto compreendido entre os comandos \verb@ %%verbatim% e %verbatim%% @, não será interpretado aquando da conversão entre os formatos, sendo este apresentado no documento sem quaisquer modificações. Este último caso é utilizado aquando da introdução de várias linhas. Caso o pretendido seja apenas a introdução de uma linha, basta introduzir o conteúdo dessa linha entre os comandos \begin{verbatim} %%verb% e %verb%% \end{verbatim}.  \\  
+
+Sabendo que o texto presente entre os comandos acima referidos, não vai ser interpretado, isso também acontece com os comandos da própria linguagem, como por exemplo, se dentro das tags \verb@ %%verbatim% e %verbatim%% @ se encontrar a tag \verb@ %b{Latex} @, a palavra "Latex" não ficará a negrito, pois dentro destas tags não existe interpretação de comandos. 
+
+
+
+\subsection{Texto Formatado}
+Ao longo do documento, partes do texto podem ser apresentadas em itálico, em negrito, ou até mesmo sublinhadas. Para isso, basta seguir os próximos comandos: \\  
+
+\begin{description}
+    \item[Itálico:] \verb@ %i{Texto em itálico} @
+    \item[Negrito:] \verb@ %b{Texto em negrito} @
+    \item[Sublinhado:] \verb@ %u{Textto sublinhado} @
+\end{description}
+
+Estas operações de formatação de texto são muito usuais na escrita de documentos, e tendo isso em conta, esta nova  ferramenta permite a formatação do texto em várias situações, nomeadamente, em listas numeradas, listas não numeradas, listas descritivas, links e em situações normais ao longo do documento. A composição destas é também suportada pela ferramenta, sendo assim possível, por exemplo, que o mesmo texto seja destacado a negrito e a sublinhado.  \\ 
+
+\subsection{Listas} 
+De seguida, são apresentadas os três tipos de listas suportadas pela ferramenta \textit{PAH}. \\  
+ 
+
+\subsubsection{Listas Numeradas}
+
+
+\begin{itemize}
+    \item Iniciada por \verb@ %%ol% @ e finalizada por \verb@ %ol%% @;
+    \item Cada item da lista é precedido por \verb@ %it @.
+\end{itemize}
+
+
+
+\subsubsection{Listas Não Numeradas}
+
+
+\begin{itemize}
+    \item Iniciada por \verb@ %%ul% @ e finalizada por \verb@ %ul%% @;
+    \item Cada item da lista é precedido por \verb@ %it @.
+\end{itemize}
+
+
+\subsubsection{Entradas de um dicionário}
+
+
+\begin{itemize}
+    \item Iniciada por \verb@ %%dl% @ e finalizada por \verb@ %dl%% @;
+    \item Cada item é precedido por \verb@ %it{} @ e o texto que ficará a negrito deverá ser colocado entre os parêntesis;
+    \item A descrição do item deve ser colocada após o fim dos parêntesis.
+\end{itemize}
+
+
+
+\textbf{Exemplo:}
+
+\begin{verbatim}
+%%dl%
+    %it{Item} descrição do item
+    %it{Item} descrição do item
+%dl%%
+\end{verbatim} 
+
+Em relação aos três tipos de lista é possível implementar outros comandos dentro destas, como por exemplo, colocar o texto a negrito, a itálico e ainda, existe a possibilidade de poder colocar listas dentro de listas, sendo esta uma funcionalidade muito utilizada. \\ 
+ 
+
+\subsection{Imagens}
+Como qualquer outra ferramenta, esta também permite a inclusão de imagens no documento. Para isso, basta usar o comando \verb@ %img{path,caption} @, sendo "path" o caminho para a respectiva imagem e "caption" a legenda da mesma. \\  
+
+\textbf{Exemplo:}
+Este comando que a seguir se apresenta é o reponsável pela a inclusão da imagem, que depois deste se encontra. \\  
+
+\verb@ %img{exemplo.png, Logotipo Escolha de Engenharia} @
+
+
+\begin{figure}[h]
+\centering
+\includegraphics{escola_eng.png}
+\caption{ Logotipo Escolha de Engenharia}
+\end{figure}
+
+
+\subsection{Links}
+A presença de links num documento é permitida usando o comando \verb@ %link{url,texto} @. No campo "texto" é inserido o texto que fica associado ao link colocado no campo "url", como mostra o exemplo. \\  
+
+
+\textbf{Exemplo:} 
+
+\begin{verbatim} %link{https://elearning.uminho.pt/, Se clicar aqui será redireccionado para a 
+página blackboard da uminho.} \end{verbatim}
+
+\href{https://elearning.uminho.pt/}{ Se clicar aqui será redireccionado para a página blackboard da uminho.}
+ 
+
+\subsection{Comentários}
+O uso de comentários é muito usual ao longo do texto, uma vez que facilitam a leitura do mesmo e não aparecem no documento final. No caso de o comentário abrangir várias linhas, estas devem ser colocadas entre os comandos \verb@ %%coment% e %coment%% @. Por outro lado, se o pretendido for apenas um comentário de linha, coloca-se o texto a comentar após o comando \verb@ %%% @. \\  
+
+\begin{itemize}
+    \item \verb@ %%% Isto é um comentário de linha @
+\end{itemize}
+
+ \newpage  
+\subsection{Tabelas} 
+As tabelas têm a seguinte estrutura:  \\  
+
+
+
+            
+            
+            
+            
+
+\begin{table}[!htpb]
+\centering
+\begin{tabular}{||c|c||}
+\hline
+ \textbf{ Nome  } & \textbf{  Idade  } \\
+\hline
+ André   &  17  \\
+\hline
+ Maria  &  10 \\
+\hline
+ Rui  &  15 \\
+\hline
+\end{tabular}
+\end{table}
+
+
+
+\begin{verbatim}
+    %%table%
+            %head Célula  % Célula 
+            %row  Célula  % Célula  
+    %table%%
+\end{verbatim}
+
+
+\begin{itemize}
+    \item A tabela é iniciada com \verb@ %%table% @ e finalizada com \verb@ %table%% @;
+    \item Cada célula da tabela deve ser colocada após \verb@ %head @ ou \verb@ %row @. A única diferença entre estes, consiste no formato do texto. Enquanto que o comando \verb@ %head @ coloca o texto centrado e a negrito, o comando \verb@ %row @ coloca o texto num formato normal.
+    \item O comando \verb@ % @ permite a separação das células da tabela, correspondendo, no entanto, ao número total de colunas.
+\end{itemize}
+
+
+Numa tabela, e em latex, caso seja inserido uma nova linha com um número de colunas inferior ao número de colunas da linha com mais colunas, automaticamente são desenhadas as restantes células em branco. Uma vez que em html é perfeitamente possível que cada linha tenha um número de colunas distintas, esse problema não se coloca.
+
+Na introdução de tabelas, um dos aspectos principais tidos em conta consistiu em reduzir grande parte da complexidade dos comandos necessários para a sua implementação, tornando esta muito mais facilitada. Desta forma, apenas é necessário a introdução dos comandos acima referidos, tornando mais prática a sua introdução. \\  
+
+ \newpage 
+
+\section{Conclusão}
+Como forma de conclusão pode-se referir que o trabalho prático foi, no entender do grupo, realizado com sucesso. As funcionalidades propostas pelo enunciado foram implementadas com sucesso, juntamente com a adição de algumas funcionalidades extras. 
+
+De uma forma geral, os resultados produzidos foram satisfatórios, de modo a obter uma solução simples e eficiente. 
+
+\end{document}

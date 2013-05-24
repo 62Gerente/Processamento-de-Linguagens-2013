@@ -161,9 +161,13 @@
 
     /* --------------------------- GERAL --------------------------- */    
 
-<INITIAL,LIST,DICTIONARY>\\\}    {}           
+<INITIAL,LIST,DICTIONARY>\~  { printf("\\textasciitilde ");  }
+<INITIAL,LIST,DICTIONARY>\^  { printf("\\textasciicircum ");  }
+<INITIAL,LIST,DICTIONARY>\\  { printf("\\textbackslash ");  }
+
+<INITIAL,LIST,DICTIONARY>(\\\})|(\\\{)|(\\\%)           { ECHO; }
 <INITIAL,LIST,DICTIONARY>\}      { endLatexTag(closeTags); }               /* Fecha ultima tag aberta */
-<INITIAL,LIST,DICTIONARY>\%|\$|\_|\&|\#|\~|\{|\}|\\|\^                 {printf("\\");ECHO;}
+<INITIAL,LIST,DICTIONARY>\%|\$|\_|\&|\#|\{|\}                 {printf("\\");ECHO;}
 <*>.|\n                          { ECHO; }
 
 %%
