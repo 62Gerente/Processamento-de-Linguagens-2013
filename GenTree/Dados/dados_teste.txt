@@ -29,6 +29,49 @@ N Visita ao estádio
 D Visita ao estádio do Jamor para sessão de autografos dos jogadores do
 Guimarães
 
+
+
+Francisco Manuel Faria *05/1910 +06/1985 [20]
+FOTO Imagens/20.jpg
+ev 4 1930
+
+Helena Raquel Guimaraes *c08/11/1895 [25]
+FOTO Imagens/25.jpg
+ev 4 05/09/1930
+HIST Historico/25_1.html
+HIST Historico/25_2.html
+
+Ana Rita Guimarães Faria *c05/09/1942 +c03/02/2000 [11]
+S Feminino
+M Maria Antónia Guimarães *c03/09/1920 [4] {
+	ev 2 30/03/1920
+	FOTO Imagens/4.jpg
+}
+P [20]
+MM [25]
+PP Telmo Oliveira Faria [50]
+FOTO Imagens/11.jpg
+HIST Historico/11_1.html
+HIST Historico/12_2.html
+ev 1 20/01/1989
+
+Maria dos Anjos Santos%2 +c1955 [16]
+HIST Historico/16.html
+S Feminino
+F Manuel Rodrigues Santos *1900 [121] {
+	FOTO Imagens/121.png
+	ev 4 1930
+	ev 5 1932
+}
+
+José/Rodrigues Santos *c1899 [14]
+FOTO Imagens/14.jpg
+ev 2 30/03/1920
+ev 3 29/02/1910
+CC [16]
+S Masculino
+F João Ricardo Santos *1915 +10/09/1925 [120]
+
 Joaquim Manuel Santos Oliveira *21/01/1940 +10/10/2012 [10]
 S Masculino
 M Maria dos Anjos/Santos *10/02/1915 +08/06/1980 [2]
@@ -46,47 +89,6 @@ F André Ricardo Oliveira Faria *13/04/1960 [62] {
 	ev 6 24/10/1984
 	ev 7 1988
 }
-
-Ana Rita Guimarães Faria *c05/09/1942 +c03/02/2000 [11]
-S Feminino
-M Maria Antónia Guimarães *c03/09/1920 [4] {
-	ev 2 30/03/1920
-	FOTO Imagens/4.jpg
-}
-P [20]
-MM [25]
-PP Telmo Oliveira Faria [50]
-FOTO Imagens/11.jpg
-HIST Historico/11_1.html
-HIST Historico/12_2.html
-ev 1 20/01/1989
-
-José/Rodrigues Santos *c1899 [14]
-FOTO Imagens/14.jpg
-ev 2 30/03/1920
-ev 3 29/02/1910
-CC [16]
-S Masculino
-F João Ricardo Santos *1915 +10/09/1925 [120]
-
-Maria dos Anjos Santos%2 +c1955 [16]
-HIST Historico/16.html
-S Feminino
-F Manuel Rodrigues Santos *1900 [121] {
-	FOTO Imagens/121.png
-	ev 4 1930
-	ev 5 1932
-}
-
-Francisco Manuel Faria *05/1910 +06/1985 [20]
-FOTO Imagens/20.jpg
-ev 4 1930
-
-Helena Raquel Guimaraes *c08/11/1895 [25]
-FOTO Imagens/25.jpg
-ev 4 05/09/1930
-HIST Historico/25_1.html
-HIST Historico/25_2.html
 
 Carla Filipa Oliveira Faria *06/06/1958 [63]
 M [11]
