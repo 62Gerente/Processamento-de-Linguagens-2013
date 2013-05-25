@@ -1,7 +1,7 @@
 EVENTO 1
-N Visita ao museu
-D Visita guiada ao museu D. Diogo de Souza em Braga, grupo de arqueólogos de
-braga e familias
+N Visita ao Museu
+D Visita guiada ao Museu D. Diogo de Souza em Braga, grupo de arqueólogos de
+braga e famílias
 
 EVENTO 2
 N Churrasco
