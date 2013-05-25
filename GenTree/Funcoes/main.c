@@ -11,6 +11,9 @@ int main(){
     andre->nome = strdup("André Augusto Costa Santos");
     andre->sexo = 1;
 
+    andre->historias = g_list_prepend(andre->historias,"../Dados/Historias/latim.txt");
+    andre->historias = g_list_prepend(andre->historias,"../Dados/Historias/capuchinho.txt");
+
     Individuo* maria = (Individuo*) malloc (sizeof(Individuo));
 
     maria->id = 2;
@@ -25,6 +28,8 @@ int main(){
     manuel->id = 3;
     manuel->nome = strdup("Manuel Ruas da Costa");
     
+    manuel->historias = g_list_prepend(manuel->historias,"../Dados/Historias/latim.txt");
+
     maria->pai=manuel;
 
     Individuo* amelia = (Individuo*) malloc (sizeof(Individuo));

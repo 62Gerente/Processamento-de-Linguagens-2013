@@ -10,7 +10,7 @@ void toHTML (GList* individuos) {
         return;
     }
     
-    int i;
+    int i,j;
     
     fprintf(fp,"<!DOCTYPE html>\n<html lang=\"pt\">\n<head>\n	\n	<meta charset=\"utf-8\">\n	<title>GenTree</title>\n\n	<link href=\"Layout/css/bootstrap.min.css\" rel=\"stylesheet\">\n <link href=\"Layout/css/bootstrap-responsive.min.css\" rel=\"stylesheet\">\n	<link href=\"Layout/css/style.css\" rel=\"stylesheet\">\n <link href=\"Layout/css/style-responsive.css\" rel=\"stylesheet\">\n	<link href=\"Layout/css/retina.css\" rel=\"stylesheet\">\n\n	<link rel=\"apple-touch-icon-precomposed\" sizes=\"144x144\" href=\"ico/apple-touch-icon-144-precomposed.png\">\n	<link rel=\"apple-touch-icon-precomposed\" sizes=\"114x114\" href=\"ico/apple-touch-icon-114-precomposed.png\">\n	<link rel=\"apple-touch-icon-precomposed\" sizes=\"72x72\" href=\"ico/apple-touch-icon-72-precomposed.png\">\n	<link rel=\"apple-touch-icon-precomposed\" href=\"ico/apple-touch-icon-57-precomposed.png\">\n	<link rel=\"shortcut icon\" href=\"ico/favicon.png\">\n\n</head>\n\n<body>\n	<div class=\"navbar\">\n		<div class=\"navbar-inner\" style=\"min-height:45px;\">\n <div class=\"container-fluid\">\n				<a class=\"btn btn-navbar\" data-toggle=\"collapse\" data-target=\".top-nav.nav-collapse,.sidebar-nav.nav-collapse\">\n <span class=\"icon-bar\"></span>\n					<span class=\"icon-bar\"></span>\n					<span class=\"icon-bar\"></span>\n				</a>\n <a class=\"brand\" href=\"index.html\"><span style=\"font-size:25px;\"><i class=\"fa-icon-sitemap\"></i><span style=\"color:#bdea74;\"> Gen</span>Tree</span></a>\n \n				<div class=\"nav-no-collapse header-nav\">\n\n				</div>\n				\n			</div>\n		</div>\n	</div>\n	<!-- start: Header -->\n	\n	<div class=\"container-fluid\">\n		<div class=\"row-fluid\">\n			\n			<!-- start: Content -->\n			<div id=\"content\" class=\"span12\">\n");
 
@@ -184,19 +184,81 @@ void toHTML (GList* individuos) {
 
         fprintf(fp,"<div class=\"row-fluid\">\n							<div class=\"span3\" style=\"\">\n								<h2><span><i class=\"halflings-icon leaf\"></i><b> Filhos</b></span></h2>\n								<div class=\"span12\" style=\"height:118px;overflow-y:scroll;\">");
         
+    
+        int nr =0; 
+        for(j=0;j<g_list_length(individuos);j++){
 
-        // FILHOS AQUI
+            Individuo* filho = (Individuo*)g_list_nth_data(individuos,j);
+        
+            if((filho->pai != NULL && filho->pai->id == ind->id) || (filho->mae != NULL && filho->mae->id == ind->id)){
+                
+                fprintf(fp,"<div style=\"padding-top:");
+                
+                if(nr==0){
+                    fprintf(fp,"%d",5);
+                }else{
+                    fprintf(fp,"%d",10);
+                }
+
+                fprintf(fp,"px;\">\n										<img class=\"mini-avatar\" src=\"");
+
+                if(filho != NULL && filho->foto != NULL){
+                    fprintf(fp,"%s",filho->foto);
+                }else{
+                    fprintf(fp,"Layout/img/male.jpg");
+                }
+
+                fprintf(fp,"\"></img>\n										<p><span>");
+
+                if(filho != NULL && filho->nome != NULL){
+                    fprintf(fp,"%s",filho->nome);
+                }else{
+                    fprintf(fp,"Desconhecido");
+                }
+
+                fprintf(fp,"</span></p>\n									</div>");
+
+                nr++;
+            }
+        
+        }
 
         fprintf(fp,"</div>\n							</div>\n							<div class=\"span5\" style=\"\">\n								<h2><span><i class=\"halflings-icon film\"></i><b> Histórias</b></span></h2>\n								<div class=\"span12\" style=\"height:118px;overflow-y:scroll;margin-left:0px;\">\n									<ul class=\"chat\">");
 
     
-        // HISTORIAS AQUI
+        GList* historias = ind->historias;
+
+        for(j=0;j<g_list_length(historias);j++){
+            
+            char* historia = (char*)g_list_nth_data(historias,j);
+
+            FILE *hst;
+
+            hst = fopen(historia,"r");
+            
+            if(!hst){
+                fprintf(stderr,"Erro ao abrir a história %s para leitura",historia);
+                continue;
+            }
+
+            fprintf(fp,"									<ul class=\"chat\">\n										<li class=\"\">\n											<span class=\"message\">\n												<span class=\"text\">");
+
+            char linha[512];
+            while(fgets(linha,512,hst) != NULL){
+                fprintf(fp,"%s",linha);
+            }
+
+
+            fprintf(fp,"												</span>\n											</span>	                                  \n										</li>");
+
+            fclose(hst);
+        }
 
         fprintf(fp,"</ul>\n								</div>\n							</div>\n							<div class=\"span4\" style=\"\">\n								<h2><span><i class=\"halflings-icon time\"></i><b> Eventos</b></span></h2>\n								<div class=\"span12\" style=\"height:118px;overflow-y:scroll;;margin-left:0px;\">\n									<ul class=\"chat\">");
 
         // EVENTOS AQUI
 
-        fprintf(fp,"</ul>\n								</div>\n							</div>\n						</div>\n					</div>\n				</div>\n			</div>");
+        fprintf(fp,"</ul>\n								</div>\n							</div>\n						</div>\n					</div>\n				</div>\n");
 
     }
 
