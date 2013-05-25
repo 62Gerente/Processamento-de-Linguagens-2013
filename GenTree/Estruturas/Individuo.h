@@ -1,3 +1,6 @@
+#ifndef INDIVIDUO_H
+#define INDIVIDUO_H
+
 #include <glib.h>
 
 typedef struct sIndividuo{
@@ -17,3 +20,5 @@ typedef struct sIndividuo{
     GList* eventos;
 
 }Individuo;
+
+#endif
