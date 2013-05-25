@@ -1,5 +1,6 @@
 #include "toHTML.h"
 #include "../Estruturas/Individuo.h"
+#include "../Estruturas/Evento.h"
 
 void toHTML (GList* individuos) {
     FILE *fp;
@@ -17,11 +18,10 @@ void toHTML (GList* individuos) {
     for(i=0;i<g_list_length(individuos);i++){
 
         Individuo* ind = (Individuo*)g_list_nth_data(individuos,i);
-        
-        fprintf(fp,"<a name=\"id%d\"><a/>",ind->id);
-
 
         fprintf(fp,"				<div class=\"box span12\" style=\"margin-left:0px;\">\n					<div class=\"box-header\">\n						<h2><i class=\"halflings-icon user\"></i><span class=\"break\"></span>");
+
+        fprintf(fp,"<a name=\"id%d\"><a/>",ind->id);
 
         fprintf(fp,"%s",ind->nome);
 
@@ -192,7 +192,10 @@ void toHTML (GList* individuos) {
         
             if((filho->pai != NULL && filho->pai->id == ind->id) || (filho->mae != NULL && filho->mae->id == ind->id)){
                 
-                fprintf(fp,"<div style=\"padding-top:");
+                fprintf(fp,"<a href=\"#");
+                fprintf(fp,"id%d",filho->id);
+
+                fprintf(fp,"\"><div style=\"padding-top:");
                 
                 if(nr==0){
                     fprintf(fp,"%d",5);
@@ -216,7 +219,7 @@ void toHTML (GList* individuos) {
                     fprintf(fp,"Desconhecido");
                 }
 
-                fprintf(fp,"</span></p>\n									</div>");
+                fprintf(fp,"</span></p>\n									</div></a>");
 
                 nr++;
             }
@@ -241,7 +244,7 @@ void toHTML (GList* individuos) {
                 continue;
             }
 
-            fprintf(fp,"									<ul class=\"chat\">\n										<li class=\"\">\n											<span class=\"message\">\n												<span class=\"text\">");
+            fprintf(fp,"										<li class=\"\">\n											<span class=\"message\">\n												<span class=\"text\">");
 
             char linha[512];
             while(fgets(linha,512,hst) != NULL){
@@ -256,7 +259,40 @@ void toHTML (GList* individuos) {
 
         fprintf(fp,"</ul>\n								</div>\n							</div>\n							<div class=\"span4\" style=\"\">\n								<h2><span><i class=\"halflings-icon time\"></i><b> Eventos</b></span></h2>\n								<div class=\"span12\" style=\"height:118px;overflow-y:scroll;;margin-left:0px;\">\n									<ul class=\"chat\">");
 
-        // EVENTOS AQUI
+        GList* eventos = ind->eventos;
+
+        for(j=0;j<g_list_length(eventos);j++){
+            
+            Evento* evento = (Evento*)g_list_nth_data(eventos,j);
+
+            fprintf(fp,"<li class=\"\">\n											<span class=\"message\">\n												<span class=\"from\">");
+
+            if(evento->nome != NULL){
+                fprintf(fp,"%s",evento->nome);
+            }else{
+                fprintf(fp,"Desconhecido");
+            }
+
+            fprintf(fp,"</span>\n												<span class=\"time\">");
+
+            if(evento->data != NULL){
+                fprintf(fp,"%s",evento->data);
+            }else{
+                fprintf(fp,"Desconhecida");
+            }
+
+            fprintf(fp,"</span>\n												<span class=\"text\">");
+
+            if(evento->descricao != NULL){
+                fprintf(fp,"%s",evento->descricao);
+            }else{
+                fprintf(fp,"Desconhecido");
+            }
+
+            fprintf(fp,"</span>\n											</span>	                                  \n										</li>");
+
+
+        }
 
         fprintf(fp,"</ul>\n								</div>\n							</div>\n						</div>\n					</div>\n				</div>\n");
 
