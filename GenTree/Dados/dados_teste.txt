@@ -29,70 +29,72 @@ N Visita ao estádio
 D Visita ao estádio do Jamor para sessão de autografos dos jogadores do
 Guimarães
 
-Joaquim Manuel Santos Oliveira *21/01/1940 +10/10/2012 [10]
-S Masculino
-M Maria dos Anjos/Santos *10/02/1915 +08/06/1980 [2]
-P António Manuel Ferreira Oliveira +c09/09/1987
-MM [14]
-MP [16]
-FOTO Imagens/10.jpg
-HIST Historico/10.html
-CC 06/06/1965 [11]
-F André Ricardo Oliveira Faria *13/04/1960 [62] {
-	S Masculino
-	FOTO Imagens/62.png
-	HIST Historico/62_1.html
-	HIST Historico/62_2.html
-	ev 6 24/10/1984
-	ev 7 1988
-}
+
+
+Francisco Manuel Faria *05/1910 +06/1985 [20]
+FOTO Dados/Fotos/20.jpg
+ev 4 1930
+
+Helena Raquel Guimaraes *c08/11/1895 [25]
+FOTO Dados/Fotos/25.jpg
+ev 4 05/09/1930
+HIST Dados/Historico/capuchinho.txt
+HIST Dados/Historico/crime.txt
 
 Ana Rita Guimarães Faria *c05/09/1942 +c03/02/2000 [11]
 S Feminino
 M Maria Antónia Guimarães *c03/09/1920 [4] {
 	ev 2 30/03/1920
-	FOTO Imagens/4.jpg
+	FOTO Dados/Fotos/4.jpg
 }
 P [20]
 MM [25]
 PP Telmo Oliveira Faria [50]
-FOTO Imagens/11.jpg
-HIST Historico/11_1.html
-HIST Historico/12_2.html
+FOTO Dados/Fotos/11.jpg
+HIST Dados/Historico/desculpa.txt
+HIST Dados/Historico/diario.txt
 ev 1 20/01/1989
 
+Maria dos Anjos Santos%2 +c1955 [16]
+HIST Dados/Historico/espelho.txt
+S Feminino
+F Manuel Rodrigues Santos *1900 [121] {
+	FOTO Dados/Fotos/121.jpg
+	ev 4 1930
+	ev 5 1932
+}
+
 José/Rodrigues Santos *c1899 [14]
-FOTO Imagens/14.jpg
+FOTO Dados/Fotos/14.jpg
 ev 2 30/03/1920
 ev 3 29/02/1910
 CC [16]
 S Masculino
 F João Ricardo Santos *1915 +10/09/1925 [120]
 
-Maria dos Anjos Santos%2 +c1955 [16]
-HIST Historico/16.html
-S Feminino
-F Manuel Rodrigues Santos *1900 [121] {
-	FOTO Imagens/121.png
-	ev 4 1930
-	ev 5 1932
+Joaquim Manuel Santos Oliveira *21/01/1940 +10/10/2012 [10]
+S Masculino
+M Maria dos Anjos/Santos *10/02/1915 +08/06/1980 [2]
+P António Manuel Ferreira Oliveira +c09/09/1987
+MM [14]
+MP [16]
+FOTO Dados/Fotos/10.jpg
+HIST Dados/Historico/festa.txt
+CC 06/06/1965 [11]
+F André Ricardo Oliveira Faria *13/04/1960 [62] {
+	S Masculino
+	FOTO Dados/Fotos/62.jpg
+	HIST Dados/Historico/latim.txt
+	HIST Dados/Historico/pequeno.txt
+	ev 6 24/10/1984
+	ev 7 1988
 }
-
-Francisco Manuel Faria *05/1910 +06/1985 [20]
-FOTO Imagens/20.jpg
-ev 4 1930
-
-Helena Raquel Guimaraes *c08/11/1895 [25]
-FOTO Imagens/25.jpg
-ev 4 05/09/1930
-HIST Historico/25_1.html
-HIST Historico/25_2.html
 
 Carla Filipa Oliveira Faria *06/06/1958 [63]
 M [11]
 Sexo Feminino
-HIST Historico/62_1.html
-HIST Historico/62_2.html
-FOTO Imagens/63.jpg
+HIST Dados/Historico/pipas.txt
+HIST Dados/Historico/queda.txt
+FOTO Dados/Fotos/63.jpg
 ev 6 24/10/1984
 ev 7 1988

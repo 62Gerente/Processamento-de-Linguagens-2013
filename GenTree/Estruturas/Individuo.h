@@ -1,6 +1,7 @@
 #ifndef _INDIV_H_
 #define _INDIV_H_
 
+
 #include <glib.h>
 
 typedef struct sIndividuo{
@@ -16,8 +17,8 @@ typedef struct sIndividuo{
     struct sIndividuo *mae;
     struct sIndividuo *conjugue;
 
-    GList* historias;
-    GList* eventos;
+    GList* historias;               // Glist de char*
+    GList* eventos;                 // Glist de Evento
 
 }Individuo;
 
