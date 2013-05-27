@@ -34,22 +34,23 @@ GList *eventos ;
 
 %%
 
-GenTree : ListaEvIndiv
+GenTree : ZeroOuMaisQbL ListaEvIndiv
 	;
 
-ListaEvIndiv : Evento  /*'\n'*/  ListaEvIndiv
-	     | Individuo /*'\n'*/ ListaEvIndiv
+ListaEvIndiv : Evento  /* '\n'*/  ListaEvIndiv
+	    // | Individuo /*'\n'*/ ListaEvIndiv
+	    // | '\n' ListaEvIndiv
 	     | 
 	     ;
 
-Evento : EVENTO ESPACOS Id '\n' ListaEventoInf { $$ = eventoRec($5, NULL);  $$->id = $3; eventos = g_list_append(eventos, $$); }
+Evento :  EVENTO ESPACOS Id UmaOuMaisQbL ListaEventoInf	 { $$ = eventoRec($5, NULL);  $$->id = $3; eventos = g_list_append(eventos, $$); }
 
-ListaEventoInf : EventoInf '\n' ListaEventoInf 	 { $$ = eventoRec($1, $3);}
-	       | 	   		       	 { $$ = NULL ;}
+ListaEventoInf :  EventoInf ListaEventoInf 	 { $$ = eventoRec($1, $2);}
+	       | 	   		       	 	 { $$ = NULL ;}
 	       ;	       
 
-EventoInf : NOMEEVENTO ESPACOS TEXTO  	  { $$ = init_evento(); $$->nome = $3 ;}
-	  | DESCRICAOEVENTO ESPACOS TEXTO { $$ = init_evento(); $$->descricao = $3 ;}
+EventoInf : NOMEEVENTO ESPACOS TEXTO UmaOuMaisQbL 		{ $$ = init_evento(); $$->nome = $3 ;}
+	  | DESCRICAOEVENTO ESPACOS TEXTO UmaOuMaisQbL   	{ $$ = init_evento(); $$->descricao = $3 ;}
 	  ; 
 
 Individuo : NOME ESPACOS NomeIndiv DatasOpt Id '\n' ListaInf  { $$ = indivRec($4, NULL); $$->id = $5; $3 = g_list_prepend($3, $1); $$->nome = g_list_para_string($3); g_list_free(nomes); $$ = indivRec($$, $7); resolverParentescos($$, pessoas); pessoas = g_list_append(pessoas, $$);}
