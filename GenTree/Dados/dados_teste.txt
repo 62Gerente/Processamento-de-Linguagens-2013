@@ -1,33 +1,33 @@
 EVENTO [1]
-N Visita ao Museu
-D Visita guiada ao Museu D. Diogo de Souza em Braga, grupo de arqueólogos de
-braga e famílias
+N "Visita ao Museu"
+D "Visita guiada ao Museu D. Diogo de Souza em Braga, grupo de arqueólogos de
+braga e famílias"
 
 EVENTO [2]
-N Churrasco
-D Churrasco familiar no magusto em casa dos visinhos 
+N "Churrasco"
+D "Churrasco familiar no magusto em casa dos visinhos"
 
 EVENTO [3]
-N Visita de estudo
-D Visita de estudo aos laboratórios da universidade do minho, no intuito da
-disciplica de Fisica e Quimica
+N "Visita de estudo"
+D "Visita de estudo aos laboratórios da universidade do minho, no intuito da
+disciplica de Fisica e Quimica"
 
 EVENTO [4]
-N Cinema
-D Ida ao cinema para a vizualização do filme Ressaca
+N "Cinema"
+D "Ida ao cinema para a vizualização do filme Ressaca"
 
 EVENTO [5]
-N Voluntariado 
-D Recolha de alimentos no Continente para a ajuda aos mais desfavorecidos
+N "Voluntariado"
+D "Recolha de alimentos no Continente para a ajuda aos mais desfavorecidos"
 
 EVENTO [6]
-N Corrida Solidariedade
-D Corrida no porto da caritas para ajudar os mais desfavorecidos
+N "Corrida Solidariedade"
+D "Corrida no porto da caritas para ajudar os mais desfavorecidos"
 
 EVENTO [7]
-N Visita ao estádio
-D Visita ao estádio do Jamor para sessão de autografos dos jogadores do
-Guimarães
+N "Visita ao estádio"
+D "Visita ao estádio do Jamor para sessão de autografos dos jogadores do
+Guimarães"
 
 
 
@@ -75,7 +75,7 @@ F João Ricardo Santos *1915 +10/09/1925 [120]
 Joaquim Manuel Santos Oliveira *21/01/1940 +10/10/2012 [10]
 S Masculino
 M Maria dos Anjos/Santos *10/02/1915 +08/06/1980 [2]
-P António Manuel Ferreira Oliveira +c09/09/1987
+P António Manuel Ferreira Oliveira +c09/09/1987 [449]
 MM [14]
 MP [16]
 FOTO Dados/Fotos/10.jpg

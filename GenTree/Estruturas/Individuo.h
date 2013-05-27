@@ -18,7 +18,8 @@ typedef struct sIndividuo{
     struct sIndividuo *conjugue;
 
     GList* historias;               // Glist de char*
-    GList* eventos;                 // Glist de Evento
+    GList* eventos;                 // Glist de Evento*
+  //GList* filhos;                  // GList de Individuos* 
 
 }Individuo;
 

@@ -25,4 +25,11 @@ Evento* encontrar_evento (GList* lista, int id);
 void processar_casamento (GList **lista, Individuo* actual, Individuo* conjugue) ;
 
 void imprimir_evento (gpointer data, gpointer user_data) ;
+
+Evento* eventoRec (Evento* e1, Evento* e2) ;
+Individuo* indivRec (Individuo* i1, Individuo* i2) ;
+
+char* substring(char* str, int posi, int offset) ;
+
+Individuo* processarParentesco (char* parentesco, Individuo* i, GList** l) ;
 #endif

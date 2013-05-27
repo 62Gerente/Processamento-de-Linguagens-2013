@@ -5,7 +5,10 @@
 
 %%
 
-[ \t]                   { return ESPACO;}
+	/*[ \t]                   { return ESPACO;}*/
+
+[ \t]+			{ yylval.texto = strdup(yytext) ;  			  
+  			  return ESPACOS; }
 
 [\[\]\*\+\nc]		{ return yytext[0];}
 
@@ -21,10 +24,9 @@ FOTO			{ return FOTO ;}
 
 HIST			{ return HIST ;}
 
-EVENTO			{ yylval.evento = init_evento(); 
-			  return EVENTO ;}
+EVENTO			{ return EVENTO ;}
 
-EV			{ return EVENTOREF ;}
+ev			{ return EVENTOREF ;}
 
 (Masculino|Feminino)		{ yylval.texto = strdup(yytext) ;
 			  	return SEXO ; }
@@ -32,7 +34,7 @@ EV			{ return EVENTOREF ;}
 (F|P|M|MM|MP|PM|PP)	{ yylval.texto = strdup(yytext) ;
 			  return PARENTESCO ;}
 
-[a-zA-Z]+	       	{ char* res = (char*)malloc(strlen(yytext)+2); memset(res, '\0', strlen(yytext)+2); strcpy(res, yytext); yylval.texto = res ;
+[a-zA-Z]+	       	{ /*char* res = (char*)malloc(strlen(yytext)+2); memset(res, '\0', strlen(yytext)+2); strcpy(res, yytext);*/ yylval.texto = strdup(yytext) ;
 	 	     	  return NOME ;}
 
 [a-zA-Z\/]+\.[a-zA-Z]+	       { yylval.texto = strdup(yytext) ;
@@ -44,11 +46,13 @@ EV			{ return EVENTOREF ;}
 ([0-9][0-9][0-9][0-9]|[0-9][0-9]\/[0-9][0-9][0-9][0-9]|[0-9][0-9]\/[0-9][0-9]\/[0-9][0-9][0-9][0-9])	{ yylval.texto = strdup(yytext) ;
 			 return DATA ; }
 
-[0-9]+			{ yylval.n = atoi(yytext) ;
+[0-9]+			{ yylval.n = atoi(yytext) ; 
    			  return NUM ;}
 
-[a-zA-Z0-9 \t^\n]+	{ yylval.texto = strdup(yytext);
-	   		  return TEXTO ;}
+			  /*[a-zA-Z0-9 \t^\n]+	{ yylval.texto = strdup(yytext); return TEXTO ;}*/
+
+\"[^\"]*\"		{ yylval.texto = substring(yytext, 1, strlen(yytext)-2) ; 
+			  return TEXTO ; }	
 
 . 		       { yyerror() ;}
 
