@@ -19,8 +19,14 @@ typedef struct sIndividuo{
 
     GList* historias;               // Glist de char*
     GList* eventos;                 // Glist de Evento*
-  //GList* filhos;                  // GList de Individuos* 
+  GList* parentescos;                  // GList de Relacoes por resolver* 
 
 }Individuo;
+
+typedef struct sParentPorResolver {
+
+  char* parentesco ;
+  int id ;
+} ParentPorResolver ;
 
 #endif

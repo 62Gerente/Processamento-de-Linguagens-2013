@@ -10,7 +10,7 @@
 [ \t]+			{ yylval.texto = strdup(yytext) ;  			  
   			  return ESPACOS; }
 
-[\[\]\*\+\nc]		{ return yytext[0];}
+[\[\]\*\+\nc\{\}]		{ return yytext[0];}
 
 \S			{ return INFSEXO ;}
 

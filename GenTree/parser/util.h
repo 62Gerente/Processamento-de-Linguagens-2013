@@ -22,7 +22,7 @@ Individuo* encontrar_individuo (GList* lista, int id);
 gint comparar_evento (gconstpointer a, gconstpointer b);
 Evento* encontrar_evento (GList* lista, int id);
 
-void processar_casamento (GList **lista, Individuo* actual, Individuo* conjugue) ;
+Individuo* processarCasamento (Individuo* conjugue, GList **lista) ;
 
 void imprimir_evento (gpointer data, gpointer user_data) ;
 
@@ -32,4 +32,6 @@ Individuo* indivRec (Individuo* i1, Individuo* i2) ;
 char* substring(char* str, int posi, int offset) ;
 
 Individuo* processarParentesco (char* parentesco, Individuo* i, GList** l) ;
+void resolverUmParentesco (Individuo *i, ParentPorResolver *prr,  GList *l) ;
+void resolverParentescos (Individuo *i, GList *l) ;
 #endif

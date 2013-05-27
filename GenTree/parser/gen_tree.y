@@ -37,8 +37,8 @@ GList *eventos ;
 GenTree : ListaEvIndiv
 	;
 
-ListaEvIndiv : Evento  /* '\n' */ ListaEvIndiv
-	     | Individuo /* '\n' */   ListaEvIndiv
+ListaEvIndiv : Evento  /*'\n'*/  ListaEvIndiv
+	     | Individuo /*'\n'*/ ListaEvIndiv
 	     | 
 	     ;
 
@@ -52,7 +52,7 @@ EventoInf : NOMEEVENTO ESPACOS TEXTO  	  { $$ = init_evento(); $$->nome = $3 ;}
 	  | DESCRICAOEVENTO ESPACOS TEXTO { $$ = init_evento(); $$->descricao = $3 ;}
 	  ; 
 
-Individuo : NOME ESPACOS NomeIndiv DatasOpt Id '\n' ListaInf  { $$ = indivRec($4, NULL); $$->id = $5; $3 = g_list_prepend($3, $1); $$->nome = g_list_para_string($3); g_list_free(nomes); $$ = indivRec($$, $7); pessoas = g_list_append(pessoas, $$);}
+Individuo : NOME ESPACOS NomeIndiv DatasOpt Id '\n' ListaInf  { $$ = indivRec($4, NULL); $$->id = $5; $3 = g_list_prepend($3, $1); $$->nome = g_list_para_string($3); g_list_free(nomes); $$ = indivRec($$, $7); resolverParentescos($$, pessoas); pessoas = g_list_append(pessoas, $$);}
 	  ;
 
 NomeIndiv : NOME ESPACOS NomeIndiv	{ $1 = adicionar_espaco_inicio($1); $3 = g_list_prepend($3, $1); $$ = $3; }
@@ -79,20 +79,20 @@ ListaInf : Informacao '\n' ListaInf	{ $$ = indivRec($1, $3); }
 	 ;
 
 
-Informacao : | FOTO ESPACOS FICHEIRO					{ $$ = init_individuo(); $$->foto = $3 ;} 	
-	     | HIST ESPACOS FICHEIRO					{ $$ = init_individuo(); $$->historias = g_list_prepend($$->historias, $3) ;}
-	/*   | CASOUCOM UmOuMaisEsp CData UmOuMaisEsp RefIndividuo*/
-	     | INFSEXO ESPACOS SEXO					{ $$ = init_individuo(); if(strcmp($3, "Masculino")==0) $$->sexo = 1; else $$->sexo = 2;}
-	     | EVENTOREF ESPACOS NUM ESPACOS CData			{ $$ = init_individuo(); Evento *e = encontrar_evento(eventos, $3); $$->eventos = g_list_prepend($$->eventos, e); }
-	     | PARENTESCO ESPACOS RefIndividuo 				{ $$ = processarParentesco($1, $3, pessoas); }
+Informacao : | ZeroOuMaisEsp FOTO ESPACOS FICHEIRO					{ $$ = init_individuo(); $$->foto = $4;		                                        } 	
+	     | ZeroOuMaisEsp HIST ESPACOS FICHEIRO					{ $$ = init_individuo(); $$->historias = g_list_prepend($$->historias, $4);		}
+	     | ZeroOuMaisEsp CASOUCOM ESPACOS CData ESPACOS RefIndividuo              	{ $6->data_casamento = $4; resolverParentescos($6, pessoas); $$ = processarCasamento($6, &pessoas) ; }
+	     | ZeroOuMaisEsp INFSEXO ESPACOS SEXO					{ $$ = init_individuo(); if(strcmp($4, "Masculino")==0) $$->sexo = 1; else $$->sexo = 2;}
+	     | ZeroOuMaisEsp EVENTOREF ESPACOS NUM ESPACOS CData			{ $$ = init_individuo(); Evento *e = encontrar_evento(eventos, $4); if(e) { e->data = $6; $$->eventos = g_list_prepend($$->eventos, e);} }
+	     | ZeroOuMaisEsp PARENTESCO ESPACOS RefIndividuo 				{ resolverParentescos($4, pessoas); $$ = processarParentesco($2, $4, &pessoas); }
 	     ;
 
 RefIndividuo : NOME ESPACOS NomeIndiv DatasOpt Id InformacaoExtra	{ $$ = indivRec($4, $6); $3 = g_list_prepend($3, $1); $$->id = $5; $$->nome = g_list_para_string($3); g_list_free(nomes); }
 	     | Id   	    	      	       	  			{ $$ = init_individuo(); $$->id = $1 ;}
 	     ;
 
-InformacaoExtra : '{' '\n' ListaInf '}'					{ $$ = $3 ;}
-		|     	   	    					{ $$ = NULL ;}
+InformacaoExtra : ESPACOS '{' '\n' ListaInf '}'					{ $$ = $4 ;}
+		|     	   	    						{ $$ = NULL ;}
 		; 
 
 
@@ -102,9 +102,17 @@ UmOuMaisEsp : ESPACO
 	    | ESPACO UmOuMaisEsp
 	    ;
 
-/*ZeroOuMaisEsp : ESPACO ZeroOuMaisEsp
+ZeroOuMaisEsp : ESPACOS
 	      | 
-	      ; */
+	      ; 
+
+UmaOuMaisQbL  : '\n' UmaOuMaisQbL
+	      | '\n'
+	      ;      
+
+ZeroOuMaisQbL  : '\n' ZeroOuMaisQbL
+	       | 
+	       ;
 
 Texto : NOME MaisTexto			{ $$ = g_list_prepend($2, $1); }
       ;
