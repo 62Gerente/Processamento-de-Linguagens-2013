@@ -7,10 +7,12 @@
 
 	/*[ \t]                   { return ESPACO;}*/
 
-[ \t]+			{ yylval.texto = strdup(yytext) ;  			  
+[ \t]+			{ yylval.texto = strdup(yytext) ; 
   			  return ESPACOS; }
 
-[\[\]\*\+\nc\{\}]		{ return yytext[0];}
+[\n]+ 			{ return '\n';} 
+
+[\[\]\*\+\nc\{\}\%\/]	{ return yytext[0];}
 
 \S			{ return INFSEXO ;}
 
@@ -37,17 +39,17 @@ ev			{ return EVENTOREF ;}
 [a-zA-Z]+	       	{ /*char* res = (char*)malloc(strlen(yytext)+2); memset(res, '\0', strlen(yytext)+2); strcpy(res, yytext);*/ yylval.texto = strdup(yytext) ;
 	 	     	  return NOME ;}
 
-[a-zA-Z\/]+\.[a-zA-Z]+	       { yylval.texto = strdup(yytext) ;
-		       	       	 return FICHEIRO ;}
-
-				 /*([a-zA-Z ]*[a-zA-Z])	       { yylval.texto = strdup(yytext) ;
-	 	     		return NOME ;} */
-
 ([0-9][0-9][0-9][0-9]|[0-9][0-9]\/[0-9][0-9][0-9][0-9]|[0-9][0-9]\/[0-9][0-9]\/[0-9][0-9][0-9][0-9])	{ yylval.texto = strdup(yytext) ;
 			 return DATA ; }
 
 [0-9]+			{ yylval.n = atoi(yytext) ; 
    			  return NUM ;}
+
+[a-zA-Z\/\\\.0-9]+\.[a-zA-Z]+	{ yylval.texto = strdup(yytext) ;
+		       	  	return FICHEIRO ;}
+
+				 /*([a-zA-Z ]*[a-zA-Z])	       { yylval.texto = strdup(yytext) ;
+	 	     		return NOME ;} */
 
 			  /*[a-zA-Z0-9 \t^\n]+	{ yylval.texto = strdup(yytext); return TEXTO ;}*/
 
