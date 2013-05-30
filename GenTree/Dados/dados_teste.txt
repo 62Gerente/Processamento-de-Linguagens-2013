@@ -32,40 +32,40 @@ Guimarães"
 
 
 Francisco Manuel Faria *05/1910 +06/1985 [20]
-FOTO Dados/Fotos/20.jpg
+FOTO ../Dados/Fotos/20.jpg
 ev 4 1930
 
 Helena Raquel Guimaraes *c08/11/1895 [25]
-FOTO Dados/Fotos/25.jpg
+FOTO ../Dados/Fotos/25.jpg
 ev 4 05/09/1930
-HIST Dados/Historico/capuchinho.txt
-HIST Dados/Historico/crime.txt
+HIST ../Dados/Historico/capuchinho.txt
+HIST ../Dados/Historico/crime.txt
 
 Ana Rita Guimaraes Faria *c05/09/1942 +c03/02/2000 [11]
 S Feminino
 M Maria Antonia Guimaraes *c03/09/1920 [4] {
 	ev 2 30/03/1920
-	FOTO Dados/Fotos/4.jpg
+	FOTO ../Dados/Fotos/4.jpg
 }
 P [20]
 MM [25]
 PP Telmo Oliveira Faria [50]
-FOTO Dados/Fotos/11.jpg
-HIST Dados/Historico/desculpa.txt
-HIST Dados/Historico/diario.txt
+FOTO ../Dados/Fotos/11.jpg
+HIST ../Dados/Historico/desculpa.txt
+HIST ../Dados/Historico/diario.txt
 ev 1 20/01/1989
 
 Maria dos Anjos Santos%2 +c1955 [16]
-HIST Dados/Historico/espelho.txt
+HIST ../Dados/Historico/espelho.txt
 S Feminino
 F Manuel Rodrigues Santos *1900 [121] {
-	FOTO Dados/Fotos/121.jpg
+	FOTO ../Dados/Fotos/121.jpg
 	ev 4 1930
 	ev 5 1932
 }
 
 Jose/Rodrigues Santos *c1899 [14]
-FOTO Dados/Fotos/14.jpg
+FOTO ../Dados/Fotos/14.jpg
 ev 2 30/03/1920
 ev 3 29/02/1910
 CC  [16]
@@ -78,14 +78,14 @@ M Maria dos Anjos/Santos *10/02/1915 +08/06/1980 [2]
 P Antonio Manuel Ferreira Oliveira +c09/09/1987 [449]
 MM [14]
 MP [16]
-FOTO Dados/Fotos/10.jpg
-HIST Dados/Historico/festa.txt
+FOTO ../Dados/Fotos/10.jpg
+HIST ../Dados/Historico/festa.txt
 CC 06/06/1965 [11]
 F Andre Ricardo Oliveira Faria *13/04/1960 [62] {
 	S Masculino
-	FOTO Dados/Fotos/62.jpg
-	HIST Dados/Historico/latim.txt
-	HIST Dados/Historico/pequeno.txt
+	FOTO ../Dados/Fotos/62.jpg
+	HIST ../Dados/Historico/latim.txt
+	HIST ../Dados/Historico/pequeno.txt
 	ev 6 24/10/1984
 	ev 7 1988
 }
@@ -93,8 +93,8 @@ F Andre Ricardo Oliveira Faria *13/04/1960 [62] {
 Carla Filipa Oliveira Faria *06/06/1958 [63]
 M [11]
 S Feminino
-HIST Dados/Historico/pipas.txt
-HIST Dados/Historico/queda.txt
-FOTO Dados/Fotos/63.jpg
+HIST ../Dados/Historico/pipas.txt
+HIST ../Dados/Historico/queda.txt
+FOTO ../Dados/Fotos/63.jpg
 ev 6 24/10/1984
 ev 7 1988

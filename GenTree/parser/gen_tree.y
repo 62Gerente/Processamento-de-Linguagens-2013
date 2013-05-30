@@ -59,8 +59,8 @@ Nome	  : NOME NomeOpt		{ $2 = g_list_prepend($2, $1); $$ = $2; }
 	  ;
 
 NomeOpt   : NomeOptEsp			        { $$ = $1 ; }
-	  | '%' NUM ESPACOS			{ char* res = (char*)malloc(10); sprintf(res, "%%%d", $2); $$ = g_list_prepend(NULL, res);      }
-	  | '/' NOME NomeOpt			{ char* res = (char*)malloc(strlen($2)+2); memset(res, '\0', strlen($2)+2); strcat(res, "/"); strcat(res, $2); $3 = g_list_prepend($3, res); $$ = $3; }
+	  | '%' NUM ESPACOS			{ $$ = NULL;      }
+	  | '/' NOME NomeOpt			{ char* res = (char*)malloc(strlen($2)+2); memset(res, '\0', strlen($2)+2); strcat(res, " "); strcat(res, $2); $3 = g_list_prepend($3, res); $$ = $3; }
 	  ;
 
 NomeOptEsp : ESPACOS NOME NomeOpt		{ char* res = (char*)malloc(strlen($1)+strlen($2)); sprintf(res, "%s%s", $1, $2); $3 = g_list_prepend($3, res); $$ = $3 ;}
@@ -130,9 +130,7 @@ int yyerror () {
 }
 
 int main () {
-  
-  indiv = init_individuo() ;
-  ev = init_evento() ;
+
   yyparse() ;
   //g_list_foreach(eventos, imprimir_evento, NULL) ;
   //g_list_foreach(pessoas, imprimir_individuo, NULL) ;
