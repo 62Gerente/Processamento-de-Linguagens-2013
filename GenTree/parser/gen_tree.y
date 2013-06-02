@@ -2,10 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../Funcoes/toHTML.h"
 #include "../Estruturas/Individuo.h"
 #include "../Estruturas/Evento.h"
 #include "util.h"
-//#include "../Funcoes/toHTML.h"
+
 
 GHashTable *pessoasHash ;
 GList *eventos ;
@@ -139,9 +140,7 @@ int main () {
 
   pessoasHash = g_hash_table_new(g_int_hash, compararIndividuo) ;
   yyparse() ;
-  g_list_foreach(eventos, imprimir_evento, NULL) ;
-  g_hash_table_foreach(pessoasHash, imprimir_individuo_hash, NULL) ;
-  //toHTML(pessoas) ;
+  toHTML(pessoasHash) ;
   return 0 ;
 }
 

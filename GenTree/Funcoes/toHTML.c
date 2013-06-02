@@ -2,7 +2,7 @@
 #include "../Estruturas/Individuo.h"
 #include "../Estruturas/Evento.h"
 
-void toHTML (GList* individuos) {
+void toHTML (GHashTable* hash_individuos) {
     FILE *fp;
 
     fp = fopen("../HTML/index.html", "w");
@@ -15,9 +15,16 @@ void toHTML (GList* individuos) {
     
     fprintf(fp,"<!DOCTYPE html>\n<html lang=\"pt\">\n<head>\n	\n	<meta charset=\"utf-8\">\n	<title>GenTree</title>\n\n	<link href=\"Layout/css/bootstrap.min.css\" rel=\"stylesheet\">\n <link href=\"Layout/css/bootstrap-responsive.min.css\" rel=\"stylesheet\">\n	<link href=\"Layout/css/style.css\" rel=\"stylesheet\">\n <link href=\"Layout/css/style-responsive.css\" rel=\"stylesheet\">\n	<link href=\"Layout/css/retina.css\" rel=\"stylesheet\">\n\n	<link rel=\"apple-touch-icon-precomposed\" sizes=\"144x144\" href=\"ico/apple-touch-icon-144-precomposed.png\">\n	<link rel=\"apple-touch-icon-precomposed\" sizes=\"114x114\" href=\"ico/apple-touch-icon-114-precomposed.png\">\n	<link rel=\"apple-touch-icon-precomposed\" sizes=\"72x72\" href=\"ico/apple-touch-icon-72-precomposed.png\">\n	<link rel=\"apple-touch-icon-precomposed\" href=\"ico/apple-touch-icon-57-precomposed.png\">\n	<link rel=\"shortcut icon\" href=\"ico/favicon.png\">\n\n</head>\n\n<body>\n	<div class=\"navbar\">\n		<div class=\"navbar-inner\" style=\"min-height:45px;\">\n <div class=\"container-fluid\">\n				<a class=\"btn btn-navbar\" data-toggle=\"collapse\" data-target=\".top-nav.nav-collapse,.sidebar-nav.nav-collapse\">\n <span class=\"icon-bar\"></span>\n					<span class=\"icon-bar\"></span>\n					<span class=\"icon-bar\"></span>\n				</a>\n <a class=\"brand\" href=\"index.html\"><span style=\"font-size:25px;\"><i class=\"fa-icon-sitemap\"></i><span style=\"color:#bdea74;\"> Gen</span>Tree</span></a>\n \n				<div class=\"nav-no-collapse header-nav\">\n\n				</div>\n				\n			</div>\n		</div>\n	</div>\n	<!-- start: Header -->\n	\n	<div class=\"container-fluid\">\n		<div class=\"row-fluid\">\n			\n			<!-- start: Content -->\n			<div id=\"content\" class=\"span12\">\n");
 
+    GList* individuos = g_hash_table_get_values(hash_individuos);
+
     for(i=0;i<(int)g_list_length(individuos);i++){
 
         Individuo* ind = (Individuo*)g_list_nth_data(individuos,i);
+
+        Individuo* conjugue = (Individuo*) g_hash_table_lookup(hash_individuos, &ind->idConjugue);
+        Individuo* pai = (Individuo*)  g_hash_table_lookup(hash_individuos, &ind->idPai);
+        Individuo* mae = (Individuo*)  g_hash_table_lookup(hash_individuos, &ind->idMae);
+
 
         fprintf(fp,"				<div class=\"box span12\" style=\"margin-left:0px;\">\n					<div class=\"box-header\">\n						<h2><i class=\"halflings-icon user\"></i><span class=\"break\"></span>");
 
@@ -67,63 +74,63 @@ void toHTML (GList* individuos) {
 
         fprintf(fp,"</span></p>\n								</div>\n							</div>\n							<div class=\"span4\">\n								<h2><span><i class=\"halflings-icon home\"></i><b> Filho de</b></span></h2>\n								<a href=\"#");
 
-        if(ind->pai != NULL){
-            fprintf(fp,"id%d",ind->pai->id);
+        if(pai != NULL){
+            fprintf(fp,"id%d",pai->id);
         }
 
         fprintf(fp,"\"><div style=\"padding-top:5px;\">\n									<img class=\"mini-avatar\" src=\"");
 
-        if(ind->pai != NULL && ind->pai->foto != NULL){
-            fprintf(fp,"%s",ind->pai->foto);
+        if(pai != NULL && pai->foto != NULL){
+            fprintf(fp,"%s",pai->foto);
         }else{
             fprintf(fp,"Layout/img/male.jpg");
         }
 
         fprintf(fp,"\"></img>\n									<p><span>");
 
-        if(ind->pai != NULL && ind->pai->nome != NULL){
-            fprintf(fp,"%s",ind->pai->nome);
+        if(pai != NULL && pai->nome != NULL){
+            fprintf(fp,"%s",pai->nome);
         }else{
             fprintf(fp,"Desconhecido");
         }
 
         fprintf(fp,"</span></p>\n								</div></a>\n								<a href=\"#");
 
-        if(ind->mae != NULL){
-            fprintf(fp,"id%d",ind->mae->id);
+        if(mae != NULL){
+            fprintf(fp,"id%d",mae->id);
         }
 
         fprintf(fp,"\"><div style=\"padding-top:10px;\">\n									<img class=\"mini-avatar\" src=\"");
 
-        if(ind->mae != NULL && ind->mae->foto != NULL){
-            fprintf(fp,"%s",ind->mae->foto);
+        if(mae != NULL && mae->foto != NULL){
+            fprintf(fp,"%s",mae->foto);
         }else{
             fprintf(fp,"Layout/img/fem.jpg");
         }
 
         fprintf(fp,"\"></img>\n									<p><span>");
 
-        if(ind->mae != NULL && ind->mae->nome != NULL){
-            fprintf(fp,"%s",ind->mae->nome);
+        if(mae != NULL && mae->nome != NULL){
+            fprintf(fp,"%s",mae->nome);
         }else{
             fprintf(fp,"Desconhecida");
         }
 
         fprintf(fp,"</span></p>\n								</div></a>\n							</div>\n							<div class=\"span3\">\n								<h2><span><i class=\"halflings-icon heart\"></i><b> Casado com</b></span></h2>\n								<a href=\"#");
 
-        if(ind->conjugue != NULL){
-            fprintf(fp,"id%d",ind->conjugue->id);
+        if(conjugue != NULL){
+            fprintf(fp,"id%d",conjugue->id);
         }
 
         fprintf(fp,"\"><div style=\"padding-top:5px;\">\n									<img class=\"mini-avatar\" src=\"");
 
-        if(ind->conjugue != NULL){
-            if(ind->conjugue->foto != NULL){
-                fprintf(fp,"%s",ind->conjugue->foto);
+        if(conjugue != NULL){
+            if(conjugue->foto != NULL){
+                fprintf(fp,"%s",conjugue->foto);
             }else{
-                if(ind->conjugue->sexo == 2){
+                if(conjugue->sexo == 2){
                     fprintf(fp,"%s","Layout/img/fem.jpg"); 
-                }else if(ind->conjugue->sexo == 1){
+                }else if(conjugue->sexo == 1){
                     fprintf(fp,"%s","Layout/img/male.jpg"); 
                 }else{
                     if(ind->sexo == 2){
@@ -143,13 +150,13 @@ void toHTML (GList* individuos) {
 
         fprintf(fp,"\"></img>\n									<p><span>");
 
-        if(ind->conjugue != NULL){
-            if(ind->conjugue->nome != NULL){
-                fprintf(fp,"%s",ind->conjugue->nome);
+        if(conjugue != NULL){
+            if(conjugue->nome != NULL){
+                fprintf(fp,"%s",conjugue->nome);
             }else{
-                if(ind->conjugue->sexo == 2){
+                if(conjugue->sexo == 2){
                     fprintf(fp,"%s","Desconhecida"); 
-                }else if(ind->conjugue->sexo == 1){
+                }else if(conjugue->sexo == 1){
                     fprintf(fp,"%s","Desconhecido"); 
                 }else{
                     if(ind->sexo == 2){
@@ -173,8 +180,8 @@ void toHTML (GList* individuos) {
         if(ind->data_casamento != NULL){
             fprintf(fp,"%s",ind->data_casamento);    
         }else{
-            if(ind->conjugue != NULL && ind->conjugue->data_casamento != NULL){
-                fprintf(fp,"%s",ind->conjugue->data_casamento);    
+            if(conjugue != NULL && conjugue->data_casamento != NULL){
+                fprintf(fp,"%s",conjugue->data_casamento);    
             }else{
                 fprintf(fp,"Desconhecida");
             }
@@ -190,7 +197,11 @@ void toHTML (GList* individuos) {
 
             Individuo* filho = (Individuo*)g_list_nth_data(individuos,j);
         
-            if((filho->pai != NULL && filho->pai->id == ind->id) || (filho->mae != NULL && filho->mae->id == ind->id)){
+        Individuo* fpai = (Individuo*)  g_hash_table_lookup(hash_individuos, &filho->idPai);
+        Individuo* fmae = (Individuo*)  g_hash_table_lookup(hash_individuos, &filho->idMae);
+
+
+            if((fpai != NULL && fpai->id == ind->id) || (fmae != NULL && fmae->id == ind->id)){
                 
                 fprintf(fp,"<a href=\"#");
                 fprintf(fp,"id%d",filho->id);

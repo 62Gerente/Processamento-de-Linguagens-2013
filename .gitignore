@@ -4,3 +4,5 @@ GenTree/parser/lex.yy.c
 *.h.gch
 *.o
 *.out
+
+*.swp

@@ -7,6 +7,6 @@
 #include <glib.h>
 #include "../Estruturas/Individuo.h"
 
-void toHTML ( GList* individuos );
+void toHTML (GHashTable* hash_individuos);
 
 #endif
