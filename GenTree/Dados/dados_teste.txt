@@ -76,8 +76,8 @@ Joaquim Manuel Santos Oliveira *21/01/1940 +10/10/2012 [10]
 S Masculino
 M Maria dos Anjos/Santos *10/02/1915 +08/06/1980 [2]
 P António Manuel Ferreira Oliveira +c09/09/1987 [449]
-MM [14]
-MP [16]
+MP [14]
+MM [16]
 FOTO "../Dados/Fotos/10.jpg"
 HIST "../Dados/Historico/festa.txt"
 CC 06/06/1965 [11]

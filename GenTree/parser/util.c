@@ -3,6 +3,8 @@
 #include <string.h>
 #include "util.h"
 
+int remover = FALSE ;
+
 Individuo* init_individuo () {
 
     Individuo *indiv = (Individuo*) malloc (sizeof(Individuo)) ;
@@ -301,20 +303,19 @@ Individuo* processarParentescoHash (char* parentesco, Individuo* i) {
   Individuo *iPesq = g_hash_table_lookup(pessoasHash, &(i->id)) ;
   int *chave = (int*) malloc (sizeof(int)) ;
   *chave = i->id ;
+  if(strcmp(parentesco, "M") == 0 || strcmp(parentesco, "MM") == 0 || strcmp(parentesco, "PM") == 0)
+    i->sexo = 2 ;
+  else if(strcmp(parentesco, "P") == 0 || strcmp(parentesco, "MP") == 0 || strcmp(parentesco, "PP") == 0)
+    i->sexo = 1 ;
   if(iPesq == NULL)
     g_hash_table_insert(pessoasHash, chave, i) ;
   else
     g_hash_table_insert(pessoasHash, chave, indivRec(iPesq, i)) ;
-  if(strcmp(parentesco, "M") == 0)
-    res->idMae = *chave ;
-  else if(strcmp(parentesco, "P") == 0)
-    res->idPai = *chave ;
-  else {
     ParentPorResolver *prr = init_parentesco() ;
     prr->parentesco = parentesco ;
     prr->id = *chave ;
     res->parentescos = g_list_append(res->parentescos, prr) ;
-  }
+    //  }
   return res ;
 }    
 
@@ -325,7 +326,18 @@ void resolverUmParentescoHash (Individuo *i, ParentPorResolver *prr) {
   Individuo *iPesq = g_hash_table_lookup(pessoasHash, &(prr->id)), *p ;
   if(iPesq == NULL)
     return ;
-  if(strcmp(prr->parentesco, "MP") == 0) {
+  if(strcmp(prr->parentesco, "M") == 0) {
+    i->idMae = prr->id ;
+    if(i->idPai == ID_NULO && iPesq->idConjugue != ID_NULO) {
+      i->idPai = iPesq->idConjugue ;
+    }
+  } 
+  else if(strcmp(prr->parentesco, "P") == 0) {
+    i->idPai = prr->id ;
+    if(i->idMae != ID_NULO && iPesq->idConjugue != ID_NULO)
+      i->idMae = iPesq->idConjugue ;
+  } 
+  else if(strcmp(prr->parentesco, "MP") == 0) {
     p = g_hash_table_lookup(pessoasHash, &(i->idMae)) ;
     if(p != NULL)
       p->idPai = prr->id ;
@@ -346,10 +358,16 @@ void resolverUmParentescoHash (Individuo *i, ParentPorResolver *prr) {
       p->idPai = prr->id ;
   }
   else if(strcmp(prr->parentesco, "F") == 0) {
-    if(i->sexo == 1)
+    if(i->sexo == 1) {
       iPesq->idPai = i->id ;
-    else if (i->sexo == 2)
+      if(i->idConjugue != ID_NULO)
+	iPesq->idMae = i->idConjugue ;
+    }
+    else if (i->sexo == 2) {
       iPesq->idMae = i->id ;
+      if(i->idConjugue != ID_NULO)
+	iPesq->idPai = i->idConjugue ;
+    }
   } else if(strcmp(prr->parentesco, "CC") == 0) {
     iPesq->idConjugue = i->id ;
   }
@@ -362,16 +380,27 @@ void resolverParentescosHash (gpointer chave, gpointer valor, gpointer userData)
   if(!valor)
     return ;
   Individuo *i = (Individuo*)valor ;
-  for(; g_list_length(i->parentescos) > 0 ;) {
-    ParentPorResolver *prr = (ParentPorResolver*)(i->parentescos->data) ;
-    resolverUmParentescoHash(i, prr) ;
-    i->parentescos = g_list_remove(i->parentescos, prr) ;
+  if(remover == TRUE) {
+    for(; g_list_length(i->parentescos) > 0 ;) {
+      ParentPorResolver *prr = (ParentPorResolver*)(i->parentescos->data) ;
+      resolverUmParentescoHash(i, prr) ; 
+      i->parentescos = g_list_remove(i->parentescos, prr) ;
+    }
+    g_list_free(i->parentescos) ;
   }
-  g_list_free(i->parentescos) ;
+  else {
+    unsigned int j ;
+    for(j = 0; j < g_list_length(i->parentescos); j++) {
+      ParentPorResolver *prr = (ParentPorResolver*)g_list_nth_data(i->parentescos, j) ;
+      resolverUmParentescoHash(i, prr) ; 
+    }
+  }
 }
 
 void resolverTodosOsParentescos () {
 
+  g_hash_table_foreach(pessoasHash, resolverParentescosHash, NULL) ;
+  remover = TRUE ;
   g_hash_table_foreach(pessoasHash, resolverParentescosHash, NULL) ;
 }
 
