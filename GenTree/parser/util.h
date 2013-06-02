@@ -5,10 +5,15 @@
 #include "../Estruturas/Individuo.h"
 #include "../Estruturas/Evento.h"
 
+#define ID_NULO -1
+
+extern GHashTable *pessoasHash ;
+extern int idIndividuo ;
+
 Individuo* init_individuo () ;
 Evento* init_evento () ;
 
-void imprimir_individuo (gpointer data, gpointer user_data) ;
+void imprimir_individuo_hash (gpointer chave, gpointer valor, gpointer user_data) ;
 void imprimir_eventos (GList* eventos) ;
 void imprimir_historias (GList* historias) ;
 
@@ -16,13 +21,12 @@ char* g_list_para_string (GList *nomes) ;
 
 char* adicionar_espaco_inicio (char* str) ;
 
-gint comparar_individuo (gconstpointer a, gconstpointer b);
-Individuo* encontrar_individuo (GList* lista, int id);
+gboolean compararIndividuo (gconstpointer a, gconstpointer b);
 
 gint comparar_evento (gconstpointer a, gconstpointer b);
 Evento* encontrar_evento (GList* lista, int id);
 
-Individuo* processarCasamento (Individuo* conjugue, GList **lista) ;
+Individuo* processarCasamentoHash (Individuo* conjugue) ;
 
 void imprimir_evento (gpointer data, gpointer user_data) ;
 
@@ -31,7 +35,12 @@ Individuo* indivRec (Individuo* i1, Individuo* i2) ;
 
 char* substring(char* str, int posi, int offset) ;
 
-Individuo* processarParentesco (char* parentesco, Individuo* i, GList** l) ;
-void resolverUmParentesco (Individuo *i, ParentPorResolver *prr,  GList *l) ;
-void resolverParentescos (Individuo *i, GList *l) ;
+Individuo* processarParentescoHash (char* parentesco, Individuo* i) ;
+
+void resolverUmParentescoHash (Individuo *i, ParentPorResolver *prr) ;
+void resolverParentescosHash (gpointer chave, gpointer valor, gpointer userData) ;
+void resolverTodosOsParentescos () ;
+
+void inserirIndividuo (Individuo *i) ;
+int encontrarId () ;
 #endif

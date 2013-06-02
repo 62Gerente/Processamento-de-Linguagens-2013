@@ -1,12 +1,5 @@
-*.DS_Store
-*.swp
+GenTree/parser/gen_tree
+GenTree/parser/gen_tree.tab.c
+GenTree/parser/lex.yy.c
+*.h.gch
 *.o
-*.yy.c
-PAH/pah
-PAH/html
-PAH/latex
-
-
-
-
-*.out

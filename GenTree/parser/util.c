@@ -6,10 +6,10 @@
 Individuo* init_individuo () {
 
     Individuo *indiv = (Individuo*) malloc (sizeof(Individuo)) ;
-    indiv->id = -1 ;
+    indiv->id = ID_NULO ;
     indiv->sexo = 0 ;
     indiv->nome = indiv->data_nascimento = indiv->data_morte = indiv->data_casamento = indiv->foto = NULL ;
-    indiv->pai = indiv->mae = indiv->conjugue = NULL ;
+    indiv->idPai = indiv->idMae = indiv->idConjugue = ID_NULO ;
     indiv->historias = indiv->eventos = indiv->parentescos = NULL ;
     return indiv ;
 }
@@ -30,13 +30,13 @@ ParentPorResolver* init_parentesco () {
   return res ;
 }
 
-void imprimir_individuo (gpointer data, gpointer user_data) {
+void imprimir_individuo_hash (gpointer chave, gpointer valor, gpointer user_data) {
   
-  if(data == NULL)
+  if(valor == NULL)
     return ;
-  if(user_data != NULL)
+  if(user_data != NULL || !chave)
     user_data = NULL ;
-  Individuo *i = (Individuo*)data ;
+  Individuo *i = (Individuo*)valor ;
   printf("Individuo\n") ;
   printf("  Id: %d\n", i->id) ;
   if(i->nome != NULL)
@@ -51,14 +51,14 @@ void imprimir_individuo (gpointer data, gpointer user_data) {
     printf("  Data de casamento: %s\n", i->data_casamento) ;
   if(i->foto != NULL)
     printf("  Foto: %s\n", i->foto) ;
-  if(i->pai != NULL) {
-    printf("  Pai: %d\n", i->pai->id) ;
+  if(i->idPai != ID_NULO) {
+    printf("  Pai: %d\n", i->idPai) ;
   }
-  if(i->mae != NULL) {
-    printf("  Mae: %d\n", i->mae->id) ;
+  if(i->idMae != ID_NULO) {
+    printf("  Mae: %d\n", i->idMae) ;
   }
-  if(i->conjugue != NULL) {
-    printf("  Conjugue: %d\n", i->conjugue->id) ;
+  if(i->idConjugue != ID_NULO) {
+    printf("  Conjugue: %d\n", i->idConjugue) ;
   }
   if(i->historias != NULL) {
     printf("  Historias: ") ;
@@ -101,34 +101,16 @@ char* adicionar_espaco_inicio (char* str) {
   return str ;
 }
 
-gint comparar_individuo (gconstpointer a, gconstpointer b) {
+gboolean compararIndividuo (gconstpointer a, gconstpointer b) {
 
-  int res ;
   if( a == NULL || b == NULL)
-    return -1 ;
-  Individuo *i1 = (Individuo*)a ;
-  Individuo *i2 = (Individuo*)b ;
-  if(i1->id == i2->id)
-    res = 0 ;
-  else if(i1->id > i2->id)
-    res = 1 ;
+    return FALSE ;
+  int *i1 = (int*)a ;
+  int *i2 = (int*)b ;
+  if(*i1 == *i2)
+    return TRUE ;
   else
-    res = -1 ;
-  return res ;
-}
-
-Individuo* encontrar_individuo (GList* lista, int id) {
-  
-  if(lista == NULL)
-    return NULL ;
-  Individuo *i = NULL ;
-  Individuo *aux = init_individuo() ;
-  aux->id = id ;
-  GList *l_aux = g_list_find_custom(lista, aux, comparar_individuo) ;
-  if(l_aux != NULL)
-    i = (Individuo*)l_aux->data ;
-  free(aux);
-  return i ;
+    return FALSE ;
 }
 
 gint comparar_evento (gconstpointer a, gconstpointer b) {
@@ -156,27 +138,26 @@ Evento* encontrar_evento (GList* lista, int id) {
   return res ;
 }
 
-Individuo* processarCasamento (Individuo* conjugue, GList **lista) {
+Individuo* processarCasamentoHash (Individuo* conjugue) {
 
-  if(conjugue == NULL || lista == NULL)
+  if(conjugue == NULL)
     return NULL;
   Individuo *res = init_individuo() ;
-  GList *l = *lista ;
-  Individuo *noivo_pesq = encontrar_individuo(l, conjugue->id) ;
+  Individuo *noivo_pesq = (Individuo*)g_hash_table_lookup(pessoasHash, &(conjugue->id)) ;
+  int *chave = (int*) malloc (sizeof(int)) ;
+  *chave = conjugue->id ;
+  res->idConjugue = *chave ;
+  res->data_casamento = conjugue->data_casamento ;
   if(noivo_pesq == NULL) {
-    res->conjugue = conjugue ;
-    res->data_casamento = conjugue->data_casamento ;
-    *lista = g_list_append(l, conjugue) ;
+    g_hash_table_insert(pessoasHash, chave, conjugue) ;
   }
   else {
-    noivo_pesq->data_casamento = conjugue->data_casamento ;
-    res->conjugue = noivo_pesq ;
-    res->data_casamento = conjugue->data_casamento ;    
-  }  
+    g_hash_table_insert(pessoasHash, chave, indivRec(noivo_pesq, conjugue)) ;
+  }
   ParentPorResolver *prr = (ParentPorResolver*) malloc (sizeof(ParentPorResolver)) ;
   char *parentesco = (char*) malloc(sizeof(char)*3) ; parentesco[0] = 'C' ; parentesco[1] = 'C' ; parentesco[2] = '\0' ;
   prr->parentesco = parentesco ;
-  prr->id = conjugue->id ;
+  prr->id = *chave ;
   res->parentescos = g_list_append(res->parentescos, prr) ;
   return res ;
 }
@@ -231,9 +212,9 @@ Evento* eventoRec (Evento* e1, Evento* e2) {
 Individuo* indivRec (Individuo* i1, Individuo* i2) {
 
   Individuo* res = init_individuo() ;
-  if(i1 && i1->id != -1)
+  if(i1 && i1->id != ID_NULO)
     res->id = i1->id ;
-  else if(i2 && i2->id != -1)
+  else if(i2 && i2->id != ID_NULO)
     res->id = i2->id ;
   if(i1 && i1->nome != NULL)
     res->nome = i1->nome ;
@@ -259,18 +240,18 @@ Individuo* indivRec (Individuo* i1, Individuo* i2) {
     res->foto = i1->foto ;
   else if(i2 && i2->foto != NULL)
     res->foto = i2->foto ;
-  if(i1 && i1->pai != NULL)
-    res->pai = i1->pai ;
-  else if(i2 && i2->pai != NULL)
-    res->pai = i2->pai ;
-  if(i1 && i1->mae != NULL)
-    res->mae = i1->mae ;
-  else if(i2 && i2->mae != NULL)
-    res->mae = i2->mae ;
-  if(i1 && i1->conjugue != NULL)
-    res->conjugue = i1->conjugue ;
-  else if(i2 && i2->conjugue != NULL)
-    res->conjugue = i2->conjugue ;
+  if(i1 && i1->idPai != ID_NULO)
+      res->idPai = i1->idPai ;
+  else if(i2 && i2->idPai != ID_NULO)
+    res->idPai = i2->idPai ;
+  if(i1 && i1->idMae != ID_NULO)
+    res->idMae = i1->idMae ;
+  else if(i2 && i2->idMae != ID_NULO)
+    res->idMae = i2->idMae ;
+  if(i1 && i1->idConjugue != ID_NULO)
+    res->idConjugue = i1->idConjugue ;
+  else if(i2 && i2->idConjugue != ID_NULO)
+    res->idConjugue = i2->idConjugue ;
 
   if(i1 && i2)
     res->historias = g_list_concat(i1->historias, i2->historias) ;
@@ -312,67 +293,110 @@ char* substring(char* str, int posi, int offset){
   return res;
 }
 
-Individuo* processarParentesco (char* parentesco, Individuo* i, GList** l) {
+Individuo* processarParentescoHash (char* parentesco, Individuo* i) {
   
-  if(parentesco == NULL || i == NULL || l == NULL)
+  if(parentesco == NULL || i == NULL)
     return NULL ;
   Individuo *res = init_individuo() ;
-  Individuo *iPesq = encontrar_individuo(*l, i->id) ;
+  Individuo *iPesq = g_hash_table_lookup(pessoasHash, &(i->id)) ;
+  int *chave = (int*) malloc (sizeof(int)) ;
+  *chave = i->id ;
   if(iPesq == NULL)
-    *l = g_list_append(*l, i) ;
+    g_hash_table_insert(pessoasHash, chave, i) ;
   else
-    i = iPesq ;
+    g_hash_table_insert(pessoasHash, chave, indivRec(iPesq, i)) ;
   if(strcmp(parentesco, "M") == 0)
-    res->mae = i ;
+    res->idMae = *chave ;
   else if(strcmp(parentesco, "P") == 0)
-    res->pai = i ;
+    res->idPai = *chave ;
   else {
     ParentPorResolver *prr = init_parentesco() ;
     prr->parentesco = parentesco ;
-    prr->id = i->id ;
+    prr->id = *chave ;
     res->parentescos = g_list_append(res->parentescos, prr) ;
   }
   return res ;
-}
-    
-void resolverUmParentesco (Individuo *i, ParentPorResolver *prr,  GList *l) {
+}    
+
+void resolverUmParentescoHash (Individuo *i, ParentPorResolver *prr) {
 
   if(!i || !prr)
     return ;
-  Individuo *iPesq = encontrar_individuo(l, prr->id) ;
+  Individuo *iPesq = g_hash_table_lookup(pessoasHash, &(prr->id)), *p ;
   if(iPesq == NULL)
     return ;
   if(strcmp(prr->parentesco, "MP") == 0) {
-    if(i->mae != NULL)
-      i->mae->pai = iPesq ;
+    p = g_hash_table_lookup(pessoasHash, &(i->idMae)) ;
+    if(p != NULL)
+      p->idPai = prr->id ;
   }
   else if(strcmp(prr->parentesco, "MM") == 0) {
-    if(i->mae != NULL)
-      i->mae->mae = iPesq ;
+    p = g_hash_table_lookup(pessoasHash, &(i->idMae)) ;
+    if(p != NULL)
+      p->idMae = prr->id ;
   }
   else if(strcmp(prr->parentesco, "PM") == 0) {
-    if(i->pai != NULL)
-      i->pai->mae = iPesq ;
+    p = g_hash_table_lookup(pessoasHash, &(i->idPai)) ;
+    if(p != NULL)
+      p->idMae = prr->id ;
   }
   else if(strcmp(prr->parentesco, "PP") == 0) {
-    if(i->pai != NULL)
-      i->pai->pai = iPesq ;
+    p = g_hash_table_lookup(pessoasHash, &(i->idPai)) ;
+    if(p != NULL)
+      p->idPai = prr->id ;
   }
   else if(strcmp(prr->parentesco, "F") == 0) {
     if(i->sexo == 1)
-      iPesq->pai = i ;
+      iPesq->idPai = i->id ;
     else if (i->sexo == 2)
-      iPesq->mae = i;
-  } else if(strcmp(prr->parentesco, "CC") == 0)
-    iPesq->conjugue = i ;
+      iPesq->idMae = i->id ;
+  } else if(strcmp(prr->parentesco, "CC") == 0) {
+    iPesq->idConjugue = i->id ;
+  }
 }
 
-void resolverParentescos (Individuo *i, GList *l) {
+void resolverParentescosHash (gpointer chave, gpointer valor, gpointer userData) {
   
-  if(!i)
+  if(userData || chave)
+    userData = NULL ;
+  if(!valor)
     return ;
-  unsigned int j ;
-  for(j = 0; j < g_list_length(i->parentescos); j++)
-    resolverUmParentesco(i, (ParentPorResolver*)g_list_nth_data(i->parentescos, j), l) ;
+  Individuo *i = (Individuo*)valor ;
+  for(; g_list_length(i->parentescos) > 0 ;) {
+    ParentPorResolver *prr = (ParentPorResolver*)(i->parentescos->data) ;
+    resolverUmParentescoHash(i, prr) ;
+    i->parentescos = g_list_remove(i->parentescos, prr) ;
+  }
   g_list_free(i->parentescos) ;
+}
+
+void resolverTodosOsParentescos () {
+
+  g_hash_table_foreach(pessoasHash, resolverParentescosHash, NULL) ;
+}
+
+void inserirIndividuo (Individuo *i) {
+
+  int *chave = (int*) malloc (sizeof(int)) ;
+  *chave = i->id ;
+  Individuo *iPesq = (Individuo*) g_hash_table_lookup(pessoasHash, chave) ;
+  if(iPesq == NULL) {
+    g_hash_table_insert(pessoasHash, chave, i) ;
+  } else {
+    g_hash_table_insert(pessoasHash, chave, indivRec(iPesq, i)) ;
+  }
+}
+
+int encontrarId () {
+  
+  gboolean flag = TRUE ;
+  int i = idIndividuo ;
+  while(flag) {
+    if(g_hash_table_lookup(pessoasHash, &i) == NULL)
+      flag = FALSE ;
+    else
+      i++ ;
+  }
+  idIndividuo = i+1 ;
+  return i ;
 }

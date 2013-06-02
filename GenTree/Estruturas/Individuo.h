@@ -13,13 +13,13 @@ typedef struct sIndividuo{
     char* data_casamento;
     char* foto;
 
-    struct sIndividuo *pai; 
-    struct sIndividuo *mae;
-    struct sIndividuo *conjugue;
+  int idPai ;
+  int idMae ;
+  int idConjugue ;
 
-    GList* historias;               // Glist de char*
-    GList* eventos;                 // Glist de Evento*
-  GList* parentescos;                  // GList de Relacoes por resolver* 
+  GList* historias;               // Glist de char*
+  GList* eventos;                 // Glist de Evento*
+  GList* parentescos;             // GList de Relacoes por resolver* 
 
 }Individuo;
 
