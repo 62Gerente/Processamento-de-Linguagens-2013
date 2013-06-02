@@ -3,3 +3,4 @@ GenTree/parser/gen_tree.tab.c
 GenTree/parser/lex.yy.c
 *.h.gch
 *.o
+*.out
