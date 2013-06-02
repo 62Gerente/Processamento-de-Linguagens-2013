@@ -6,3 +6,5 @@ GenTree/parser/lex.yy.c
 *.out
 
 *.swp
+
+GenTree/parser/gentree
