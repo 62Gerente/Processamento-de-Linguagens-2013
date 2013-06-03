@@ -1,0 +1,15 @@
+Pedro [1]
+S Masculino
+P Bernardo [10]
+M Ana [2] {
+  MM Beatriz [6]
+}
+MM Ana Rosa [4] {
+   P Jericó 
+}
+
+Sofia [3]
+S Feminino
+M [2]
+MP Manuel Figueiredo [5]
+

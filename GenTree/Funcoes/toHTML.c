@@ -30,7 +30,7 @@ void toHTML (GHashTable* hash_individuos) {
 
         fprintf(fp,"<a name=\"id%d\"><a/>",ind->id);
 
-        fprintf(fp,"%s",ind->nome);
+        fprintf(fp,"%s || %d",ind->nome, ind->id);
 
         fprintf(fp,"</h2>\n						<div class=\"box-icon\">\n							<a href=\"#\" class=\"btn-minimize\"><i class=\"halflings-icon chevron-up\"></i></a>\n						</div>\n					</div>\n					<div class=\"box-content\" style=\"height:288px\">\n						<div class=\"row-fluid\">\n							<div class=\"span5\" style=\"\">\n								<img class=\"super-avatar\" src=\"");
 

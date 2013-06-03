@@ -8,3 +8,4 @@ GenTree/parser/lex.yy.c
 *.swp
 
 GenTree/parser/gentree
+GenTree/HTML/index.html

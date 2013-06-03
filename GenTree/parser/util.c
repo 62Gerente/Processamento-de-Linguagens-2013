@@ -311,11 +311,10 @@ Individuo* processarParentescoHash (char* parentesco, Individuo* i) {
     g_hash_table_insert(pessoasHash, chave, i) ;
   else
     g_hash_table_insert(pessoasHash, chave, indivRec(iPesq, i)) ;
-    ParentPorResolver *prr = init_parentesco() ;
-    prr->parentesco = parentesco ;
-    prr->id = *chave ;
-    res->parentescos = g_list_append(res->parentescos, prr) ;
-    //  }
+  ParentPorResolver *prr = init_parentesco() ;
+  prr->parentesco = parentesco ;
+  prr->id = *chave ;
+  res->parentescos = g_list_append(res->parentescos, prr) ;
   return res ;
 }    
 
@@ -330,34 +329,62 @@ void resolverUmParentescoHash (Individuo *i, ParentPorResolver *prr) {
     i->idMae = prr->id ;
     if(i->idPai == ID_NULO && iPesq->idConjugue != ID_NULO) {
       i->idPai = iPesq->idConjugue ;
+    } else if(i->idPai != ID_NULO && iPesq->idConjugue == ID_NULO) {
+      iPesq->idConjugue = i->idPai ;
     }
-  } 
-  else if(strcmp(prr->parentesco, "P") == 0) {
+  } else if(strcmp(prr->parentesco, "P") == 0) {
     i->idPai = prr->id ;
-    if(i->idMae != ID_NULO && iPesq->idConjugue != ID_NULO)
+    if(i->idMae == ID_NULO && iPesq->idConjugue != ID_NULO) {
       i->idMae = iPesq->idConjugue ;
-  } 
-  else if(strcmp(prr->parentesco, "MP") == 0) {
+    } else if(i->idMae != ID_NULO && iPesq->idConjugue == ID_NULO) {
+      iPesq->idConjugue = i->idMae ;
+    }
+  } else if(strcmp(prr->parentesco, "MP") == 0) {
     p = g_hash_table_lookup(pessoasHash, &(i->idMae)) ;
-    if(p != NULL)
+    if(p != NULL) {
       p->idPai = prr->id ;
+      if(iPesq->idConjugue == ID_NULO && p->idMae != ID_NULO) {
+	Individuo *p2 = (Individuo*)g_hash_table_lookup(pessoasHash, &(p->idMae)) ;
+	iPesq->idConjugue = p->idMae ;
+	if(p2->idConjugue == ID_NULO)
+	  p2->idConjugue = prr->id ;
+      }
+    }
   }
   else if(strcmp(prr->parentesco, "MM") == 0) {
     p = g_hash_table_lookup(pessoasHash, &(i->idMae)) ;
-    if(p != NULL)
+    if(p != NULL) {
       p->idMae = prr->id ;
-  }
-  else if(strcmp(prr->parentesco, "PM") == 0) {
+      if(iPesq->idConjugue == ID_NULO && p->idPai != ID_NULO) {
+	Individuo *p2 = (Individuo*)g_hash_table_lookup(pessoasHash, &(p->idPai)) ;
+	iPesq->idConjugue = p->idPai ;
+	if(p2->idConjugue == ID_NULO)
+	  p2->idConjugue = prr->id ;
+      }
+    }
+  } else if(strcmp(prr->parentesco, "PM") == 0) {
     p = g_hash_table_lookup(pessoasHash, &(i->idPai)) ;
-    if(p != NULL)
+    if(p != NULL) {
       p->idMae = prr->id ;
-  }
-  else if(strcmp(prr->parentesco, "PP") == 0) {
+      if(iPesq->idConjugue == ID_NULO && p->idPai != ID_NULO) {
+	Individuo *p2 = (Individuo*)g_hash_table_lookup(pessoasHash, &(p->idPai)) ;
+	iPesq->idConjugue = p->idPai ;
+	if(p2->idConjugue == ID_NULO)
+	  p2->idConjugue = prr->id ;
+      }
+    }
+  } else if(strcmp(prr->parentesco, "PP") == 0) {
     p = g_hash_table_lookup(pessoasHash, &(i->idPai)) ;
-    if(p != NULL)
+    if(p != NULL) {
       p->idPai = prr->id ;
-  }
-  else if(strcmp(prr->parentesco, "F") == 0) {
+      if(iPesq->idConjugue == ID_NULO && p->idMae != ID_NULO) {
+	Individuo *p2 = (Individuo*)g_hash_table_lookup(pessoasHash, &(p->idMae)) ;
+	iPesq->idConjugue = p->idMae ;
+	if(p2->idConjugue == ID_NULO)
+	  p2->idConjugue = prr->id ;
+      }
+    }
+  } else if(strcmp(prr->parentesco, "F") == 0) {
     if(i->sexo == 1) {
       iPesq->idPai = i->id ;
       if(i->idConjugue != ID_NULO)
@@ -370,6 +397,10 @@ void resolverUmParentescoHash (Individuo *i, ParentPorResolver *prr) {
     }
   } else if(strcmp(prr->parentesco, "CC") == 0) {
     iPesq->idConjugue = i->id ;
+    if(i->sexo == 0 && iPesq->sexo != 0)
+      i->sexo = (iPesq->sexo == 1 ? 2 : 1) ;
+    else if(iPesq->sexo == 0 && i->sexo != 0)
+      iPesq->sexo = (i->sexo == 1 ? 2 : 1) ;
   }
 }
 
@@ -380,6 +411,7 @@ void resolverParentescosHash (gpointer chave, gpointer valor, gpointer userData)
   if(!valor)
     return ;
   Individuo *i = (Individuo*)valor ;
+  int mm = ID_NULO, mp = ID_NULO, pp = ID_NULO, pm = ID_NULO ;
   if(remover == TRUE) {
     for(; g_list_length(i->parentescos) > 0 ;) {
       ParentPorResolver *prr = (ParentPorResolver*)(i->parentescos->data) ;
@@ -392,9 +424,33 @@ void resolverParentescosHash (gpointer chave, gpointer valor, gpointer userData)
     unsigned int j ;
     for(j = 0; j < g_list_length(i->parentescos); j++) {
       ParentPorResolver *prr = (ParentPorResolver*)g_list_nth_data(i->parentescos, j) ;
+      if(!strcmp(prr->parentesco, "MM"))
+	mm = prr->id ;
+      else if(!strcmp(prr->parentesco, "MP"))
+	mp = prr->id ;
+      else if(!strcmp(prr->parentesco, "PP"))
+	pp = prr->id ;
+      else if(!strcmp(prr->parentesco, "PM"))
+	pm = prr->id ;
       resolverUmParentescoHash(i, prr) ; 
     }
+    if(mm != ID_NULO && mp != ID_NULO)
+      casamentoAvos(mm, mp) ;
+    if(pm != ID_NULO && pp != ID_NULO)
+      casamentoAvos(pm, pp) ;
   }
+}
+
+void casamentoAvos(int ela, int ele) {
+  
+  Individuo *iEla = (Individuo*)g_hash_table_lookup(pessoasHash, &ela) ;
+  Individuo *iEle = (Individuo*)g_hash_table_lookup(pessoasHash, &ele) ;
+  if(!iEla || !iEle)
+    return ;
+  if(iEla->idConjugue == ID_NULO)
+    iEla->idConjugue = ele ;
+  if(iEle->idConjugue == ID_NULO)
+    iEle->idConjugue = ela ;
 }
 
 void resolverTodosOsParentescos () {

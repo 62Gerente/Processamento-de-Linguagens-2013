@@ -59,6 +59,7 @@ Maria dos Anjos Santos%2 +c1955 [16]
 HIST "../Dados/Historico/espelho.txt"
 S Feminino
 F Manuel Rodrigues Santos *1900 [121] {
+  	S Masculino
 	FOTO "../Dados/Fotos/121.jpg"
 	ev 4 1930
 	ev 5 1932
@@ -70,7 +71,9 @@ ev 2 30/03/1920
 ev 3 29/02/1910
 CC [16]
 S Masculino
-F João Ricardo Santos *1915 +10/09/1925 [120]
+F João Ricardo Santos *1915 +10/09/1925 [120] {
+  S Masculino
+}
 
 Joaquim Manuel Santos Oliveira *21/01/1940 +10/10/2012 [10]
 S Masculino

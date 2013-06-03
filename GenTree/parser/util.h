@@ -41,6 +41,8 @@ void resolverUmParentescoHash (Individuo *i, ParentPorResolver *prr) ;
 void resolverParentescosHash (gpointer chave, gpointer valor, gpointer userData) ;
 void resolverTodosOsParentescos () ;
 
+void casamentoAvos(int ela, int ele) ;
+
 void inserirIndividuo (Individuo *i) ;
 int encontrarId () ;
 #endif
